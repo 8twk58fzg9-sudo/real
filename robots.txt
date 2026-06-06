@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://8twk58fzg9-sudo.github.io/8/sitemap.xml

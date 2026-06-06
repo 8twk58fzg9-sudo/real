@@ -1,0 +1,2954 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="theme-color" content="#0b0f1a">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co https://api.emailjs.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+    <title>Computrax | Prémiové repasované počítače</title>
+
+    <!-- Open Graph / SEO -->
+    <meta name="description" content="Repasované herné a kancelárske počítače so zárukou, kontrolou skladu, doplnkovými službami a rýchlym doručením po Slovensku.">
+    <meta property="og:title" content="Computrax | Prémiové repasované počítače">
+    <meta property="og:description" content="Výkon bez kompromisov. Repasované herné a kancelárske PC so zárukou, testované 24h.">
+    <meta property="og:image" content="https://8twk58fzg9-sudo.github.io/8/og-image.svg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://8twk58fzg9-sudo.github.io/8/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://8twk58fzg9-sudo.github.io/8/">
+    <link rel="icon" href="og-image.svg" type="image/svg+xml">
+    <link rel="manifest" href="site.webmanifest">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>emailjs.init('wFL29J-4MPhZmZYTf');</script>
+    <script>
+    const PRODUCTS_DATA = [
+        { id: 1, name: "Alienware Aurora R14", price: 949, cat: "gaming", stock: 2, status: "active", tag: "HERNÝ ŠPECIÁL", tagColor: "#f87171", cpu: "Ryzen 9 5900X", cpuBrand: "amd", gpu: "RTX 3080 10GB", gpuFilter: "RTX 3080", ram: "32GB DDR4", ramFilter: "32", ssd: "1TB NVMe", os: "Windows 11 Pro", delivery: "Doprava zdarma", popular: 3, newest: 1 },
+        { id: 2, name: "HP Omen 40L", price: 829, cat: "gaming", stock: 5, status: "active", tag: "BESTSELLER", tagColor: "#60a5fa", cpu: "Intel i7-12700K", cpuBrand: "intel", gpu: "RTX 3070 Ti", gpuFilter: "RTX 3070", ram: "16GB DDR4", ramFilter: "16", ssd: "512GB + 1TB HDD", os: "Windows 11 Pro", delivery: "Doprava zdarma", popular: 5, newest: 2 },
+        { id: 3, name: "Dell OptiPlex 7090", price: 349, cat: "office", stock: 8, status: "active", tag: "PRO WORKSTATION", tagColor: "#34d399", cpu: "Intel i5-10500", cpuBrand: "intel", gpu: "UHD Graphics", gpuFilter: "UHD", ram: "16GB DDR4", ramFilter: "16", ssd: "256GB SSD", os: "Windows 11 Pro", delivery: "Doprava 3,90€", popular: 8, newest: 3 }
+    ];
+    window.PRODUCTS_DATA = PRODUCTS_DATA;
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "Computrax.sk",
+      "url": "https://8twk58fzg9-sudo.github.io/8/",
+      "description": "Repasované herné a kancelárske počítače, komponenty a servisné doplnkové služby.",
+      "email": "computrax.sk@gmail.com",
+      "telephone": "+421949835923",
+      "areaServed": "SK",
+      "sameAs": []
+    }
+    </script>
+
+    <style>
+        :root {
+            --bg: #0b0f1a;
+            --card-bg: rgba(22, 30, 45, 0.7);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --radius: 24px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+        /* BLOBS */
+        .blob { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); filter: blur(80px); z-index: -1; opacity: 0.4; pointer-events: none; }
+
+        /* NAV */
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 1.2rem 6%; display: flex; justify-content: space-between; align-items: center; background: rgba(11,15,26,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); gap: 1rem; }
+        .logo { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.8rem; color: white; text-decoration: none; flex-shrink: 0; }
+        .logo span { color: var(--accent); }
+        nav ul { display: flex; gap: 1.5rem; list-style: none; }
+        nav ul a { text-decoration: none; color: var(--muted); font-weight: 500; transition: 0.3s; font-size: 0.95rem; }
+        nav ul a:hover { color: var(--accent); }
+        .nav-right { display: flex; align-items: center; gap: 0.8rem; }
+
+        /* SEARCH BAR in nav */
+        .nav-search { position: relative; }
+        .nav-search input {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            color: var(--text); padding: 0.55rem 1rem 0.55rem 2.4rem;
+            border-radius: 10px; font-size: 0.9rem; outline: none; width: 180px; transition: 0.3s;
+        }
+        .nav-search input:focus { border-color: var(--accent); width: 240px; }
+        .nav-search .search-icon { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.85rem; pointer-events: none; }
+
+        /* CART BTN */
+        .cart-btn { position: relative; background: rgba(59,130,246,0.12); border: 1px solid var(--accent); color: var(--text); padding: 0.6rem 1.1rem; border-radius: 12px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; transition: 0.3s; font-weight: 600; white-space: nowrap; }
+        .cart-btn:hover { background: var(--accent); }
+        .cart-count { background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.68rem; font-weight: 800; display: none; align-items: center; justify-content: center; }
+        .cart-count.visible { display: flex; }
+        .account-btn { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.45); }
+        .account-btn.logged-in { background: rgba(34,197,94,0.18); border-color: #22c55e; color: #dcfce7; }
+
+        /* HERO */
+        .hero { min-height: 82vh; display: flex; align-items: center; justify-content: space-between; padding: 7rem 8% 3rem; gap: 4rem; }
+        .hero-content { flex: 1; }
+        .badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; background: rgba(59,130,246,0.1); border: 1px solid var(--accent); border-radius: 50px; color: var(--accent); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .badge-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 2s infinite; }
+        .site-announcement { display: none; width: fit-content; max-width: 100%; align-items: center; gap: 0.6rem; margin: -0.4rem 0 1.3rem; padding: 0.8rem 1rem; border-radius: 14px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.28); color: #bbf7d0; font-weight: 700; font-size: 0.92rem; }
+        .site-announcement.visible { display: inline-flex; }
+        .site-announcement a { color: #86efac; text-decoration: none; border-bottom: 1px solid rgba(134,239,172,0.55); }
+        .site-announcement a:hover { color: #fff; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+        h1 { font-family: 'Outfit', sans-serif; font-size: 4.5rem; line-height: 1.1; font-weight: 900; margin-bottom: 2rem; }
+        h1 span { color: var(--accent); }
+        .hero p { font-size: 1.15rem; color: var(--muted); max-width: 550px; margin-bottom: 2.5rem; }
+        .hero-btns { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+        .btn-primary { background: var(--accent); color: white; padding: 1.1rem 2.2rem; border-radius: 14px; text-decoration: none; font-weight: 700; transition: 0.3s; display: inline-block; }
+        .btn-primary:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.4); }
+        .btn-ghost { background: transparent; border: 1px solid var(--border); color: white; padding: 1.1rem 2.2rem; border-radius: 14px; text-decoration: none; font-weight: 700; transition: 0.3s; display: inline-block; }
+        .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* TRUST BADGES */
+        .trust-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .trust-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--muted); }
+        .trust-item span:first-child { font-size: 1.1rem; }
+
+        /* STATS SECTION */
+        .stats-section { padding: 4rem 8%; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+        .stat-card { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem 2rem; text-align: center; transition: 0.3s; }
+        .stat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+        .stat-num { font-family: 'Outfit'; font-size: 3rem; font-weight: 900; color: var(--accent); }
+        .stat-label { color: var(--muted); font-size: 0.95rem; margin-top: 0.3rem; }
+
+        /* SECTIONS */
+        section { padding: 5rem 8%; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-label { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; }
+        .section-title { font-family: 'Outfit'; font-size: 3rem; font-weight: 700; margin-top: 0.5rem; }
+
+        /* FILTER PANEL */
+        .filter-panel { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; }
+        .filter-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
+        .filter-row + .filter-row { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
+        .filter-details { align-items: flex-start; }
+        .filter-item { display: flex; flex-direction: column; gap: 0.5rem; min-width: 140px; }
+        .filter-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+        .filter-select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1rem; border-radius: 10px; font-size: 0.88rem; outline: none; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif; }
+        .filter-select:focus { border-color: var(--accent); }
+        .filter-select option { background: #0f1623; }
+        .filter-reset { background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.6rem 1.2rem; border-radius: 10px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; white-space: nowrap; }
+        .filter-reset:hover { border-color: #f87171; color: #f87171; }
+        .price-range-wrap { display: flex; align-items: center; gap: 0.5rem; }
+        .price-val { font-size: 0.82rem; color: var(--accent); font-weight: 700; min-width: 38px; }
+        .range-track { position: relative; flex: 1; height: 20px; }
+        .range-track input[type=range] { position: absolute; width: 100%; accent-color: var(--accent); cursor: pointer; height: 4px; background: transparent; }
+        .filter-tag { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); border-radius: 8px; padding: 0.3rem 0.7rem; font-size: 0.8rem; color: var(--accent); }
+        .filter-tag button { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 0.9rem; line-height: 1; padding: 0; }
+
+        /* PRODUCT CONTROLS (old - keep for reference) */
+        .product-controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
+        .filter-group { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+        .filter-btn { background: var(--glass); border: 1px solid var(--border); color: var(--muted); padding: 0.7rem 1.6rem; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 0.9rem; }
+        .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .price-filter { display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; color: var(--muted); }
+        .price-filter input[type=range] { accent-color: var(--accent); width: 130px; cursor: pointer; }
+        .price-label { color: var(--accent); font-weight: 700; min-width: 55px; }
+
+        /* COMPARE BAR */
+        .compare-bar {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #1a2235; border: 1px solid var(--accent); border-radius: 20px;
+            padding: 1rem 2rem; z-index: 900; display: flex; align-items: center; gap: 1.5rem;
+            transition: bottom 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5); white-space: nowrap;
+        }
+        .compare-bar.visible { bottom: 2rem; }
+        .compare-bar-items { display: flex; gap: 0.8rem; }
+        .compare-chip { background: rgba(59,130,246,0.15); border: 1px solid var(--accent); border-radius: 8px; padding: 0.4rem 0.8rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; }
+        .compare-chip button { background: none; border: none; color: #f87171; cursor: pointer; font-size: 1rem; line-height: 1; }
+        .compare-now-btn { background: var(--accent); color: white; border: none; padding: 0.7rem 1.4rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .compare-now-btn:hover { background: #2563eb; }
+        .compare-clear { background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; font-size: 0.85rem; }
+
+        /* PRODUCTS GRID */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .pc-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; backdrop-filter: blur(10px); transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; }
+        .pc-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .pc-card.wishlisted { border-color: rgba(251,113,133,0.5); }
+
+        .pc-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+        .pc-tag { font-size: 0.7rem; font-weight: 800; padding: 0.4rem 0.8rem; border-radius: 6px; background: rgba(255,255,255,0.1); }
+        .card-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+        /* WISHLIST HEART */
+        .wish-btn { background: rgba(255,255,255,0.07); border: 1px solid var(--border); color: var(--muted); width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .wish-btn:hover, .wish-btn.active { background: rgba(251,113,133,0.15); border-color: #fb7185; color: #fb7185; }
+        .wish-btn.active { color: #fb7185; }
+
+        /* COMPARE CHECKBOX */
+        .compare-check-wrap { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--muted); cursor: pointer; }
+        .compare-check-wrap input { accent-color: var(--accent); cursor: pointer; width: 15px; height: 15px; }
+
+        /* STOCK */
+        .stock-badge { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 6px; margin-bottom: 0.8rem; }
+        .stock-low { background: rgba(251,113,133,0.12); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+        .stock-ok { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+        .stock-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 1.5s infinite; }
+
+        .pc-name { font-family: 'Outfit'; font-size: 1.8rem; margin-bottom: 1.2rem; margin-top: 0.3rem; }
+        .pc-specs { list-style: none; margin-bottom: 2rem; }
+        .pc-specs li { display: flex; justify-content: space-between; padding: 0.55rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--muted); font-size: 0.92rem; }
+        .pc-specs b { color: white; font-weight: 500; }
+
+        /* GUARANTEE MINI */
+        .card-guarantee { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .g-item { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 0.3rem; }
+
+        .pc-footer { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+        .pc-price { font-family: 'Outfit'; font-size: 2.2rem; font-weight: 800; }
+        .add-cart-btn { background: var(--accent); color: white; border: none; padding: 1rem 1.3rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; white-space: nowrap; }
+        .add-cart-btn:hover { background: #2563eb; transform: translateY(-2px); }
+        .add-cart-btn.added { background: #22c55e; }
+        .detail-btn { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); padding: 1rem 1.1rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; white-space: nowrap; }
+        .detail-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+        /* SKELETON */
+        .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .skeleton-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; }
+        .skel-line { height: 14px; margin-bottom: 12px; }
+        .skel-title { height: 32px; margin-bottom: 20px; width: 70%; }
+        .skel-price { height: 40px; width: 40%; }
+
+        /* COMPARE MODAL */
+        .compare-modal { position: fixed; inset: 0; z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .compare-modal.open { opacity: 1; pointer-events: all; }
+        .compare-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); }
+        .compare-content { position: relative; background: #0f1623; border: 1px solid var(--border); border-radius: 24px; padding: 2.5rem; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; }
+        .compare-content h3 { font-family: 'Outfit'; font-size: 2rem; margin-bottom: 2rem; }
+        .compare-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: 1px solid var(--border); color: var(--muted); width: 40px; height: 40px; border-radius: 10px; cursor: pointer; font-size: 1.2rem; }
+        .compare-table { width: 100%; border-collapse: collapse; }
+        .compare-table th { text-align: left; padding: 0.8rem 1rem; background: rgba(59,130,246,0.08); font-family: 'Outfit'; font-size: 0.9rem; color: var(--accent); }
+        .compare-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; vertical-align: top; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .compare-table .row-label { color: var(--muted); font-weight: 500; }
+        .compare-table .highlight { color: #22c55e; font-weight: 700; }
+        .product-detail-head { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: start; margin-bottom: 1.5rem; padding-right: 3rem; }
+        .product-detail-tag { display: inline-flex; width: fit-content; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.04em; padding: 0.4rem 0.75rem; border-radius: 8px; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.28); margin-bottom: 0.8rem; }
+        .product-detail-price { font-family: 'Outfit'; font-size: 2.35rem; font-weight: 800; color: var(--accent); text-align: right; }
+        .product-detail-stock { color: var(--muted); font-size: 0.9rem; text-align: right; margin-top: 0.25rem; }
+        .product-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; margin: 1.4rem 0; }
+        .product-detail-spec { border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem 1rem; background: rgba(255,255,255,0.04); }
+        .product-detail-spec span { display: block; color: var(--muted); font-size: 0.78rem; margin-bottom: 0.35rem; }
+        .product-detail-spec b { color: var(--text); font-size: 0.95rem; }
+        .product-detail-services { border: 1px solid rgba(34,197,94,0.22); background: rgba(34,197,94,0.06); border-radius: 14px; padding: 1rem; margin-bottom: 1.2rem; color: var(--muted); font-size: 0.9rem; }
+        .product-detail-services strong { display: block; color: var(--text); margin-bottom: 0.4rem; }
+        .product-detail-perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin-bottom: 1.4rem; }
+        .product-detail-perks span { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem; font-size: 0.82rem; color: var(--muted); text-align: center; }
+        .product-detail-actions { display: flex; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; }
+        .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+        .auth-tab { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); border-radius: 12px; padding: 0.75rem; font-weight: 800; cursor: pointer; }
+        .auth-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .auth-panel { display: none; }
+        .auth-panel.active { display: block; }
+        .auth-field { margin-bottom: 0.85rem; }
+        .auth-field label { display: block; color: var(--muted); font-size: 0.82rem; margin-bottom: 0.3rem; }
+        .auth-field input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); border-radius: 12px; padding: 0.9rem 1rem; outline: none; font-family: 'Inter', sans-serif; }
+        .auth-field input:focus { border-color: var(--accent); }
+        .auth-link { background: none; border: none; color: var(--accent); cursor: pointer; font-weight: 800; padding: 0; margin-top: 0.65rem; }
+        .auth-note { color: var(--muted); font-size: 0.82rem; line-height: 1.45; margin-top: 1rem; }
+        .account-summary { display: grid; grid-template-columns: 1fr auto; gap: 0.8rem; align-items: start; padding: 1rem; border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,0.04); margin-bottom: 1rem; }
+        .account-orders { display: grid; gap: 0.8rem; }
+        .account-order { border: 1px solid var(--border); border-radius: 14px; padding: 1rem; background: rgba(255,255,255,0.04); }
+        .account-order-head { display: flex; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; font-weight: 800; margin-bottom: 0.45rem; }
+        .account-order-meta { color: var(--muted); font-size: 0.85rem; }
+        .account-status { display: inline-flex; width: fit-content; margin-top: 0.55rem; padding: 0.25rem 0.55rem; border-radius: 999px; background: rgba(59,130,246,0.12); color: #93c5fd; font-size: 0.78rem; font-weight: 800; }
+        .order-timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.35rem; margin-top: 0.75rem; }
+        .order-step { height: 6px; border-radius: 99px; background: rgba(255,255,255,0.08); }
+        .order-step.done { background: #22c55e; }
+        .order-support { display: inline-block; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 0.84rem; margin-top: 0.7rem; }
+
+        /* CART OVERLAY */
+        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1999; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+        /* CART PANEL */
+        .cart-panel { position: fixed; top: 0; right: -480px; width: 460px; height: 100vh; background: #0d1422; border-left: 1px solid var(--border); z-index: 2000; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+        .cart-panel.open { right: 0; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 2rem 1.5rem; border-bottom: 1px solid var(--border); }
+        .cart-header h2 { font-family: 'Outfit'; font-size: 1.8rem; font-weight: 700; }
+        .cart-close { background: none; border: 1px solid var(--border); color: var(--muted); width: 40px; height: 40px; border-radius: 10px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+        .cart-close:hover { border-color: var(--accent); color: var(--accent); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+        .cart-item { display: flex; align-items: center; gap: 1rem; padding: 1.2rem; background: var(--glass); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 1rem; }
+        .cart-item-icon { font-size: 2rem; width: 50px; text-align: center; flex-shrink: 0; }
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+        .cart-item-price { color: var(--accent); font-weight: 700; font-family: 'Outfit'; }
+        .cart-item-controls { display: flex; align-items: center; gap: 0.5rem; }
+        .qty-btn { background: rgba(255,255,255,0.07); border: 1px solid var(--border); color: white; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .qty-btn:hover { background: var(--accent); border-color: var(--accent); }
+        .qty-num { min-width: 24px; text-align: center; font-weight: 700; }
+        .remove-btn { background: none; border: none; color: #f87171; cursor: pointer; font-size: 1.1rem; margin-left: 0.3rem; padding: 4px; transition: 0.2s; }
+        .remove-btn:hover { transform: scale(1.2); }
+        .cart-empty { text-align: center; padding: 4rem 0; color: var(--muted); }
+        .cart-empty .icon { font-size: 4rem; margin-bottom: 1rem; }
+        .cart-footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
+        .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .cart-total span { color: var(--muted); }
+        .cart-total-price { font-family: 'Outfit'; font-size: 2rem; font-weight: 800; color: var(--accent); }
+
+        /* ORDER WIZARD */
+        .wizard-steps { display: flex; gap: 0; margin-bottom: 1.5rem; }
+        .wizard-step { flex: 1; text-align: center; font-size: 0.78rem; font-weight: 600; padding: 0.6rem; color: var(--muted); border-bottom: 2px solid var(--border); transition: 0.3s; }
+        .wizard-step.active { color: var(--accent); border-color: var(--accent); }
+        .wizard-step.done { color: #22c55e; border-color: #22c55e; }
+        .wizard-panel { display: none; }
+        .wizard-panel.active { display: block; }
+        .wizard-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 0.9rem 1rem; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 0.95rem; margin-bottom: 0.8rem; font-family: 'Inter', sans-serif; }
+        .wizard-input:focus { border-color: var(--accent); }
+        .wizard-input option { background: #0f1623; }
+        .wizard-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.3rem; display: block; }
+        .wizard-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 1.1rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 0.5rem; font-size: 1rem; }
+        .wizard-btn:hover { background: #2563eb; transform: translateY(-2px); }
+        .wizard-btn-ghost { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+        .wizard-btn-ghost:hover { background: rgba(255,255,255,0.1); transform: none; }
+        .wizard-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+        .service-options { display: grid; gap: 0.75rem; margin: 0.4rem 0 1rem; }
+        .service-option { display: flex; align-items: flex-start; gap: 0.75rem; border: 1px solid var(--border); background: rgba(255,255,255,0.04); border-radius: 12px; padding: 0.85rem; cursor: pointer; transition: 0.2s; }
+        .service-option:hover { border-color: rgba(59,130,246,0.45); }
+        .service-option input { margin-top: 0.25rem; accent-color: var(--accent); }
+        .service-name { display: flex; justify-content: space-between; gap: 0.8rem; color: var(--text); font-weight: 700; font-size: 0.9rem; }
+        .service-name span:last-child { color: var(--accent); white-space: nowrap; }
+        .service-desc { color: var(--muted); font-size: 0.78rem; line-height: 1.45; margin-top: 0.2rem; }
+        .summary-item { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .summary-item:last-child { border: none; font-weight: 700; font-size: 1.1rem; color: var(--accent); }
+
+        /* REVIEWS */
+        .reviews-scroll { display: flex; gap: 2rem; overflow-x: auto; padding: 1rem 0 3rem; scrollbar-width: none; }
+        .review-card { min-width: 350px; background: var(--glass); padding: 2rem; border-radius: 20px; border: 1px solid var(--border); }
+        .stars { color: #fbbf24; margin-bottom: 1rem; }
+        .rev-user { display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+        /* FAQ */
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: var(--glass); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 1rem; overflow: hidden; }
+        .faq-q { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; font-weight: 600; }
+        .faq-a { padding: 0 1.5rem 1.5rem; color: var(--muted); display: none; }
+        .legal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+        .legal-card { background: var(--glass); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
+        .legal-card h3 { color: var(--text); font-family: 'Outfit'; font-size: 1.15rem; margin-bottom: 0.65rem; }
+        .legal-card p + p { margin-top: 0.55rem; }
+        .legal-card a { color: var(--accent); }
+        .legal-muted { color: var(--muted); font-size: 0.84rem; margin-top: 0.8rem; }
+
+        /* CONTACT */
+        .contact-wrapper { display: grid; grid-template-columns: 1fr 1.5fr; background: var(--glass); border-radius: 30px; border: 1px solid var(--border); overflow: hidden; }
+        .contact-info { background: var(--accent); padding: 4rem; color: white; }
+        .contact-form { padding: 4rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--muted); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 1rem; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+        .form-group select option { background: #0f1623; }
+        .send-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 1.2rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .send-btn:hover { background: #2563eb; }
+
+        /* WHATSAPP BUTTON */
+        .whatsapp-fab {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 800;
+            background: #25D366; color: white; border: none; border-radius: 50px;
+            padding: 1rem 1.4rem; font-weight: 700; font-size: 1rem;
+            cursor: pointer; display: flex; align-items: center; gap: 0.6rem;
+            box-shadow: 0 8px 24px rgba(37,211,102,0.4); transition: 0.3s;
+            text-decoration: none;
+        }
+        .whatsapp-fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 32px rgba(37,211,102,0.5); }
+        .whatsapp-fab .wa-icon { font-size: 1.3rem; }
+
+        /* COOKIE BANNER */
+        .cookie-banner {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 5000;
+            background: #0f1a2e; border-top: 1px solid var(--border);
+            padding: 1.2rem 6%; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+            transform: translateY(100%); transition: transform 0.4s ease;
+        }
+        .cookie-banner.visible { transform: translateY(0); }
+        .cookie-banner p { flex: 1; font-size: 0.88rem; color: var(--muted); min-width: 280px; }
+        .cookie-banner p a { color: var(--accent); }
+        .cookie-btns { display: flex; gap: 0.8rem; flex-shrink: 0; }
+        .cookie-accept { background: var(--accent); color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+        .cookie-decline { background: none; color: var(--muted); border: 1px solid var(--border); padding: 0.7rem 1.2rem; border-radius: 10px; cursor: pointer; font-size: 0.9rem; }
+
+        /* ANIMATIONS */
+        .reveal { opacity: 1; transform: none; transition: 0.45s ease-out; }
+        .js .reveal { opacity: 0.01; transform: translateY(18px); }
+        .js .reveal.visible { opacity: 1; transform: translateY(0); }
+        .js-ready .reveal:not(.visible) { opacity: 1; transform: none; }
+
+        /* TOAST */
+        .toast { position: fixed; top: 5.5rem; right: 2rem; z-index: 9999; background: #1a2235; border: 1px solid var(--accent); border-radius: 14px; padding: 1rem 1.5rem; font-size: 0.9rem; display: flex; align-items: center; gap: 0.7rem; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); box-shadow: 0 8px 32px rgba(0,0,0,0.4); max-width: 300px; }
+        .toast.show { transform: translateX(0); }
+        .products-live-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; font-size:0.85rem; color:var(--muted); margin-top:0.8rem; }
+        .live-status { display:inline-flex; align-items:center; gap:0.45rem; }
+        .live-dot { width:0.55rem; height:0.55rem; border-radius:999px; background:var(--accent); box-shadow:0 0 12px rgba(59,130,246,0.7); }
+        .refresh-products-btn { border:1px solid var(--border); background:rgba(255,255,255,0.05); color:var(--text); border-radius:10px; padding:0.55rem 0.85rem; cursor:pointer; font-weight:700; }
+        .refresh-products-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+        /* FOOTER */
+        footer { padding: 4rem 8%; border-top: 1px solid var(--border); }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+        .footer-brand p { color: var(--muted); font-size: 0.9rem; margin-top: 1rem; max-width: 280px; }
+        .footer-col h4 { font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 1rem; }
+        .footer-col a { display: block; color: var(--muted); text-decoration: none; font-size: 0.9rem; margin-bottom: 0.5rem; transition: 0.2s; }
+        .footer-col a:hover { color: var(--accent); }
+        .footer-bottom { text-align: center; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); padding-top: 2rem; }
+
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; padding: 7rem 6% 2.5rem; min-height: auto; gap: 2.5rem; }
+            h1 { font-size: 3rem; }
+            section { padding: 3.5rem 6%; }
+            .stats-section { padding: 3.5rem 6%; }
+            .section-header { margin-bottom: 2rem; }
+            .section-title { font-size: 2.25rem; line-height: 1.15; }
+            .products-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+            .pc-card { padding: 1.5rem; }
+            .product-detail-head, .product-detail-grid, .product-detail-perks { grid-template-columns: 1fr; }
+            .product-detail-price, .product-detail-stock { text-align: left; }
+            .product-detail-head { padding-right: 0; }
+            #pravne-info { padding-top: 3rem !important; }
+            .hero-btns { justify-content: center; }
+            .trust-row { justify-content: center; }
+            .contact-wrapper { grid-template-columns: 1fr; }
+            .contact-info, .contact-form { padding: 2rem; }
+            nav ul { display: none; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .nav-search input { width: 130px; }
+            .nav-search input:focus { width: 160px; }
+        }
+        @media (max-width: 720px) {
+            nav { position: sticky; top: 0; align-items: flex-start; padding: 0.8rem 4%; flex-wrap: wrap; }
+            .logo { font-size: 1.45rem; line-height: 1; padding-top: 0.25rem; }
+            .nav-right { width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
+            .nav-search { grid-column: 1 / -1; }
+            .nav-search input, .nav-search input:focus { width: 100%; min-height: 44px; }
+            .cart-btn { justify-content: center; min-height: 44px; padding: 0.58rem 0.65rem; border-radius: 10px; font-size: 0.82rem; }
+            .cart-count { position: absolute; top: -0.35rem; right: -0.35rem; }
+            .hero { padding-top: 2.5rem; }
+            h1 { font-size: 2.35rem; }
+            .hero p { font-size: 1rem; }
+            .hero-btns .btn-primary, .hero-btns .btn-ghost { width: 100%; text-align: center; }
+            .filter-panel { padding: 1rem; border-radius: 16px; }
+            .filter-row { display: grid; grid-template-columns: 1fr; align-items: stretch; }
+            .filter-item { min-width: 0; }
+            .filter-select, .filter-reset { width: 100%; min-height: 44px; }
+            .wizard-row { grid-template-columns: 1fr; }
+            .legal-grid { grid-template-columns: 1fr; }
+            .compare-modal { align-items: flex-end; padding: 0; }
+            .compare-content { width: 100%; max-height: 92vh; border-radius: 18px 18px 0 0; padding: 1.25rem; }
+            .compare-content h3 { font-size: 1.45rem; padding-right: 2.8rem; }
+            .compare-close { top: 1rem; right: 1rem; }
+            .auth-tabs { gap: 0.45rem; }
+            .auth-tab, .wizard-btn, .auth-field input { min-height: 46px; }
+            .auth-link { display: block; width: 100%; text-align: left; padding: 0.25rem 0; }
+            .toast { left: 1rem; right: 1rem; top: auto; bottom: 1rem; max-width: none; }
+        }
+        @media (max-width: 500px) {
+            .cart-panel { width: 100%; right: -100%; }
+            .whatsapp-fab span.wa-label { display: none; }
+            .compare-bar { flex-direction: column; bottom: -200px; width: 90%; }
+            .compare-bar.visible { bottom: 1rem; }
+            .compare-modal { padding: 0.75rem; }
+            .compare-content { padding: 1.4rem; border-radius: 18px; }
+            .product-detail-actions .add-cart-btn, .product-detail-actions .detail-btn { width: 100%; }
+            .account-summary { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="blob" style="top: -100px; right: -100px;"></div>
+<div class="blob" style="bottom: -100px; left: -100px;"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">🛒 <span id="toast-msg">Produkt pridaný</span></div>
+
+<!-- NAV -->
+<nav>
+    <a href="#" class="logo">Compu<span>trax</span></a>
+    <ul>
+        <li><a href="#ponuka">Ponuka</a></li>
+        <li><a href="#preco-my">O nás</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <div class="nav-right">
+        <div class="nav-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="nav-search-input" placeholder="Hľadať PC..." oninput="searchProducts(this.value)">
+        </div>
+        <button class="cart-btn" style="background:rgba(251,113,133,0.1);border-color:#fb7185;" onclick="openWishlist()">
+            ♥ Obľúbené
+            <span class="cart-count" id="wish-count" style="background:#fb7185;">0</span>
+        </button>
+        <button class="cart-btn account-btn" id="account-btn" onclick="openAccount()">
+            👤 Prihlásiť
+        </button>
+        <button class="cart-btn" onclick="openCart()">
+            🛒 Košík
+            <span class="cart-count" id="cart-count">0</span>
+        </button>
+    </div>
+</nav>
+
+<!-- CART OVERLAY & PANEL -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cart-panel">
+    <div class="cart-header">
+        <h2>🛒 Košík</h2>
+        <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+
+    <!-- WIZARD STEPS -->
+    <div style="padding: 1rem 2rem 0;">
+        <div class="wizard-steps">
+            <div class="wizard-step active" id="ws-1">1. Produkty</div>
+            <div class="wizard-step" id="ws-2">2. Doručenie</div>
+            <div class="wizard-step" id="ws-3">3. Súhrn</div>
+        </div>
+    </div>
+
+    <!-- STEP 1: Items -->
+    <div class="wizard-panel active" id="wp-1">
+        <div class="cart-items" id="cart-items">
+            <div class="cart-empty" id="cart-empty">
+                <div class="icon">🛒</div>
+                <p>Košík je prázdny</p>
+                <small>Pridajte produkty z ponuky</small>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Medzisúčet:</span>
+                <span class="cart-total-price" id="cart-total">0€</span>
+            </div>
+            <button class="wizard-btn" id="to-step2-btn" onclick="goStep(2)" disabled>Pokračovať k doručeniu →</button>
+        </div>
+    </div>
+
+    <!-- STEP 2: Delivery -->
+    <div class="wizard-panel" id="wp-2" style="padding: 1.5rem 2rem; overflow-y: auto; flex: 1;">
+        <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem;">Zadajte údaje pre doručenie</p>
+        <label class="wizard-label">Meno a priezvisko</label>
+        <input class="wizard-input" id="d-name" autocomplete="name" placeholder="Ján Novák">
+        <label class="wizard-label">E-mail</label>
+        <input class="wizard-input" id="d-email" type="email" inputmode="email" autocomplete="email" placeholder="jan@priklad.sk">
+        <label class="wizard-label">Telefón</label>
+        <input class="wizard-input" id="d-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+421 9XX XXX XXX">
+        <div class="wizard-row">
+            <div>
+                <label class="wizard-label">Ulica a číslo</label>
+                <input class="wizard-input" id="d-street" autocomplete="street-address" placeholder="Hlavná 1">
+            </div>
+            <div>
+                <label class="wizard-label">PSČ</label>
+                <input class="wizard-input" id="d-zip" inputmode="numeric" autocomplete="postal-code" placeholder="010 01">
+            </div>
+        </div>
+        <label class="wizard-label">Mesto</label>
+        <input class="wizard-input" id="d-city" autocomplete="address-level2" placeholder="Žilina">
+        <input id="d-company" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0;">
+        <label class="wizard-label">Spôsob doručenia</label>
+        <select class="wizard-input" id="d-delivery">
+            <option value="kurier">Kuriér GLS – 5,90€ (do 2 dní)</option>
+            <option value="packeta">Packeta – 3,90€ (do 3 dní)</option>
+            <option value="osobne">Osobný odber – zdarma (Bratislava)</option>
+        </select>
+        <label class="wizard-label">Doplnkové služby</label>
+        <div class="service-options" id="service-options"></div>
+        <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+            <button class="wizard-btn wizard-btn-ghost" onclick="goStep(1)" style="flex: 0.4;">← Späť</button>
+            <button class="wizard-btn" onclick="goStep(3)" style="flex: 1;">Zobraziť súhrn →</button>
+        </div>
+    </div>
+
+    <!-- STEP 3: Summary -->
+    <div class="wizard-panel" id="wp-3" style="padding: 1.5rem 2rem; overflow-y: auto; flex: 1;">
+        <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem;">Skontrolujte svoju objednávku</p>
+        <div id="order-summary-items"></div>
+        <div id="delivery-summary" style="margin: 1rem 0; padding: 1rem; background: var(--glass); border-radius: 12px; font-size: 0.9rem; color: var(--muted);"></div>
+        <label style="display:flex;gap:0.7rem;align-items:flex-start;font-size:0.86rem;color:var(--muted);line-height:1.45;margin-top:1rem;">
+            <input type="checkbox" id="terms-accepted" style="margin-top:0.2rem;accent-color:var(--accent);">
+            <span>Súhlasím s <a href="#obchodne-podmienky" onclick="closeCart()" style="color:var(--accent);">obchodnými podmienkami</a>, <a href="#ochrana-udajov" onclick="closeCart()" style="color:var(--accent);">spracovaním údajov</a> pre vybavenie objednávky, odpočítaním skladovej zásoby a odoslaním objednávky s povinnosťou platby.</span>
+        </label>
+        <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+            <button class="wizard-btn wizard-btn-ghost" onclick="goStep(2)" style="flex: 0.4;">← Späť</button>
+            <button class="wizard-btn" onclick="submitOrder()" style="flex: 1;">✓ Objednávka s povinnosťou platby</button>
+        </div>
+    </div>
+</div>
+
+<!-- WISHLIST PANEL -->
+<div class="cart-overlay" id="wish-overlay" onclick="closeWishlist()"></div>
+<div class="cart-panel" id="wish-panel">
+    <div class="cart-header">
+        <h2>♥ Obľúbené</h2>
+        <button class="cart-close" onclick="closeWishlist()">✕</button>
+    </div>
+    <div class="cart-items" id="wish-items">
+        <div class="cart-empty"><div class="icon">♡</div><p>Žiadne obľúbené</p><small>Klikni na ♡ na produkte</small></div>
+    </div>
+    <div class="cart-footer">
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;">💾 Uložené v tvojom prehliadači. Na inom zariadení alebo po vymazaní histórie sa zoznam vymaže.</p>
+        <button class="wizard-btn" onclick="addAllWishToCart()">Pridať všetko do košíka 🛒</button>
+    </div>
+</div>
+<div class="compare-bar" id="compare-bar">
+    <span style="font-weight: 700; font-size: 0.9rem;">Porovnať:</span>
+    <div class="compare-bar-items" id="compare-bar-items"></div>
+    <button class="compare-now-btn" onclick="openCompare()">Porovnať teraz</button>
+    <button class="compare-clear" onclick="clearCompare()">Zrušiť</button>
+</div>
+
+<!-- COMPARE MODAL -->
+<div class="compare-modal" id="compare-modal">
+    <div class="compare-backdrop" onclick="closeCompare()"></div>
+    <div class="compare-content">
+        <h3>⚖️ Porovnanie produktov</h3>
+        <button class="compare-close" onclick="closeCompare()">✕</button>
+        <div id="compare-table-wrap"></div>
+    </div>
+</div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="compare-modal" id="product-modal">
+    <div class="compare-backdrop" onclick="closeProductDetail()"></div>
+    <div class="compare-content">
+        <button class="compare-close" onclick="closeProductDetail()">✕</button>
+        <div id="product-detail-wrap"></div>
+    </div>
+</div>
+
+<!-- CUSTOMER ACCOUNT MODAL -->
+<div class="compare-modal" id="account-modal">
+    <div class="compare-backdrop" onclick="closeAccount()"></div>
+    <div class="compare-content">
+        <button class="compare-close" onclick="closeAccount()">✕</button>
+        <div id="auth-view">
+            <h3 style="margin-bottom:1rem;">Zákaznícky účet</h3>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="auth-login-tab" onclick="setAuthMode('login')">Log in</button>
+                <button class="auth-tab" id="auth-signup-tab" onclick="setAuthMode('signup')">Sign up</button>
+            </div>
+            <div class="auth-panel active" id="auth-login-panel">
+                <div class="auth-field"><label>E-mail</label><input id="login-email" type="email" autocomplete="username" placeholder="email@priklad.sk"></div>
+                <div class="auth-field"><label>Heslo</label><input id="login-password" type="password" autocomplete="current-password" placeholder="Min. 6 znakov"></div>
+                <button class="wizard-btn" onclick="loginCustomer()">Prihlásiť sa</button>
+                <button class="auth-link" onclick="openPasswordReset()">Zabudli ste heslo?</button>
+                <button class="auth-link" onclick="openConfirmResend()">Potvrdenie účtu neprišlo?</button>
+            </div>
+            <div class="auth-panel" id="auth-signup-panel">
+                <div class="auth-field"><label>Meno</label><input id="signup-name" type="text" autocomplete="name" placeholder="Ján Novák"></div>
+                <div class="auth-field"><label>E-mail</label><input id="signup-email" type="email" autocomplete="username" placeholder="email@priklad.sk"></div>
+                <div class="auth-field"><label>Telefón</label><input id="signup-phone" type="tel" autocomplete="tel" placeholder="09XX XXX XXX alebo +421"></div>
+                <div class="auth-field"><label>Heslo</label><input id="signup-password" type="password" autocomplete="new-password" placeholder="10+ znakov, A-z a číslo"></div>
+                <button class="wizard-btn" onclick="signupCustomer()">Vytvoriť účet</button>
+            </div>
+            <div class="auth-panel" id="auth-reset-panel">
+                <div id="reset-request-view">
+                    <div class="auth-field"><label>E-mail účtu</label><input id="reset-email" type="email" autocomplete="email" placeholder="email@priklad.sk"></div>
+                    <button class="wizard-btn" id="reset-submit-btn" onclick="requestPasswordReset()">Poslať reset hesla</button>
+                    <button class="auth-link" onclick="setAuthMode('login')">Späť na Log in</button>
+                </div>
+                <div id="reset-new-password-view" style="display:none;">
+                    <p class="auth-note" style="margin-bottom:1rem;">Zadajte nové bezpečné heslo pre svoj účet.</p>
+                    <div class="auth-field"><label>Nové heslo</label><input id="reset-new-password" type="password" autocomplete="new-password" placeholder="10+ znakov, A-z a číslo"></div>
+                    <button class="wizard-btn" onclick="updateRecoveredPassword()">Uložiť nové heslo</button>
+                </div>
+            </div>
+            <div class="auth-panel" id="auth-confirm-panel">
+                <p class="auth-note" style="margin-bottom:1rem;">Toto používajte iba pre nový účet, ktorý ešte nebol potvrdený. Ak je účet už potvrdený a neviete heslo, použite Zabudli ste heslo.</p>
+                <div class="auth-field"><label>E-mail účtu</label><input id="confirm-email" type="email" autocomplete="email" placeholder="email@priklad.sk"></div>
+                <button class="wizard-btn" id="confirm-submit-btn" onclick="resendConfirmationEmail()">Poslať potvrdenie znova</button>
+                <button class="auth-link" onclick="setAuthMode('login')">Späť na Log in</button>
+            </div>
+            <p class="auth-note">Heslo neukladáme do stránky. Prihlásenie spracuje Supabase Auth. Ak email nepríde, skontrolujte Spam a neposielajte ho opakovane; viac pokusov za sebou dočasne zablokuje odosielanie.</p>
+        </div>
+        <div id="account-view" style="display:none;">
+            <h3 style="margin-bottom:1rem;">Môj účet</h3>
+            <div class="account-summary">
+                <div>
+                    <div style="font-weight:800;" id="account-email">—</div>
+                    <div style="color:var(--muted);font-size:0.86rem;" id="account-phone">—</div>
+                </div>
+                <button class="detail-btn" onclick="logoutCustomer()">Odhlásiť</button>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:0.8rem;align-items:center;margin-bottom:0.8rem;flex-wrap:wrap;">
+                <strong>Moje objednávky</strong>
+                <button class="detail-btn" style="padding:0.7rem 0.9rem;font-size:0.85rem;" onclick="loadCustomerOrders()">Obnoviť</button>
+            </div>
+            <div class="account-orders" id="account-orders">
+                <div style="color:var(--muted);">Prihláste sa a objednávky sa načítajú podľa emailu účtu.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="badge"><span class="badge-dot"></span> <span id="hero-badge-text">Skladom · Doručenie do 48h</span></div>
+        <div class="site-announcement" id="site-announcement"></div>
+        <h1 id="hero-title">Získajte <span>výkon</span> bez kompromisov.</h1>
+        <p id="hero-text">Sme špecialisti na prémiové repasované stanice. Ponúkame stroje s výkonom nových PC, ale za zlomok ich ceny. Každý kus prešiel 24-hodinovým záťažovým testom.</p>
+        <div class="hero-btns">
+            <a href="#ponuka" class="btn-primary">Prezrieť sklad</a>
+            <a href="#kontakt" class="btn-ghost">Poradiť sa</a>
+        </div>
+        <div class="trust-row">
+            <div class="trust-item"><span>🔒</span> Bezpečná platba</div>
+            <div class="trust-item"><span>📦</span> Doprava od 3,90€</div>
+            <div class="trust-item"><span>🛡️</span> 12 mesiacov záruka</div>
+            <div class="trust-item"><span>🔄</span> 14 dní na vrátenie</div>
+        </div>
+    </div>
+    <div class="hero-visual reveal">
+        <div style="width: 400px; height: 400px; background: linear-gradient(45deg, var(--accent), #8b5cf6); border-radius: 40px; transform: rotate(5deg); display: flex; align-items: center; justify-content: center; font-size: 6rem; box-shadow: 0 40px 80px rgba(59,130,246,0.3);">🖥️</div>
+    </div>
+</section>
+
+<!-- WHY US -->
+<div class="stats-section" id="preco-my">
+    <div class="section-header reveal">
+        <div class="section-label">Prečo Computrax</div>
+        <div class="section-title">Výkon, ktorému môžeš veriť</div>
+    </div>
+    <div class="stats-grid reveal">
+        <div class="stat-card">
+            <div style="font-size:2.5rem;margin-bottom:0.8rem;">🔬</div>
+            <div style="font-family:'Outfit';font-size:1.3rem;font-weight:700;margin-bottom:0.4rem;">24h záťažový test</div>
+            <div class="stat-label">Každý PC otestujeme 24 hodín pod plnou záťažou pred expedíciou</div>
+        </div>
+        <div class="stat-card">
+            <div style="font-size:2.5rem;margin-bottom:0.8rem;">🛡️</div>
+            <div style="font-family:'Outfit';font-size:1.3rem;font-weight:700;margin-bottom:0.4rem;">12 mesiacov záruka</div>
+            <div class="stat-label">Plná záruka na každý predaný kus. Oprava alebo výmena kus za kus</div>
+        </div>
+        <div class="stat-card">
+            <div style="font-size:2.5rem;margin-bottom:0.8rem;">🔄</div>
+            <div style="font-family:'Outfit';font-size:1.3rem;font-weight:700;margin-bottom:0.4rem;">14 dní vrátenie</div>
+            <div class="stat-label">Nie ste spokojní? Vrátite do 14 dní bez udania dôvodu, odvoz na naše náklady</div>
+        </div>
+        <div class="stat-card">
+            <div style="font-size:2.5rem;margin-bottom:0.8rem;">📦</div>
+            <div style="font-family:'Outfit';font-size:1.3rem;font-weight:700;margin-bottom:0.4rem;">Doručenie do 48h</div>
+            <div class="stat-label">Expedícia v deň objednávky, doručenie kuriérom priamo k vám domov</div>
+        </div>
+    </div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="ponuka">
+    <div class="section-header reveal">
+        <div class="section-label">Aktuálny stav skladu</div>
+        <div class="section-title">Vyberte si svoj nový stroj</div>
+    </div>
+
+    <div class="filter-panel reveal">
+
+        <!-- Row 1: Category + Sort + Reset -->
+        <div class="filter-row">
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="setFilter('cat','vsetko',this)">Všetky</button>
+                <button class="filter-btn" onclick="setFilter('cat','gaming',this)">🎮 Herné</button>
+                <button class="filter-btn" onclick="setFilter('cat','office',this)">💼 Kancelárske</button>
+            </div>
+            <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
+                <select class="filter-select" id="sort-select" onchange="applyFilters()">
+                    <option value="default">Zoradiť: Predvolené</option>
+                    <option value="price-asc">Cena: od najlacnejšej</option>
+                    <option value="price-desc">Cena: od najdrahšej</option>
+                    <option value="newest">Najnovšie pridané</option>
+                    <option value="popular">Najpredávanejšie</option>
+                </select>
+                <button class="filter-reset" onclick="resetFilters()">✕ Zrušiť filtre</button>
+            </div>
+        </div>
+
+        <!-- Row 2: Detailed filters -->
+        <div class="filter-row filter-details">
+            <!-- Price range -->
+            <div class="filter-item">
+                <label class="filter-label">Cena</label>
+                <div class="price-range-wrap">
+                    <span class="price-val" id="price-min-label">0€</span>
+                    <div class="range-track">
+                        <input type="range" min="0" max="10000" value="0" step="50" id="price-min" oninput="applyFilters()">
+                        <input type="range" min="0" max="10000" value="10000" step="50" id="price-max" oninput="applyFilters()">
+                    </div>
+                    <span class="price-val" id="price-max-label">10000€</span>
+                </div>
+            </div>
+
+            <!-- GPU -->
+            <div class="filter-item">
+                <label class="filter-label">Grafická karta</label>
+                <select class="filter-select" id="filter-gpu" onchange="applyFilters()">
+                    <option value="">Všetky</option>
+                    <option value="RTX 3080">RTX 3080</option>
+                    <option value="RTX 3070">RTX 3070</option>
+                    <option value="UHD">Integrovaná</option>
+                </select>
+            </div>
+
+            <!-- CPU -->
+            <div class="filter-item">
+                <label class="filter-label">Procesor</label>
+                <select class="filter-select" id="filter-cpu" onchange="applyFilters()">
+                    <option value="">Všetky</option>
+                    <option value="amd">AMD (Ryzen)</option>
+                    <option value="intel">Intel</option>
+                </select>
+            </div>
+
+            <!-- RAM -->
+            <div class="filter-item">
+                <label class="filter-label">RAM</label>
+                <div class="filter-group" id="ram-group">
+                    <button class="filter-btn active" onclick="setFilter('ram','',this)">Všetky</button>
+                    <button class="filter-btn" onclick="setFilter('ram','16',this)">16GB</button>
+                    <button class="filter-btn" onclick="setFilter('ram','32',this)">32GB</button>
+                </div>
+            </div>
+
+            <!-- Stock status -->
+            <div class="filter-item">
+                <label class="filter-label">Dostupnosť</label>
+                <div class="filter-group">
+                    <button class="filter-btn active" onclick="setFilter('stock','vsetko',this)">Všetky</button>
+                    <button class="filter-btn" onclick="setFilter('stock','skladom',this)">🟢 Skladom</button>
+                    <button class="filter-btn" onclick="setFilter('stock','malo',this)">🔴 Posledné kusy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active filter tags -->
+        <div id="active-tags" style="display:none; display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;"></div>
+
+        <!-- Results count -->
+        <div class="products-live-row">
+            <div>
+                Zobrazuje sa <span id="results-count" style="color:var(--accent);font-weight:700;">0</span> produktov
+            </div>
+            <div class="live-status" id="products-live-status"><span class="live-dot"></span><span>Načítavam sklad...</span></div>
+            <button class="refresh-products-btn" type="button" onclick="refreshProductsNow()">Obnoviť sklad</button>
+        </div>
+    </div>
+
+    <div class="products-grid" id="products-grid">
+        <!-- Produkty sa načítavajú dynamicky z vložených dát alebo Supabase -->
+    </div>
+
+    <!-- No results -->
+    <div id="no-results" style="display:none; text-align:center; padding: 4rem; color: var(--muted);">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+        <p>Žiadne PC nezodpovedá filtru. Skúste iné nastavenie.</p>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+    <div class="section-header reveal">
+        <div class="section-label">Podpora</div>
+        <div class="section-title">Často kladené otázky</div>
+    </div>
+    <div class="faq-container reveal">
+        <div class="faq-item">
+            <div class="faq-q">Aká je záruka na vaše počítače? <span>+</span></div>
+            <div class="faq-a">Na každý počítač poskytujeme plnú záruku 12 mesiacov. V prípade poruchy garantujeme opravu alebo výmenu kus za kus.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Čo presne znamená "repasovaný"? <span>+</span></div>
+            <div class="faq-a">Sú to stroje z operatívnych leasingov veľkých firiem. My ich kompletne vyčistíme, prepastujeme procesory a otestujeme každý komponent 24 hodín pod záťažou.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Je doručenie bezpečné? <span>+</span></div>
+            <div class="faq-a">Áno, počítače balíme do špeciálnych vystužených boxov a posielame kuriérom ako krehký tovar priamo k vám domov.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Môžem vrátiť tovar? <span>+</span></div>
+            <div class="faq-a">Áno, máte 14 dní na vrátenie bez udania dôvodu. Stačí nás kontaktovať a my zabezpečíme odvoz na naše náklady.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Dodávate aj pre firmy s faktúrou? <span>+</span></div>
+            <div class="faq-a">Samozrejme! Pre firemných zákazníkov vystavujeme faktúru s DPH. Kontaktujte nás priamo pre hromadné objednávky alebo špeciálne cenové podmienky.</div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="kontakt">
+    <div class="contact-wrapper reveal">
+        <div class="contact-info">
+            <h2 style="font-family: 'Outfit'; font-size: 2.5rem; margin-bottom: 1.5rem;">Napíšte nám</h2>
+            <p style="margin-bottom: 3rem; opacity: 0.9;">Máte otázku k vybranému modelu? Ozvite sa nám a my vám radi poradíme.</p>
+            <div style="margin-bottom: 2rem;">
+                <small style="text-transform: uppercase; opacity: 0.6; font-size: 0.75rem;">Telefón</small>
+                <p id="contact-phone-text" style="font-size: 1.5rem; font-weight: 700;">0949 835 923</p>
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <small style="text-transform: uppercase; opacity: 0.6; font-size: 0.75rem;">E-mail</small>
+                <p id="contact-email-text" style="font-size: 1.1rem; font-weight: 600;">computrax.sk@gmail.com</p>
+            </div>
+            <div>
+                <small style="text-transform: uppercase; opacity: 0.6; font-size: 0.75rem;">Pracovné hodiny</small>
+                <p id="contact-hours-text" style="font-weight: 600;">Po–Pi: 12:00 – 18:00</p>
+            </div>
+        </div>
+        <div class="contact-form">
+            <form onsubmit="submitContact(event)">
+                <div class="form-group"><label>Vaše meno</label><input type="text" id="c-name" autocomplete="name" placeholder="Jozef Mrkvička" required></div>
+                <div class="form-group"><label>Váš E-mail</label><input type="email" id="c-email" inputmode="email" autocomplete="email" placeholder="email@priklad.sk" required></div>
+                <input id="c-company" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0;">
+                <div class="form-group">
+                    <label>Model PC</label>
+                    <select id="model-select">
+                        <option value="">Všeobecná otázka</option>
+                        <option value="Alienware Aurora R14">Alienware Aurora R14</option>
+                        <option value="HP Omen 40L">HP Omen 40L</option>
+                        <option value="Dell OptiPlex 7090">Dell OptiPlex 7090</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Správa</label><textarea id="c-msg" rows="4" placeholder="Dobrý deň, mal by som záujem o..."></textarea></div>
+                <button type="submit" class="send-btn">Odoslať dopyt ✉️</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- LEGAL -->
+<section id="pravne-info" style="padding-top: 4rem;">
+    <div class="section-header" style="margin-bottom:2rem;">
+        <div class="section-label">Právne info</div>
+        <h2>Podmienky, súkromie a cookies</h2>
+        <p>Prehľad základných pravidiel nákupu, reklamácie a spracovania údajov. Údaje predávajúceho sa dopĺňajú z admin nastavení.</p>
+    </div>
+    <div class="legal-grid">
+        <article id="predavajuci" class="legal-card">
+            <h3>Predávajúci</h3>
+            <p><strong id="legal-company-name">Computrax.sk</strong></p>
+            <p>Adresa: <span id="legal-company-address">Doplň adresu predávajúceho</span></p>
+            <p>IČO: <span id="legal-company-id">Doplň IČO</span></p>
+            <p>DIČ: <span id="legal-tax-id">Doplň DIČ</span></p>
+            <p id="legal-vat-row">IČ DPH: <span id="legal-vat-id">-</span></p>
+            <p>E-mail: <a id="legal-email" href="mailto:computrax.sk@gmail.com">computrax.sk@gmail.com</a></p>
+            <p>Telefón: <a id="legal-phone" href="tel:+421949835923">0949 835 923</a></p>
+            <p class="legal-muted">Posledná aktualizácia: <span id="legal-updated">06.06.2026</span></p>
+            <p class="legal-muted">Ak sú vyššie uvedené údaje označené ako „Doplň“, pred spustením verejného predaja ich treba nahradiť reálnymi údajmi predávajúceho.</p>
+        </article>
+        <article id="obchodne-podmienky" class="legal-card">
+            <h3>Obchodné podmienky</h3>
+            <p>Objednávka sa považuje za odoslanú po stlačení tlačidla „Objednávka s povinnosťou platby“. Pred odoslaním objednávky zákazník vidí cenu produktov, doplnkových služieb, dopravy a celkovú sumu.</p>
+            <p>Tovar je repasovaný alebo použitý, vždy s uvedeným stavom a parametrami. Cena pri produkte je konečná cena produktu; doprava a doplnkové služby sa zobrazia v košíku pred odoslaním objednávky.</p>
+            <p>Ak sa produkt vypredá alebo nastane chyba skladovej dostupnosti, zákazníka kontaktujeme s náhradným riešením, zrušením objednávky alebo vrátením prijatej platby.</p>
+            <p>Pri repasovanom alebo použitom tovare môže byť bežné kozmetické opotrebenie. Podstatné vady, chýbajúce príslušenstvo alebo obmedzenia konkrétneho kusu majú byť uvedené pri produkte alebo potvrdené pred odoslaním.</p>
+        </article>
+        <article id="odstupenie" class="legal-card">
+            <h3>Odstúpenie od zmluvy</h3>
+            <p>Spotrebiteľ môže pri nákupe na diaľku spravidla odstúpiť od zmluvy do 14 dní od prevzatia tovaru. Pre odstúpenie nás kontaktujte e-mailom a uveďte číslo objednávky.</p>
+            <p>Tovar je potrebné vrátiť kompletný, primerane zabalený a bez poškodenia nad rámec bežného vyskúšania. Peniaze vraciame najneskôr v zákonnej lehote rovnakým alebo dohodnutým spôsobom platby.</p>
+            <p>Náklady na spätné doručenie pri odstúpení znáša zákazník, ak sa individuálne nedohodneme inak. Pri chybne dodanom alebo poškodenom tovare nás kontaktujte pred odoslaním balíka.</p>
+        </article>
+        <article id="reklamacny-poriadok" class="legal-card">
+            <h3>Reklamačný poriadok</h3>
+            <p>Na počítače poskytujeme záruku uvedenú pri konkrétnom produkte. Uvedená záruka neobmedzuje zákonné práva spotrebiteľa pri vadnom tovare.</p>
+            <p>Pri reklamácii nás kontaktujte s číslom objednávky, popisom problému a fotkami alebo videom závady. Po prijatí reklamácie navrhneme diagnostiku, opravu, výmenu alebo iné zákonné riešenie.</p>
+            <p>Po uplatnení reklamácie zákazník dostane potvrdenie o prijatí reklamácie a informáciu o ďalšom postupe. Reklamovaný tovar posielajte bezpečne zabalený a s príslušenstvom, ktorého sa reklamácia týka.</p>
+        </article>
+        <article id="ochrana-udajov" class="legal-card">
+            <h3>Ochrana údajov (GDPR)</h3>
+            <p>Prevádzkovateľom osobných údajov je predávajúci uvedený v časti Predávajúci. Údaje z objednávky používame na vybavenie nákupu, doručenie, komunikáciu so zákazníkom, správu účtu, reklamácie, bezpečnosť stránky a zákonné účtovné povinnosti.</p>
+            <p>Spracúvané môžu byť najmä meno, e-mail, telefón, adresa, obsah objednávky, stav platby, stav doručenia a technické údaje potrebné pre fungovanie stránky. Právnym základom je najmä plnenie zmluvy, zákonná povinnosť a oprávnený záujem na bezpečnosti.</p>
+            <p>Údaje môžu spracúvať technickí poskytovatelia potrební pre fungovanie e-shopu, najmä Supabase pre databázu a zákaznícke účty, EmailJS pre e-mailové notifikácie, dopravca pre doručenie a prípadná platobná brána pre platby.</p>
+            <p>Účtovné a objednávkové údaje uchovávame po dobu vyžadovanú právnymi predpismi. Účet a technické údaje uchovávame len primerane dlho podľa účelu. O prístup, opravu, výmaz, obmedzenie spracovania alebo prenos údajov môžete požiadať cez kontaktný e-mail.</p>
+            <p>Ak si myslíte, že s údajmi nakladáme nesprávne, môžete podať sťažnosť dozornému orgánu na ochranu osobných údajov. Údaje nepredávame marketingovým tretím stranám.</p>
+        </article>
+        <article id="cookies" class="legal-card">
+            <h3>Cookies a lokálne úložisko</h3>
+            <p>Používame iba nevyhnutné cookies, localStorage a sessionStorage na fungovanie košíka, obľúbených položiek, zákazníckeho prihlásenia, skladových funkcií, bezpečnostných kontrol a zapamätanie voľby v cookie lište.</p>
+            <p>Stránka používa technické služby Supabase, EmailJS a Google Fonts. Nepoužívame reklamné ani analytické cookies. Ak ich v budúcnosti zapneme, stránka musí najprv zobraziť samostatný súhlas pre konkrétne účely.</p>
+        </article>
+        <article id="alternativne-riesenie-sporov" class="legal-card">
+            <h3>Alternatívne riešenie sporov</h3>
+            <p>Ak zákazník nie je spokojný s vybavením objednávky, reklamácie alebo odpoveďou predávajúceho, môže sa obrátiť na príslušný orgán alternatívneho riešenia spotrebiteľských sporov.</p>
+            <p>Pre Slovensko je dôležitým kontaktným miestom Slovenská obchodná inšpekcia. Informácie o riešení spotrebiteľských sporov nájdete aj na európskych spotrebiteľských portáloch.</p>
+        </article>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#" class="logo">Compu<span>trax</span></a>
+            <p>Prémiové repasované počítače so zárukou a podporou. Výkon bez kompromisov za rozumnú cenu.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Navigácia</h4>
+            <a href="#ponuka">Ponuka</a>
+            <a href="#preco-my">O nás</a>
+            <a href="#faq">FAQ</a>
+            <a href="#kontakt">Kontakt</a>
+        </div>
+        <div class="footer-col">
+            <h4>Právne info</h4>
+            <a href="#obchodne-podmienky">Obchodné podmienky</a>
+            <a href="#ochrana-udajov">Ochrana údajov (GDPR)</a>
+            <a href="#reklamacny-poriadok">Reklamačný poriadok</a>
+            <a href="#alternativne-riesenie-sporov">Riešenie sporov</a>
+            <a href="#cookies">Cookies</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Computrax.sk – Špičková repasovaná technika. Všetky práva vyhradené.</p>
+    </div>
+</footer>
+
+<!-- WHATSAPP FAB -->
+<a class="whatsapp-fab" href="https://wa.me/421949835923?text=Dobr%C3%BD+de%C5%88%2C+zauj%C3%ADmal+by+ma+jeden+z+va%C5%A1ich+po%C4%8D%C3%ADta%C4%8Dov." target="_blank" rel="noopener">
+    <span class="wa-icon">💬</span>
+    <span class="wa-label">Napísať na WhatsApp</span>
+</a>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookie-banner">
+    <p>🍪 Táto stránka používa nevyhnutné cookies a localStorage na fungovanie košíka a obľúbených položiek. Nezbierame žiadne analytické ani reklamné údaje. Viac informácií v našich <a href="#ochrana-udajov">Zásadách ochrany súkromia</a>.</p>
+    <div class="cookie-btns">
+        <button class="cookie-accept" onclick="acceptCookies()">Rozumiem</button>
+        <button class="cookie-decline" onclick="declineCookies()">Zavrieť</button>
+    </div>
+</div>
+
+<script>
+document.documentElement.classList.add('js');
+// ============================================================
+//  DATA (bundled fallback, Supabase/local data can replace it)
+// ============================================================
+const products = {};
+const SB_URL = 'https://aryjaqexfgalxaiseqtp.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeWphcWV4ZmdhbHhhaXNlcXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNjk5NzUsImV4cCI6MjA5NTY0NTk3NX0.m6PTVqVvjGWeVGdvSIfbcBPs7OLg_P8MjVw9ziN-_BA';
+const LOCAL_PRODUCTS_KEY = 'ctrax_local_products';
+const CART_KEY = 'ctrax_cart';
+const CHECKOUT_DRAFT_KEY = 'ctrax_checkout_draft';
+const CUSTOMER_SESSION_KEY = 'ctrax_customer_session';
+const PASSWORD_RESET_COOLDOWN_KEY = 'ctrax_password_reset_last';
+const AUTH_EMAIL_COOLDOWN_MS = 10 * 60 * 1000;
+const CONTACT_COOLDOWN_KEY = 'ctrax_contact_last';
+const CONTACT_COOLDOWN_MS = 90 * 1000;
+const PRODUCT_AUTO_REFRESH_MS = 60000;
+const DEFAULT_SITE_SETTINGS = {
+    heroBadge: 'Skladom · Doručenie do 48h',
+    heroTitle: 'Získajte <span>výkon</span> bez kompromisov.',
+    heroText: 'Sme špecialisti na prémiové repasované stanice. Ponúkame stroje s výkonom nových PC, ale za zlomok ich ceny. Každý kus prešiel 24-hodinovým záťažovým testom.',
+    publicSiteUrl: 'https://8twk58fzg9-sudo.github.io/8',
+    announcementEnabled: false,
+    announcementText: 'Akcia: ku každému PC základné nastavenie zdarma tento týždeň.',
+    announcementLink: '#ponuka',
+    announcementLinkLabel: 'Pozrieť ponuku',
+    companyName: 'Computrax.sk',
+    companyAddress: 'Doplň adresu predávajúceho',
+    companyId: 'Doplň IČO',
+    taxId: 'Doplň DIČ',
+    vatId: '',
+    bankAccount: '',
+    legalUpdated: '06.06.2026',
+    phone: '0949 835 923',
+    email: 'computrax.sk@gmail.com',
+    hours: 'Po–Pi: 12:00 – 18:00',
+    whatsappPhone: '421949835923',
+    whatsappText: 'Dobrý deň, zaujímal by ma jeden z vašich počítačov.',
+    priceMin: 0,
+    priceMax: 10000
+};
+const DEFAULT_SERVICE_ADDONS = [
+    { id: 'setup', name: 'Expresné nastavenie PC', price: 29, desc: 'Windows konto, aktualizácie, ovládače a základné nastavenia pred odoslaním.' },
+    { id: 'software', name: 'Balík programov', price: 19, desc: 'Prehliadač, VLC, 7-Zip, LibreOffice a základné utility pripravené na používanie.' },
+    { id: 'warranty', name: 'Predĺžená záruka +12 mesiacov', price: 49, desc: 'Spolu 24 mesiacov záruky na repasovaný počítač.' }
+];
+let serviceAddons = DEFAULT_SERVICE_ADDONS.map(service => ({ ...service, enabled: true }));
+let activeProducts = PRODUCTS_DATA.map(normalizeProduct);
+let customerSession = loadCustomerSession();
+
+function normalizeProduct(p) {
+    const name = String(p.name || '').trim();
+    const stock = Math.max(0, Number(p.stock ?? 0));
+    const price = Math.max(0, Number(p.price ?? 0));
+    const cpu = p.cpu || '–';
+    const gpu = p.gpu || '–';
+    const ram = p.ram || '–';
+    const ssd = p.ssd || '–';
+    return {
+        id: p.id,
+        name,
+        price,
+        cat: p.cat || 'office',
+        stock,
+        status: p.status || (stock > 0 ? 'active' : 'sold'),
+        tag: p.tag || (p.cat === 'gaming' ? 'HERNÉ PC' : 'SKLADOM'),
+        tagColor: p.tagColor || p.tag_color || '#60a5fa',
+        cpu,
+        cpuBrand: p.cpuBrand || p.cpu_brand || (/ryzen|amd/i.test(cpu) ? 'amd' : /intel|i[3579]/i.test(cpu) ? 'intel' : ''),
+        gpu,
+        gpuFilter: p.gpuFilter || p.gpu_filter || gpu,
+        ram,
+        ramFilter: p.ramFilter || p.ram_filter || (String(ram).match(/\d+/)?.[0] || ''),
+        ssd,
+        os: p.os || 'Windows 11 Pro',
+        delivery: p.delivery || 'Doprava 3,90€',
+        popular: Number(p.popular || 0),
+        newest: Number(p.newest || p.id || 0)
+    };
+}
+
+function rebuildProductMap(list) {
+    Object.keys(products).forEach(key => delete products[key]);
+    list.forEach(p => { if (p.name) products[p.name] = p; });
+}
+
+function safeAttr(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+}
+
+function jsArg(value) {
+    return safeAttr(JSON.stringify(String(value ?? '')));
+}
+
+function money(value) {
+    return `${Number(value || 0)}€`;
+}
+
+function authRedirectUrl() {
+    const stored = localStorage.getItem('ctrax_public_site_url') || '';
+    if (/^https:\/\/.+/i.test(stored)) return stored.replace(/\/$/, '') + '/index.html';
+    if (/^https:\/\/.+/i.test(DEFAULT_SITE_SETTINGS.publicSiteUrl)) return DEFAULT_SITE_SETTINGS.publicSiteUrl.replace(/\/$/, '') + '/index.html';
+    return location.origin + location.pathname;
+}
+
+function loadCustomerSession() {
+    try {
+        const saved = JSON.parse(sessionStorage.getItem(CUSTOMER_SESSION_KEY) || 'null');
+        if (!saved || !saved.access_token || !saved.user) return null;
+        if (saved.expires_at && saved.expires_at * 1000 < Date.now()) {
+            sessionStorage.removeItem(CUSTOMER_SESSION_KEY);
+            return null;
+        }
+        return saved;
+    } catch(e) {
+        return null;
+    }
+}
+
+function saveCustomerSession(session) {
+    if (!session?.access_token || !session?.user) return;
+    customerSession = session;
+    sessionStorage.setItem(CUSTOMER_SESSION_KEY, JSON.stringify(session));
+    updateAccountUI();
+}
+
+function customerEmail() {
+    return customerSession?.user?.email || '';
+}
+
+function customerPhone() {
+    return customerSession?.user?.user_metadata?.phone || customerSession?.user?.phone || '';
+}
+
+function authHeaders(token = customerSession?.access_token) {
+    return {
+        apikey: SB_KEY,
+        Authorization: `Bearer ${token || SB_KEY}`,
+        'Content-Type': 'application/json'
+    };
+}
+
+function setAuthMode(mode) {
+    const login = mode === 'login';
+    const signup = mode === 'signup';
+    const reset = mode === 'reset';
+    const confirm = mode === 'confirm';
+    document.getElementById('auth-login-tab').classList.toggle('active', login);
+    document.getElementById('auth-signup-tab').classList.toggle('active', signup);
+    document.getElementById('auth-login-panel').classList.toggle('active', login);
+    document.getElementById('auth-signup-panel').classList.toggle('active', signup);
+    document.getElementById('auth-reset-panel').classList.toggle('active', reset);
+    document.getElementById('auth-confirm-panel').classList.toggle('active', confirm);
+}
+
+function updateAccountUI() {
+    const loggedIn = Boolean(customerSession?.access_token);
+    const btn = document.getElementById('account-btn');
+    if (btn) {
+        btn.textContent = loggedIn ? '👤 Môj účet' : '👤 Prihlásiť';
+        btn.classList.toggle('logged-in', loggedIn);
+    }
+    const authView = document.getElementById('auth-view');
+    const accountView = document.getElementById('account-view');
+    if (authView && accountView) {
+        authView.style.display = loggedIn ? 'none' : 'block';
+        accountView.style.display = loggedIn ? 'block' : 'none';
+    }
+    const emailEl = document.getElementById('account-email');
+    const phoneEl = document.getElementById('account-phone');
+    if (emailEl) emailEl.textContent = customerEmail() || 'Prihlásený zákazník';
+    if (phoneEl) phoneEl.textContent = customerPhone() ? `Telefón: ${customerPhone()}` : 'Telefón môžete doplniť pri objednávke';
+}
+
+function openAccount() {
+    updateAccountUI();
+    document.getElementById('account-modal').classList.add('open');
+    if (customerSession?.access_token) loadCustomerOrders();
+}
+
+function closeAccount() {
+    document.getElementById('account-modal').classList.remove('open');
+}
+
+function authErrorMessage(error) {
+    const text = String(error || '').toLowerCase();
+    if (text.includes('invalid login')) return 'Nesprávny e-mail alebo heslo.';
+    if (text.includes('email not confirmed')) return 'Najprv potvrďte e-mail cez odkaz zo Supabase.';
+    if (text.includes('already registered') || text.includes('user already')) return 'Účet s týmto e-mailom už existuje. Skúste Log in.';
+    if (text.includes('rate limit')) return 'Supabase dočasne zastavil odosielanie emailov pre príliš veľa pokusov. Počkajte aspoň 10-60 minút a potom pošlite iba jeden nový email.';
+    if (text.includes('expired') || text.includes('invalid')) return 'Link vypršal alebo je neplatný. Pošlite si nový email.';
+    return error || 'Prihlásenie zlyhalo.';
+}
+
+function authEmailCooldownKey(type, email) {
+    return `${PASSWORD_RESET_COOLDOWN_KEY}_${type}_${String(email || '').toLowerCase()}`;
+}
+
+function authEmailCooldownLeft(key) {
+    const lastSent = Number(localStorage.getItem(key) || 0);
+    return Math.max(0, AUTH_EMAIL_COOLDOWN_MS - (Date.now() - lastSent));
+}
+
+function formatWaitTime(ms) {
+    const minutes = Math.max(1, Math.ceil(ms / 60000));
+    if (minutes === 1) return '1 minútu';
+    if (minutes > 1 && minutes < 5) return `${minutes} minúty`;
+    return `${minutes} minút`;
+}
+
+function guardAuthEmailCooldown(key, label) {
+    const left = authEmailCooldownLeft(key);
+    if (left <= 0) return true;
+    showToast(`⚠️ ${label} môžete poslať znova o ${formatWaitTime(left)}`);
+    return false;
+}
+
+function rememberAuthEmailAttempt(key) {
+    localStorage.setItem(key, String(Date.now()));
+}
+
+function setButtonBusy(id, busy, text = '') {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    if (busy) {
+        btn.dataset.originalText = btn.textContent;
+        btn.textContent = text || 'Odosielam...';
+        btn.disabled = true;
+        btn.style.opacity = '0.75';
+        btn.style.cursor = 'wait';
+    } else {
+        btn.textContent = btn.dataset.originalText || btn.textContent;
+        btn.disabled = false;
+        btn.style.opacity = '';
+        btn.style.cursor = '';
+    }
+}
+
+function passwordPolicyMessage(password) {
+    if (!password || password.length < 10) return 'Heslo musí mať aspoň 10 znakov.';
+    if (!/[a-zá-ž]/.test(password)) return 'Heslo musí obsahovať malé písmeno.';
+    if (!/[A-ZÁ-Ž]/.test(password)) return 'Heslo musí obsahovať veľké písmeno.';
+    if (!/\d/.test(password)) return 'Heslo musí obsahovať číslo.';
+    return '';
+}
+
+async function supabaseAuth(path, body, token = null) {
+    return supabaseAuthRequest('POST', path, body, token);
+}
+
+async function supabaseAuthRequest(method, path, body, token = null) {
+    const res = await fetch(`${SB_URL}/auth/v1/${path}`, {
+        method,
+        headers: authHeaders(token),
+        body: body ? JSON.stringify(body) : undefined
+    });
+    const text = await res.text();
+    let data = {};
+    try { data = text ? JSON.parse(text) : {}; } catch(e) { data = { message: text }; }
+    if (!res.ok) throw new Error(data.msg || data.message || data.error_description || text || 'Auth chyba');
+    return data;
+}
+
+function openConfirmResend() {
+    const email = document.getElementById('login-email')?.value || document.getElementById('signup-email')?.value || '';
+    const confirmEmail = document.getElementById('confirm-email');
+    if (confirmEmail && email) confirmEmail.value = email;
+    setAuthMode('confirm');
+}
+
+async function resendConfirmationEmail() {
+    const email = document.getElementById('confirm-email').value.trim().toLowerCase();
+    if (!email) { showToast('⚠️ Zadajte e-mail účtu'); return; }
+    const cooldownKey = authEmailCooldownKey('confirm', email);
+    if (!guardAuthEmailCooldown(cooldownKey, 'Potvrdzovací email')) return;
+    setButtonBusy('confirm-submit-btn', true, 'Odosielam...');
+    try {
+        await supabaseAuth('resend', {
+            type: 'signup',
+            email,
+            options: { email_redirect_to: authRedirectUrl() }
+        });
+        rememberAuthEmailAttempt(cooldownKey);
+        showToast('✅ Žiadosť prijatá. Ak účet ešte nie je potvrdený, príde potvrdzovací email.');
+        setAuthMode('login');
+    } catch(e) {
+        if (/rate limit/i.test(e.message || '')) rememberAuthEmailAttempt(cooldownKey);
+        showToast('❌ ' + authErrorMessage(e.message));
+    } finally {
+        setButtonBusy('confirm-submit-btn', false);
+    }
+}
+
+function openPasswordReset() {
+    const email = document.getElementById('login-email')?.value || '';
+    const resetEmail = document.getElementById('reset-email');
+    if (resetEmail && email) resetEmail.value = email;
+    const requestView = document.getElementById('reset-request-view');
+    const newPasswordView = document.getElementById('reset-new-password-view');
+    if (requestView) requestView.style.display = 'block';
+    if (newPasswordView) newPasswordView.style.display = 'none';
+    setAuthMode('reset');
+}
+
+function openRecoveredPasswordForm() {
+    const modal = document.getElementById('account-modal');
+    const authView = document.getElementById('auth-view');
+    const accountView = document.getElementById('account-view');
+    const requestView = document.getElementById('reset-request-view');
+    const newPasswordView = document.getElementById('reset-new-password-view');
+    if (authView) authView.style.display = 'block';
+    if (accountView) accountView.style.display = 'none';
+    if (requestView) requestView.style.display = 'none';
+    if (newPasswordView) newPasswordView.style.display = 'block';
+    setAuthMode('reset');
+    if (modal) modal.classList.add('open');
+    setTimeout(() => document.getElementById('reset-new-password')?.focus(), 80);
+}
+
+async function requestPasswordReset() {
+    const email = document.getElementById('reset-email').value.trim().toLowerCase();
+    if (!email) { showToast('⚠️ Zadajte e-mail účtu'); return; }
+    const cooldownKey = authEmailCooldownKey('reset', email);
+    if (!guardAuthEmailCooldown(cooldownKey, 'Reset hesla')) return;
+    setButtonBusy('reset-submit-btn', true, 'Odosielam reset...');
+    try {
+        const redirect = encodeURIComponent(authRedirectUrl());
+        await supabaseAuth(`recover?redirect_to=${redirect}`, { email, gotrue_meta_security: {} });
+        rememberAuthEmailAttempt(cooldownKey);
+        showToast('✅ Ak účet existuje, reset hesla príde na e-mail.');
+        setAuthMode('login');
+    } catch(e) {
+        if (/rate limit/i.test(e.message || '')) rememberAuthEmailAttempt(cooldownKey);
+        showToast('❌ ' + authErrorMessage(e.message));
+    } finally {
+        setButtonBusy('reset-submit-btn', false);
+    }
+}
+
+async function updateRecoveredPassword() {
+    const password = document.getElementById('reset-new-password').value;
+    const passwordProblem = passwordPolicyMessage(password);
+    if (passwordProblem) { showToast('⚠️ ' + passwordProblem); return; }
+    if (!customerSession?.access_token) { showToast('⚠️ Reset session vypršala. Otvorte reset link znova.'); return; }
+    try {
+        const user = await supabaseAuthRequest('PUT', 'user', { password }, customerSession.access_token);
+        customerSession.user = user;
+        sessionStorage.setItem(CUSTOMER_SESSION_KEY, JSON.stringify(customerSession));
+        showToast('✅ Heslo bolo zmenené');
+        updateAccountUI();
+        loadCustomerOrders();
+        closeAccount();
+    } catch(e) {
+        showToast('❌ ' + authErrorMessage(e.message));
+    }
+}
+
+async function signupCustomer() {
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim().toLowerCase();
+    const phone = normalizePhone(document.getElementById('signup-phone').value);
+    const password = document.getElementById('signup-password').value;
+    if (!name || !email || !password) { showToast('⚠️ Vyplňte meno, e-mail a heslo'); return; }
+    const passwordProblem = passwordPolicyMessage(password);
+    if (passwordProblem) { showToast('⚠️ ' + passwordProblem); return; }
+    const cooldownKey = authEmailCooldownKey('signup', email);
+    if (!guardAuthEmailCooldown(cooldownKey, 'Potvrdzovací email')) return;
+    try {
+        const redirect = encodeURIComponent(authRedirectUrl());
+        const data = await supabaseAuth(`signup?redirect_to=${redirect}`, {
+            email,
+            password,
+            data: { full_name: name, phone }
+        });
+        if (data.access_token) {
+            saveCustomerSession(data);
+            showToast('✅ Účet vytvorený a prihlásený');
+            loadCustomerOrders();
+        } else {
+            rememberAuthEmailAttempt(cooldownKey);
+            setAuthMode('login');
+            showToast('✅ Účet vytvorený. Potvrďte e-mail a potom sa prihláste.');
+        }
+    } catch(e) {
+        if (/rate limit/i.test(e.message || '')) rememberAuthEmailAttempt(cooldownKey);
+        showToast('❌ ' + authErrorMessage(e.message));
+    }
+}
+
+async function loginCustomer() {
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) { showToast('⚠️ Vyplňte e-mail a heslo'); return; }
+    try {
+        const data = await supabaseAuth('token?grant_type=password', { email, password });
+        saveCustomerSession(data);
+        showToast('✅ Prihlásenie úspešné');
+        loadCustomerOrders();
+    } catch(e) {
+        showToast('❌ ' + authErrorMessage(e.message));
+    }
+}
+
+async function logoutCustomer() {
+    try {
+        if (customerSession?.access_token) await supabaseAuth('logout', {}, customerSession.access_token);
+    } catch(e) {
+        console.warn('Supabase logout failed:', e.message);
+    }
+    customerSession = null;
+    sessionStorage.removeItem(CUSTOMER_SESSION_KEY);
+    updateAccountUI();
+    document.getElementById('account-orders').innerHTML = '<div style="color:var(--muted);">Boli ste odhlásený.</div>';
+    showToast('👋 Odhlásené');
+}
+
+async function loadCustomerOrders() {
+    const wrap = document.getElementById('account-orders');
+    if (!wrap) return;
+    if (!customerSession?.access_token || !customerEmail()) {
+        wrap.innerHTML = '<div style="color:var(--muted);">Najprv sa prihláste.</div>';
+        return;
+    }
+    wrap.innerHTML = '<div style="color:var(--muted);">Načítavam objednávky...</div>';
+    try {
+        const query = `orders?select=order_number,items,total,status,payment_status,delivery,address,note,created_at&customer_email=eq.${encodeURIComponent(customerEmail())}&order=created_at.desc&limit=20`;
+        const res = await fetch(`${SB_URL}/rest/v1/${query}`, {
+            cache: 'no-store',
+            headers: authHeaders(customerSession.access_token)
+        });
+        const text = await res.text();
+        let rows = [];
+        try { rows = text ? JSON.parse(text) : []; } catch(e) { rows = []; }
+        if (!res.ok) throw new Error(rows.message || text || 'Objednávky sa nepodarilo načítať');
+        if (!rows.length) {
+            wrap.innerHTML = '<div style="color:var(--muted);">Zatiaľ tu nie sú žiadne objednávky pre tento e-mail.</div>';
+            return;
+        }
+        wrap.innerHTML = rows.map(order => {
+            const items = Array.isArray(order.items) ? order.items.map(item => `${Number(item.qty || 1)}× ${safeAttr(item.name || 'Produkt')}`).join(', ') : 'Produkty';
+            const date = order.created_at ? new Date(order.created_at).toLocaleDateString('sk-SK') : '';
+            const statusIndex = orderStatusIndex(order.status);
+            const supportHref = `mailto:computrax.sk@gmail.com?subject=${encodeURIComponent('Objednávka ' + (order.order_number || ''))}&body=${encodeURIComponent('Dobrý deň, mám otázku k objednávke ' + (order.order_number || '') + '.')}`;
+            return `
+                <div class="account-order">
+                    <div class="account-order-head">
+                        <span>${safeAttr(order.order_number || 'Objednávka')}</span>
+                        <span>${money(order.total)}</span>
+                    </div>
+                    <div class="account-order-meta">${safeAttr(date)} · ${safeAttr(items)}</div>
+                    <div class="account-order-meta">${safeAttr(order.delivery || '')}</div>
+                    ${order.address ? `<div class="account-order-meta">Adresa: ${safeAttr(order.address)}</div>` : ''}
+                    ${order.note ? `<div class="account-order-meta">Poznámka: ${safeAttr(order.note).replace(/\n/g, '<br>')}</div>` : ''}
+                    <div class="order-timeline" title="Nová · Potvrdená · Odoslaná · Dokončená">
+                        ${[0,1,2,3].map(step => `<span class="order-step ${step <= statusIndex ? 'done' : ''}"></span>`).join('')}
+                    </div>
+                    <span class="account-status">${safeAttr(order.status || 'new')} · platba ${safeAttr(order.payment_status || 'pending')}</span>
+                    <a class="order-support" href="${safeAttr(supportHref)}">Kontaktovať podporu k objednávke</a>
+                </div>
+            `;
+        }).join('');
+    } catch(e) {
+        const message = String(e.message || '');
+        const authProblem = /jwt|token|401|403|permission/i.test(message);
+        if (authProblem) {
+            customerSession = null;
+            sessionStorage.removeItem(CUSTOMER_SESSION_KEY);
+            updateAccountUI();
+        }
+        wrap.innerHTML = `<div style="color:#fca5a5;">${authProblem ? 'Prihlásenie vypršalo alebo nemá prístup. Prihláste sa znova.' : 'Objednávky sa nepodarilo načítať. Skúste obnoviť alebo kontaktujte podporu.'}</div>`;
+        console.warn('Customer orders load failed:', e.message);
+    }
+}
+
+function orderStatusIndex(status = 'new') {
+    const map = { new: 0, confirmed: 1, packed: 1, sent: 2, done: 3, cancelled: 0 };
+    return map[status] ?? 0;
+}
+
+function handleAuthRedirect() {
+    const query = new URLSearchParams(location.search);
+    const tokenHash = query.get('token_hash');
+    const queryType = query.get('type');
+    if (tokenHash && queryType) {
+        verifyEmailTokenHash(tokenHash, queryType);
+        return;
+    }
+    const hash = new URLSearchParams(location.hash.replace(/^#/, ''));
+    const error = hash.get('error_description') || hash.get('error');
+    if (error) {
+        showToast('❌ ' + error.replace(/\+/g, ' '));
+        history.replaceState(null, document.title, location.pathname + location.search);
+        return;
+    }
+    const accessToken = hash.get('access_token');
+    const refreshToken = hash.get('refresh_token');
+    if (!accessToken) return;
+    const expiresIn = Number(hash.get('expires_in') || 3600);
+    const authType = hash.get('type') || '';
+    fetch(`${SB_URL}/auth/v1/user`, { headers: authHeaders(accessToken) })
+        .then(res => res.ok ? res.json() : Promise.reject(new Error('User load failed')))
+        .then(user => {
+            saveCustomerSession({
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                expires_at: Math.floor(Date.now() / 1000) + expiresIn,
+                user
+            });
+            history.replaceState(null, document.title, location.pathname + location.search);
+            if (authType === 'recovery') {
+                openRecoveredPasswordForm();
+                showToast('🔐 Zadajte nové heslo');
+            } else {
+                openAccount();
+                loadCustomerOrders();
+                showToast('✅ Prihlásenie úspešné');
+            }
+        })
+        .catch(e => console.warn('Auth session parse failed:', e.message));
+}
+
+async function verifyEmailTokenHash(tokenHash, type) {
+    try {
+        const data = await supabaseAuth('verify', {
+            token_hash: tokenHash,
+            type
+        });
+        if (data.access_token) {
+            saveCustomerSession(data);
+            history.replaceState(null, document.title, location.pathname);
+            if (type === 'recovery') {
+                openRecoveredPasswordForm();
+                showToast('🔐 Zadajte nové heslo');
+            } else {
+                openAccount();
+                loadCustomerOrders();
+                showToast('✅ E-mail bol potvrdený');
+            }
+        } else {
+            showToast('✅ E-mail bol potvrdený. Teraz sa prihláste.');
+            history.replaceState(null, document.title, location.pathname);
+        }
+    } catch(e) {
+        showToast('❌ ' + authErrorMessage(e.message));
+        history.replaceState(null, document.title, location.pathname);
+    }
+}
+
+function safeHeroTitle(value) {
+    const marker = '[[ACCENT_OPEN]]';
+    const markerClose = '[[ACCENT_CLOSE]]';
+    return String(value || DEFAULT_SITE_SETTINGS.heroTitle)
+        .replace(/<span>/gi, marker)
+        .replace(/<\/span>/gi, markerClose)
+        .replace(/[&<>"']/g, ch => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[ch]))
+        .replaceAll(marker, '<span>')
+        .replaceAll(markerClose, '</span>');
+}
+
+function safeInternalLink(value) {
+    const link = String(value || '').trim();
+    if (!link) return '';
+    if (link.startsWith('#') && /^#[A-Za-z0-9_-]+$/.test(link)) return link;
+    try {
+        const parsed = new URL(link, location.href);
+        return parsed.origin === location.origin ? parsed.href : '';
+    } catch(e) {
+        return '';
+    }
+}
+
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+function legalValue(value, fallback) {
+    const text = String(value || '').replace(/<[^>]*>/g, '').trim();
+    return text || fallback;
+}
+
+function safeLegalEmail(value, fallback = 'computrax.sk@gmail.com') {
+    const email = legalValue(value, fallback).replace(/\s+/g, '');
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : fallback;
+}
+
+function safeLegalPhone(value, fallback = '0949 835 923') {
+    const phone = legalValue(value, fallback);
+    const dial = phone.replace(/[^\d+]/g, '');
+    return dial.length >= 9 ? { label: phone, href: dial } : { label: fallback, href: '+421949835923' };
+}
+
+function applyLegalSettings(s) {
+    const companyName = legalValue(s.companyName, 'Computrax.sk');
+    const address = legalValue(s.companyAddress, 'Doplň adresu predávajúceho');
+    const companyId = legalValue(s.companyId, 'Doplň IČO');
+    const taxId = legalValue(s.taxId, 'Doplň DIČ');
+    const vatId = legalValue(s.vatId, '');
+    const email = safeLegalEmail(s.email);
+    const phone = safeLegalPhone(s.phone);
+    const hours = legalValue(s.hours, 'Po-Pi: 12:00 - 18:00');
+    setText('legal-company-name', companyName);
+    setText('legal-company-address', address);
+    setText('legal-company-id', companyId);
+    setText('legal-tax-id', taxId);
+    setText('legal-vat-id', vatId || '-');
+    setText('legal-updated', legalValue(s.legalUpdated, '06.06.2026'));
+    const vatRow = document.getElementById('legal-vat-row');
+    if (vatRow) vatRow.style.display = vatId ? 'block' : 'none';
+    const emailEl = document.getElementById('legal-email');
+    if (emailEl) {
+        emailEl.textContent = email;
+        emailEl.href = `mailto:${email}`;
+    }
+    const phoneEl = document.getElementById('legal-phone');
+    if (phoneEl) {
+        phoneEl.textContent = phone.label;
+        phoneEl.href = `tel:${phone.href}`;
+    }
+    const contactEmail = document.getElementById('contact-email-text');
+    if (contactEmail) contactEmail.textContent = email;
+    const contactPhone = document.getElementById('contact-phone-text');
+    if (contactPhone) contactPhone.textContent = phone.label;
+    const contactHours = document.getElementById('contact-hours-text');
+    if (contactHours) contactHours.textContent = hours;
+}
+
+function applySiteSettings(settings = {}) {
+    const s = { ...DEFAULT_SITE_SETTINGS, ...(settings || {}) };
+    if (/^https:\/\/.+/i.test(String(s.publicSiteUrl || ''))) {
+        localStorage.setItem('ctrax_public_site_url', String(s.publicSiteUrl).replace(/\/$/, ''));
+    }
+    const badge = document.getElementById('hero-badge-text');
+    const title = document.getElementById('hero-title');
+    const text = document.getElementById('hero-text');
+    const announcement = document.getElementById('site-announcement');
+    if (badge) badge.textContent = s.heroBadge || DEFAULT_SITE_SETTINGS.heroBadge;
+    if (title) title.innerHTML = safeHeroTitle(s.heroTitle);
+    if (text) text.textContent = s.heroText || DEFAULT_SITE_SETTINGS.heroText;
+    applyLegalSettings(s);
+    applyCommerceControls(s);
+    if (!announcement) return;
+    const announcementText = String(s.announcementText || '').trim();
+    if (s.announcementEnabled === false || !announcementText) {
+        announcement.classList.remove('visible');
+        announcement.innerHTML = '';
+        return;
+    }
+    const link = safeInternalLink(s.announcementLink);
+    const linkLabel = String(s.announcementLinkLabel || '').trim();
+    announcement.innerHTML = `📣 <span>${safeAttr(announcementText)}</span>${link && linkLabel ? ` <a href="${safeAttr(link)}">${safeAttr(linkLabel)}</a>` : ''}`;
+    announcement.classList.add('visible');
+}
+
+function applyCommerceControls(s) {
+    const min = Math.max(0, Number(s.priceMin ?? DEFAULT_SITE_SETTINGS.priceMin));
+    const max = Math.max(min + 50, Number(s.priceMax ?? DEFAULT_SITE_SETTINGS.priceMax));
+    const minEl = document.getElementById('price-min');
+    const maxEl = document.getElementById('price-max');
+    if (minEl && maxEl) {
+        minEl.min = String(min);
+        minEl.max = String(max);
+        maxEl.min = String(min);
+        maxEl.max = String(max);
+        if (Number(minEl.value) < min) minEl.value = String(min);
+        if (Number(maxEl.value) > max || Number(maxEl.value) < min) maxEl.value = String(max);
+    }
+    const whatsapp = document.querySelector('.whatsapp-fab');
+    const digits = String(s.whatsappPhone || DEFAULT_SITE_SETTINGS.whatsappPhone).replace(/\D/g, '');
+    const text = String(s.whatsappText || DEFAULT_SITE_SETTINGS.whatsappText).trim();
+    if (whatsapp && digits.length >= 9) {
+        whatsapp.href = `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
+    }
+}
+
+function normalizeService(service, fallback = {}) {
+    const id = String(service?.id || fallback.id || '').trim();
+    const name = String(service?.name || fallback.name || '').trim();
+    const price = Math.max(0, Number(service?.price ?? fallback.price ?? 0));
+    const desc = String(service?.desc || service?.description || fallback.desc || '').trim();
+    return { id, name, price, desc, enabled: service?.enabled !== false };
+}
+
+function applyServiceSettings(settings = {}) {
+    const incoming = Array.isArray(settings.services) ? settings.services : [];
+    serviceAddons = DEFAULT_SERVICE_ADDONS.map(defaultService => {
+        const custom = incoming.find(service => service && service.id === defaultService.id);
+        return normalizeService(custom || defaultService, defaultService);
+    }).filter(service => service.id && service.name && service.enabled);
+    renderServiceOptions();
+}
+
+function renderServiceOptions() {
+    const wrap = document.getElementById('service-options');
+    if (!wrap) return;
+    let selected = [];
+    try {
+        selected = JSON.parse(localStorage.getItem(CHECKOUT_DRAFT_KEY) || '{}').services || [];
+        if (!Array.isArray(selected)) selected = [];
+    } catch(e) {
+        selected = [];
+    }
+    if (!serviceAddons.length) {
+        wrap.innerHTML = '<div style="color:var(--muted);font-size:0.85rem">Doplnkové služby momentálne nie sú dostupné.</div>';
+        return;
+    }
+    wrap.innerHTML = serviceAddons.map(service => `
+        <label class="service-option">
+            <input type="checkbox" class="service-check" value="${safeAttr(service.id)}" ${selected.includes(service.id) ? 'checked' : ''}>
+            <span style="flex:1">
+                <span class="service-name"><span>${safeAttr(service.name)}</span><span>${money(service.price)}</span></span>
+                ${service.desc ? `<span class="service-desc">${safeAttr(service.desc)}</span>` : ''}
+            </span>
+        </label>
+    `).join('');
+    wrap.querySelectorAll('.service-check').forEach(check => {
+        check.addEventListener('change', () => {
+            saveCheckoutDraft();
+            if (wizardStep === 3) buildOrderSummary();
+        });
+    });
+}
+
+async function loadSiteSettingsFromSupabase() {
+    try {
+        const res = await fetch(`${SB_URL}/rest/v1/site_settings?select=settings&key=eq.main&limit=1`, {
+            cache: 'no-store',
+            headers: {
+                apikey: SB_KEY,
+                Authorization: `Bearer ${SB_KEY}`,
+                'Cache-Control': 'no-cache'
+            }
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const rows = await res.json();
+        const settings = rows?.[0]?.settings || {};
+        applySiteSettings(settings);
+        applyServiceSettings(settings);
+    } catch(e) {
+        console.warn('Site settings fallback:', e.message || e);
+        applySiteSettings({});
+        applyServiceSettings({});
+    }
+}
+
+async function loadProductsFromSupabase() {
+    let localProducts = [];
+    const statusEl = document.getElementById('products-live-status');
+    const setProductStatus = (message, kind = 'live') => {
+        if (!statusEl) return;
+        const color = kind === 'error' ? '#ef4444' : kind === 'local' ? '#f59e0b' : '#3b82f6';
+        statusEl.innerHTML = `<span class="live-dot" style="background:${color};box-shadow:0 0 12px ${color}77"></span><span>${safeAttr(message)}</span>`;
+    };
+    setProductStatus('Načítavam sklad...');
+    try {
+        localProducts = JSON.parse(localStorage.getItem(LOCAL_PRODUCTS_KEY) || '[]').map(normalizeProduct).filter(p => p.name);
+    } catch(e) {
+        localProducts = [];
+    }
+    try {
+        const res = await fetch(`${SB_URL}/rest/v1/products?select=*&order=id.asc`, {
+            cache: 'no-store',
+            headers: {
+                apikey: SB_KEY,
+                Authorization: `Bearer ${SB_KEY}`,
+                'Cache-Control': 'no-cache'
+            }
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const rows = await res.json();
+        const liveProducts = rows.map(normalizeProduct).filter(p => p.name && p.status !== 'sold' && p.stock > 0);
+        const merged = [...liveProducts];
+        localProducts.forEach(localProduct => {
+            if (!merged.some(p => p.name.toLowerCase() === localProduct.name.toLowerCase())) merged.push(localProduct);
+        });
+        if (merged.length) activeProducts = merged;
+        setProductStatus(liveProducts.length ? `Live sklad zo Supabase · ${liveProducts.length} produktov` : 'Supabase je pripojený, zatiaľ bez aktívnych produktov');
+    } catch(e) {
+        console.warn('Supabase products fallback:', e.message || e);
+        if (localProducts.length) activeProducts = localProducts;
+        setProductStatus(localProducts.length ? 'Lokálny sklad z admina' : 'Nepodarilo sa načítať Supabase sklad', localProducts.length ? 'local' : 'error');
+    }
+    rebuildFilterOptions(activeProducts);
+    renderProducts();
+}
+
+function refreshProductsNow() {
+    loadProductsFromSupabase();
+    showToast('Sklad obnovený');
+}
+
+function rebuildFilterOptions(list) {
+    const gpuSelect = document.getElementById('filter-gpu');
+    if (!gpuSelect) return;
+    const staticGpus = ['RTX 4090','RTX 4080','RTX 4070','RTX 4060','RTX 3090','RTX 3080','RTX 3070','RTX 3060','GTX 1660','GTX 1650','Quadro','UHD','Iris Xe'];
+    const found = list.map(p => p.gpuFilter || p.gpu || '').map(value => String(value).trim()).filter(value => value && value !== '-' && value !== '–');
+    const options = Array.from(new Set([...staticGpus, ...found])).sort((a, b) => a.localeCompare(b));
+    const current = gpuSelect.value;
+    gpuSelect.innerHTML = '<option value="">Všetky</option>' + options.map(gpu => `<option value="${safeAttr(gpu)}">${safeAttr(gpu)}</option>`).join('');
+    if (options.includes(current)) gpuSelect.value = current;
+}
+
+function renderProducts() {
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = '';
+    rebuildProductMap(activeProducts);
+    activeProducts.forEach(p => {
+        const stockLabel = p.stock === 0 ? 'Vypredané' : p.stock <= 2 ? `Zostávajú ${p.stock} kusy` : `Skladom (${p.stock} ks)`;
+        const stockClass = p.stock === 0 ? 'stock-low' : p.stock <= 2 ? 'stock-low' : 'stock-ok';
+        const stockData = p.stock <= 2 ? 'malo' : 'skladom';
+        const isSold = p.stock === 0 || p.status === 'sold';
+        const safeName = safeAttr(p.name);
+        const nameArg = jsArg(p.name);
+        const cartBtn = isSold
+            ? `<button class="add-cart-btn" disabled style="background:rgba(255,255,255,0.1);cursor:not-allowed;">Vypredané</button>`
+            : `<button class="add-cart-btn" onclick="addToCart(${nameArg}, ${p.price}, this)">Do košíka 🛒</button>`;
+        const detailBtn = `<button class="detail-btn" onclick="openProductDetail(${nameArg})">Detail</button>`;
+
+        const card = document.createElement('div');
+        card.className = 'pc-card reveal';
+        card.setAttribute('data-cat', p.cat);
+        card.setAttribute('data-price', p.price);
+        card.setAttribute('data-name', p.name.toLowerCase());
+        card.setAttribute('data-gpu', p.gpuFilter);
+        card.setAttribute('data-cpu', p.cpuBrand);
+        card.setAttribute('data-ram', p.ramFilter);
+        card.setAttribute('data-stock', stockData);
+        card.setAttribute('data-popular', p.popular);
+        card.setAttribute('data-newest', p.newest);
+
+        card.innerHTML = `
+            <div class="pc-card-top">
+                <div class="pc-tag" style="color:${safeAttr(p.tagColor)}">${safeAttr(p.tag)}</div>
+                <div class="card-actions">
+                    <button class="wish-btn" onclick="toggleWish(this, ${nameArg})" title="Pridať do obľúbených">♡</button>
+                    <label class="compare-check-wrap"><input type="checkbox" onchange="toggleCompare(this, ${nameArg})"> Porovnať</label>
+                </div>
+            </div>
+            <div class="stock-badge ${stockClass}"><span class="stock-dot"></span> ${stockLabel}</div>
+            <h3 class="pc-name">${safeName}</h3>
+            <ul class="pc-specs">
+                <li>Procesor <b>${safeAttr(p.cpu)}</b></li>
+                <li>Grafika <b>${safeAttr(p.gpu)}</b></li>
+                <li>RAM <b>${safeAttr(p.ram)}</b></li>
+                <li>SSD <b>${safeAttr(p.ssd)}</b></li>
+                <li>OS <b>${safeAttr(p.os)}</b></li>
+            </ul>
+            <div class="card-guarantee">
+                <span class="g-item">🛡️ 12M záruka</span>
+                <span class="g-item">✅ Otestovaný</span>
+                <span class="g-item">📦 ${safeAttr(p.delivery)}</span>
+            </div>
+            <div class="pc-footer">
+                <div class="pc-price">${p.price}€</div>
+                ${detailBtn}
+                ${cartBtn}
+            </div>
+        `;
+        grid.appendChild(card);
+        observer.observe(card);
+    });
+
+    // Restore wishlist hearts
+    grid.querySelectorAll('.wish-btn').forEach(btn => {
+        const card = btn.closest('.pc-card');
+        const name = card.querySelector('.pc-name').textContent.trim();
+        if (wishlist.includes(name)) { btn.textContent = '♥'; btn.classList.add('active'); card.classList.add('wishlisted'); }
+    });
+
+    document.getElementById('results-count').textContent = activeProducts.length;
+    updateProductStructuredData(activeProducts);
+    applyFilters();
+}
+
+function updateProductStructuredData(list = activeProducts) {
+    const existing = document.getElementById('product-structured-data');
+    if (existing) existing.remove();
+    const productsForSchema = list
+        .filter(p => p.name && p.price > 0)
+        .slice(0, 20)
+        .map((p, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            item: {
+                '@type': 'Product',
+                name: p.name,
+                description: `${p.cpu || ''} ${p.gpu || ''} ${p.ram || ''} ${p.ssd || ''}`.replace(/\s+/g, ' ').trim(),
+                category: p.cat === 'gaming' ? 'Herný počítač' : 'Kancelársky počítač',
+                brand: { '@type': 'Brand', name: 'Computrax' },
+                offers: {
+                    '@type': 'Offer',
+                    priceCurrency: 'EUR',
+                    price: Number(p.price || 0).toFixed(2),
+                    availability: (p.stock > 0 && p.status !== 'sold') ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+                    url: `${DEFAULT_SITE_SETTINGS.publicSiteUrl.replace(/\/$/, '')}/index.html#ponuka`,
+                    itemCondition: 'https://schema.org/RefurbishedCondition'
+                }
+            }
+        }));
+    if (!productsForSchema.length) return;
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'product-structured-data';
+    script.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Computrax ponuka počítačov',
+        itemListElement: productsForSchema
+    });
+    document.head.appendChild(script);
+}
+
+// ============================================================
+//  SCROLL REVEAL
+// ============================================================
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+setTimeout(() => document.documentElement.classList.add('js-ready'), 900);
+
+handleAuthRedirect();
+updateAccountUI();
+
+// Load live products from Supabase, with bundled demo products as fallback.
+loadProductsFromSupabase();
+loadSiteSettingsFromSupabase();
+
+let productReloadTimer;
+function scheduleProductReload() {
+    clearTimeout(productReloadTimer);
+    productReloadTimer = setTimeout(() => loadProductsFromSupabase(), 350);
+}
+window.addEventListener('storage', event => {
+    if (event.key === LOCAL_PRODUCTS_KEY || event.key === 'ctrax_products_updated_at') scheduleProductReload();
+});
+window.addEventListener('focus', scheduleProductReload);
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) scheduleProductReload();
+});
+setInterval(() => {
+    const checkoutOpen = document.getElementById('cart-panel')?.classList.contains('open') && wizardStep > 1;
+    if (!document.hidden && !checkoutOpen) scheduleProductReload();
+}, PRODUCT_AUTO_REFRESH_MS);
+
+// ============================================================
+//  ANIMATED COUNTERS
+// ============================================================
+const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting && !e.target.dataset.animated) {
+            e.target.dataset.animated = true;
+            const target = +e.target.dataset.target;
+            let count = 0;
+            const step = Math.ceil(target / 60);
+            const timer = setInterval(() => {
+                count = Math.min(count + step, target);
+                e.target.textContent = count + (e.target.dataset.target >= 98 ? '%' : '+');
+                if (count >= target) clearInterval(timer);
+            }, 25);
+        }
+    });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+
+// ============================================================
+//  FAQ
+// ============================================================
+document.querySelectorAll('#faq .faq-q').forEach(item => {
+    item.addEventListener('click', () => {
+        const answer = item.nextElementSibling;
+        const span = item.querySelector('span');
+        const isOpen = answer.style.display === 'block';
+        document.querySelectorAll('#faq .faq-a').forEach(a => a.style.display = 'none');
+        document.querySelectorAll('#faq .faq-q span').forEach(s => s.innerText = '+');
+        if (!isOpen) { answer.style.display = 'block'; span.innerText = '−'; }
+    });
+});
+
+// ============================================================
+//  FILTER & SEARCH
+// ============================================================
+// ============================================================
+//  FILTERS & SORT
+// ============================================================
+let filters = { cat: 'vsetko', ram: '', stock: 'vsetko' };
+let searchQuery = '';
+
+function setFilter(type, val, btn) {
+    filters[type] = val;
+    // Deactivate siblings in same group
+    const groupId = type === 'ram' ? 'ram-group' : null;
+    if (groupId) {
+        document.getElementById(groupId).querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    } else {
+        if (btn && btn.parentElement) btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    }
+    if (btn) btn.classList.add('active');
+    applyFilters();
+}
+
+function applyFilters() {
+    const priceMin = +document.getElementById('price-min').value;
+    const priceMax = +document.getElementById('price-max').value;
+    const gpu = document.getElementById('filter-gpu').value;
+    const cpu = document.getElementById('filter-cpu').value;
+    const sort = document.getElementById('sort-select').value;
+
+    document.getElementById('price-min-label').textContent = priceMin + '€';
+    document.getElementById('price-max-label').textContent = priceMax + '€';
+
+    const grid = document.getElementById('products-grid');
+    const cards = Array.from(document.querySelectorAll('.pc-card'));
+    let visible = 0;
+
+    cards.forEach(card => {
+        const price = +card.getAttribute('data-price');
+        const cat = card.getAttribute('data-cat');
+        const name = card.getAttribute('data-name') || '';
+        const cardGpu = card.getAttribute('data-gpu') || '';
+        const cardCpu = card.getAttribute('data-cpu') || '';
+        const cardRam = card.getAttribute('data-ram') || '';
+        const cardStock = card.getAttribute('data-stock') || '';
+
+        const catOk = filters.cat === 'vsetko' || cat === filters.cat;
+        const priceOk = price >= Math.min(priceMin, priceMax) && price <= Math.max(priceMin, priceMax);
+        const gpuOk = !gpu || cardGpu.includes(gpu);
+        const cpuOk = !cpu || cardCpu === cpu;
+        const ramOk = !filters.ram || cardRam === filters.ram;
+        const stockOk = filters.stock === 'vsetko' || cardStock === filters.stock;
+        const searchOk = !searchQuery || name.includes(searchQuery);
+
+        const show = catOk && priceOk && gpuOk && cpuOk && ramOk && stockOk && searchOk;
+        card.style.display = show ? 'block' : 'none';
+        if (show) visible++;
+    });
+
+    // Sort visible cards
+    const visibleCards = cards.filter(c => c.style.display !== 'none');
+    visibleCards.sort((a, b) => {
+        if (sort === 'price-asc') return +a.getAttribute('data-price') - +b.getAttribute('data-price');
+        if (sort === 'price-desc') return +b.getAttribute('data-price') - +a.getAttribute('data-price');
+        if (sort === 'newest') return +a.getAttribute('data-newest') - +b.getAttribute('data-newest');
+        if (sort === 'popular') return +a.getAttribute('data-popular') - +b.getAttribute('data-popular');
+        return 0;
+    });
+    visibleCards.forEach(card => grid.appendChild(card));
+
+    document.getElementById('results-count').textContent = visible;
+    document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+    updateActiveTags(priceMin, priceMax, gpu, cpu);
+}
+
+function updateActiveTags(priceMin, priceMax, gpu, cpu) {
+    const wrap = document.getElementById('active-tags');
+    const tags = [];
+    if (filters.cat !== 'vsetko') tags.push({ label: filters.cat === 'gaming' ? '🎮 Herné' : '💼 Kancelárske', clear: () => { filters.cat = 'vsetko'; document.querySelector('.filter-group .filter-btn').click(); } });
+    const minEl = document.getElementById('price-min');
+    const maxEl = document.getElementById('price-max');
+    const defaultMin = Number(minEl?.min || 0);
+    const defaultMax = Number(maxEl?.max || 10000);
+    if (priceMin > defaultMin || priceMax < defaultMax) tags.push({ label: `${priceMin}€ – ${priceMax}€`, clear: () => { document.getElementById('price-min').value = defaultMin; document.getElementById('price-max').value = defaultMax; applyFilters(); } });
+    if (gpu) tags.push({ label: 'GPU: ' + gpu, clear: () => { document.getElementById('filter-gpu').value = ''; applyFilters(); } });
+    if (cpu) tags.push({ label: 'CPU: ' + (cpu === 'amd' ? 'AMD' : 'Intel'), clear: () => { document.getElementById('filter-cpu').value = ''; applyFilters(); } });
+    if (filters.ram) tags.push({ label: 'RAM: ' + filters.ram + 'GB', clear: () => setFilter('ram', '', document.querySelector('#ram-group .filter-btn')) });
+    if (filters.stock !== 'vsetko') tags.push({ label: filters.stock === 'skladom' ? '🟢 Skladom' : '🔴 Posledné kusy', clear: () => { filters.stock = 'vsetko'; applyFilters(); } });
+
+    if (tags.length === 0) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'flex';
+    wrap.innerHTML = tags.map((t, i) =>
+        `<span class="filter-tag">${t.label} <button onclick="clearTag(${i})">×</button></span>`
+    ).join('');
+    wrap._tags = tags;
+}
+
+function clearTag(i) {
+    document.getElementById('active-tags')._tags[i].clear();
+}
+
+function resetFilters() {
+    filters = { cat: 'vsetko', ram: '', stock: 'vsetko' };
+    searchQuery = '';
+    const minEl = document.getElementById('price-min');
+    const maxEl = document.getElementById('price-max');
+    minEl.value = minEl.min || 0;
+    maxEl.value = maxEl.max || 10000;
+    document.getElementById('filter-gpu').value = '';
+    document.getElementById('filter-cpu').value = '';
+    document.getElementById('sort-select').value = 'default';
+    document.getElementById('nav-search-input').value = '';
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-group .filter-btn').classList.add('active');
+    document.querySelector('#ram-group .filter-btn').classList.add('active');
+    applyFilters();
+    showToast('🔄 Filtre boli zrušené');
+}
+
+function searchProducts(query) {
+    searchQuery = query.toLowerCase();
+    applyFilters();
+    if (query.length > 0) document.getElementById('ponuka').scrollIntoView({ behavior: 'smooth' });
+}
+
+function filterPC(cat, btn) { setFilter('cat', cat, btn); }
+function filterByPrice(val) { applyFilters(); }
+
+// ============================================================
+//  WISHLIST
+// ============================================================
+let wishlist = JSON.parse(localStorage.getItem('ctrax_wish') || '[]');
+
+function toggleWish(btn, name) {
+    const idx = wishlist.indexOf(name);
+    if (idx === -1) {
+        wishlist.push(name);
+        btn.textContent = '♥';
+        btn.classList.add('active');
+        btn.closest('.pc-card').classList.add('wishlisted');
+        showToast('❤️ Pridané do obľúbených: ' + name);
+    } else {
+        wishlist.splice(idx, 1);
+        btn.textContent = '♡';
+        btn.classList.remove('active');
+        btn.closest('.pc-card').classList.remove('wishlisted');
+        showToast('💔 Odobrané z obľúbených');
+    }
+    localStorage.setItem('ctrax_wish', JSON.stringify(wishlist));
+    updateWishlistUI();
+}
+
+function openWishlist() {
+    document.getElementById('wish-panel').classList.add('open');
+    document.getElementById('wish-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    updateWishlistUI();
+}
+
+function closeWishlist() {
+    document.getElementById('wish-panel').classList.remove('open');
+    document.getElementById('wish-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function updateWishlistUI() {
+    const countEl = document.getElementById('wish-count');
+    countEl.textContent = wishlist.length;
+    countEl.classList.toggle('visible', wishlist.length > 0);
+
+    const container = document.getElementById('wish-items');
+    if (wishlist.length === 0) {
+        container.innerHTML = `<div class="cart-empty"><div class="icon">♡</div><p>Žiadne obľúbené</p><small>Klikni na ♡ na produkte</small></div>`;
+        return;
+    }
+    container.innerHTML = '';
+    wishlist.forEach(name => {
+        const p = products[name];
+        if (!p) return;
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
+            <div class="cart-item-icon">🖥️</div>
+            <div class="cart-item-info">
+                <div class="cart-item-name">${safeAttr(name)}</div>
+                <div class="cart-item-price">${money(p.price)}</div>
+            </div>
+            <div class="cart-item-controls">
+                <button class="add-cart-btn" style="padding:0.5rem 0.8rem;font-size:0.8rem;" onclick="addToCartFromWish(${jsArg(name)}, ${Number(p.price || 0)})">Do košíka</button>
+                <button class="remove-btn" onclick="removeFromWish(${jsArg(name)})">🗑</button>
+            </div>
+        `;
+        container.appendChild(el);
+    });
+}
+
+function removeFromWish(name) {
+    wishlist = wishlist.filter(n => n !== name);
+    localStorage.setItem('ctrax_wish', JSON.stringify(wishlist));
+    document.querySelectorAll('.wish-btn').forEach(btn => {
+        const cardName = btn.closest('.pc-card').querySelector('.pc-name').textContent.trim();
+        if (cardName === name) { btn.textContent = '♡'; btn.classList.remove('active'); btn.closest('.pc-card').classList.remove('wishlisted'); }
+    });
+    updateWishlistUI();
+}
+
+function addToCartFromWish(name, price) {
+    addToCart(name, price, { textContent: '', classList: { add: () => {}, remove: () => {} } });
+    closeWishlist();
+}
+
+function addAllWishToCart() {
+    wishlist.forEach(name => {
+        const p = products[name];
+        if (p) { const existing = cart.find(i => i.name === name); if (existing) existing.qty++; else cart.push({ name, price: p.price, qty: 1 }); }
+    });
+    updateCartUI();
+    closeWishlist();
+    openCart();
+    showToast('🛒 Všetky obľúbené pridané do košíka');
+}
+
+// Restore wishlist on load
+document.querySelectorAll('.wish-btn').forEach(btn => {
+    const card = btn.closest('.pc-card');
+    const name = card.querySelector('.pc-name').textContent.trim();
+    if (wishlist.includes(name)) {
+        btn.textContent = '♥';
+        btn.classList.add('active');
+        card.classList.add('wishlisted');
+    }
+});
+updateWishlistUI();
+
+// ============================================================
+//  COMPARE
+// ============================================================
+let compareList = [];
+
+function toggleCompare(checkbox, name) {
+    if (checkbox.checked) {
+        if (compareList.length >= 3) {
+            checkbox.checked = false;
+            showToast('⚠️ Môžete porovnať max 3 produkty');
+            return;
+        }
+        compareList.push(name);
+    } else {
+        compareList = compareList.filter(n => n !== name);
+    }
+    updateCompareBar();
+}
+
+function updateCompareBar() {
+    const bar = document.getElementById('compare-bar');
+    const itemsEl = document.getElementById('compare-bar-items');
+    itemsEl.innerHTML = compareList.map(n =>
+        `<div class="compare-chip">${safeAttr(n)} <button onclick="removeCompare(${jsArg(n)})">×</button></div>`
+    ).join('');
+    bar.classList.toggle('visible', compareList.length >= 2);
+}
+
+function removeCompare(name) {
+    compareList = compareList.filter(n => n !== name);
+    document.querySelectorAll('.compare-check-wrap input').forEach(cb => {
+        const cardName = cb.closest('.pc-card').querySelector('.pc-name').textContent.trim();
+        if (cardName === name) cb.checked = false;
+    });
+    updateCompareBar();
+}
+
+function clearCompare() {
+    compareList = [];
+    document.querySelectorAll('.compare-check-wrap input').forEach(cb => cb.checked = false);
+    updateCompareBar();
+}
+
+function openCompare() {
+    const wrap = document.getElementById('compare-table-wrap');
+    const rows = ['Cena', 'Procesor', 'Grafika', 'RAM', 'SSD', 'OS', 'Kategória'];
+    const keys = ['price', 'cpu', 'gpu', 'ram', 'ssd', 'os', 'cat'];
+    const labels = { gaming: '🎮 Herný', office: '💼 Kancelársky' };
+
+    let html = `<table class="compare-table"><thead><tr><th>Vlastnosť</th>`;
+    compareList.forEach(n => html += `<th>${safeAttr(n)}</th>`);
+    html += `</tr></thead><tbody>`;
+
+    rows.forEach((row, i) => {
+        const vals = compareList.map(n => {
+            const product = products[n] || {};
+            const v = product[keys[i]];
+            return keys[i] === 'price' ? money(v) : (keys[i] === 'cat' ? labels[v] || v : v);
+        });
+        // highlight best price (lowest)
+        const isPrice = keys[i] === 'price';
+        const minPrice = isPrice ? Math.min(...compareList.map(n => products[n].price)) : null;
+        html += `<tr><td class="row-label">${row}</td>`;
+        compareList.forEach((n, j) => {
+            const isHighlight = isPrice && products[n]?.price === minPrice;
+            html += `<td class="${isHighlight ? 'highlight' : ''}">${safeAttr(vals[j])}</td>`;
+        });
+        html += `</tr>`;
+    });
+
+    html += `</tbody></table>`;
+    wrap.innerHTML = html;
+    document.getElementById('compare-modal').classList.add('open');
+}
+
+function closeCompare() {
+    document.getElementById('compare-modal').classList.remove('open');
+}
+
+function openProductDetail(name) {
+    const p = products[name];
+    const wrap = document.getElementById('product-detail-wrap');
+    if (!p || !wrap) {
+        showToast('⚠️ Produkt sa nepodarilo načítať');
+        return;
+    }
+
+    const isSold = Number(p.stock || 0) <= 0 || p.status === 'sold';
+    const stockLabel = isSold ? 'Momentálne vypredané' : p.stock <= 2 ? `Posledné ${p.stock} ks skladom` : `Skladom ${p.stock} ks`;
+    const services = serviceAddons
+        .filter(service => service.enabled !== false)
+        .slice(0, 3)
+        .map(service => `${safeAttr(service.name)} (${money(service.price)})`)
+        .join(' · ');
+    const buyAction = isSold
+        ? `<button class="add-cart-btn" disabled style="background:rgba(255,255,255,0.1);cursor:not-allowed;">Vypredané</button>`
+        : `<button class="add-cart-btn" onclick="addToCartFromDetail(${jsArg(p.name)}, ${Number(p.price || 0)})">Pridať do košíka 🛒</button>`;
+
+    wrap.innerHTML = `
+        <div class="product-detail-head">
+            <div>
+                <div class="product-detail-tag" style="color:${safeAttr(p.tagColor)}">${safeAttr(p.tag)}</div>
+                <h3 style="margin:0 0 0.5rem;">${safeAttr(p.name)}</h3>
+                <p style="color:var(--muted);line-height:1.6;margin:0;">Otestovaný repasovaný počítač pripravený na odoslanie. Pred objednávkou si môžete pridať služby ako nastavenie PC alebo predĺženú záruku.</p>
+            </div>
+            <div>
+                <div class="product-detail-price">${money(p.price)}</div>
+                <div class="product-detail-stock">${safeAttr(stockLabel)}</div>
+            </div>
+        </div>
+        <div class="product-detail-grid">
+            <div class="product-detail-spec"><span>Procesor</span><b>${safeAttr(p.cpu)}</b></div>
+            <div class="product-detail-spec"><span>Grafika</span><b>${safeAttr(p.gpu)}</b></div>
+            <div class="product-detail-spec"><span>RAM</span><b>${safeAttr(p.ram)}</b></div>
+            <div class="product-detail-spec"><span>Úložisko</span><b>${safeAttr(p.ssd)}</b></div>
+            <div class="product-detail-spec"><span>Systém</span><b>${safeAttr(p.os)}</b></div>
+            <div class="product-detail-spec"><span>Doručenie</span><b>${safeAttr(p.delivery)}</b></div>
+        </div>
+        <div class="product-detail-services">
+            <strong>Dostupné doplnkové služby</strong>
+            ${services || 'Doplnkové služby si môžete zapnúť alebo upraviť v admine.'}
+        </div>
+        <div class="product-detail-perks">
+            <span>🛡️ 12 mesiacov záruka</span>
+            <span>✅ 24h záťažový test</span>
+            <span>📦 Rýchle odoslanie</span>
+        </div>
+        <div class="product-detail-actions">
+            <button class="detail-btn" onclick="closeProductDetail()">Späť na ponuku</button>
+            ${buyAction}
+        </div>
+    `;
+    document.getElementById('product-modal').classList.add('open');
+}
+
+function closeProductDetail() {
+    document.getElementById('product-modal').classList.remove('open');
+}
+
+function addToCartFromDetail(name, price) {
+    closeProductDetail();
+    addToCart(name, price, { textContent: '', classList: { add: () => {}, remove: () => {} } });
+}
+
+// ============================================================
+//  CART
+// ============================================================
+let cart = loadSavedCart();
+let wizardStep = 1;
+
+function loadSavedCart() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        return Array.isArray(saved)
+            ? saved.map(item => ({
+                name: String(item.name || '').trim(),
+                price: Math.max(0, Number(item.price || 0)),
+                qty: Math.max(1, Math.min(20, Number(item.qty || 1)))
+            })).filter(item => item.name && item.price >= 0)
+            : [];
+    } catch(e) {
+        return [];
+    }
+}
+
+function saveCart() {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+function checkoutFieldIds() {
+    return ['d-name', 'd-email', 'd-phone', 'd-street', 'd-zip', 'd-city', 'd-delivery'];
+}
+
+function saveCheckoutDraft() {
+    const draft = {};
+    checkoutFieldIds().forEach(id => {
+        const el = document.getElementById(id);
+        if (el) draft[id] = el.value;
+    });
+    draft.services = selectedServices().map(service => service.id);
+    localStorage.setItem(CHECKOUT_DRAFT_KEY, JSON.stringify(draft));
+}
+
+function restoreCheckoutDraft() {
+    let draft = {};
+    try { draft = JSON.parse(localStorage.getItem(CHECKOUT_DRAFT_KEY) || '{}'); } catch(e) { draft = {}; }
+    checkoutFieldIds().forEach(id => {
+        const el = document.getElementById(id);
+        if (el && draft[id]) el.value = draft[id];
+        if (el) el.addEventListener('input', saveCheckoutDraft);
+        if (el && el.tagName === 'SELECT') el.addEventListener('change', saveCheckoutDraft);
+    });
+    renderServiceOptions();
+}
+
+function clearCheckoutDraft() {
+    localStorage.removeItem(CHECKOUT_DRAFT_KEY);
+    checkoutFieldIds().forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = id === 'd-delivery' ? 'kurier' : '';
+    });
+    const terms = document.getElementById('terms-accepted');
+    if (terms) terms.checked = false;
+    document.querySelectorAll('.service-check').forEach(check => check.checked = false);
+}
+
+function selectedServices() {
+    return [...document.querySelectorAll('.service-check:checked')]
+        .map(check => serviceAddons.find(service => service.id === check.value))
+        .filter(Boolean);
+}
+
+function selectedServicesTotal() {
+    return selectedServices().reduce((sum, service) => sum + service.price, 0);
+}
+
+function normalizePhone(value) {
+    const raw = String(value || '').trim();
+    const digits = raw.replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.startsWith('421')) return `+${digits}`;
+    if (digits.startsWith('09')) return `+421${digits.slice(1)}`;
+    if (digits.startsWith('9') && digits.length === 9) return `+421${digits}`;
+    return raw;
+}
+
+function getCheckoutDetails() {
+    const phone = normalizePhone(document.getElementById('d-phone').value);
+    document.getElementById('d-phone').value = phone;
+    return {
+        name: document.getElementById('d-name').value.trim(),
+        email: document.getElementById('d-email').value.trim(),
+        phone,
+        street: document.getElementById('d-street').value.trim(),
+        zip: document.getElementById('d-zip').value.trim(),
+        city: document.getElementById('d-city').value.trim(),
+        deliveryKey: document.getElementById('d-delivery').value,
+        delivery: document.getElementById('d-delivery').options[document.getElementById('d-delivery').selectedIndex].text
+    };
+}
+
+function validateCheckoutDetails(details = getCheckoutDetails(), includeTerms = false) {
+    if (!details.name || !details.email) return 'Vyplňte meno a e-mail';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email)) return 'Zadajte platný e-mail';
+    if (details.phone && details.phone.replace(/[^\d]/g, '').length < 9) return 'Zadajte platné telefónne číslo';
+    if (details.deliveryKey !== 'osobne' && (!details.street || !details.zip || !details.city)) return 'Vyplňte adresu doručenia';
+    if (includeTerms && !document.getElementById('terms-accepted')?.checked) return 'Potvrďte obchodné podmienky';
+    return '';
+}
+
+function openCart() {
+    if (customerSession?.user) {
+        const email = document.getElementById('d-email');
+        const name = document.getElementById('d-name');
+        const phone = document.getElementById('d-phone');
+        if (email && !email.value) email.value = customerEmail();
+        if (name && !name.value) name.value = customerSession.user.user_metadata?.full_name || '';
+        if (phone && !phone.value) phone.value = customerPhone();
+        saveCheckoutDraft();
+    }
+    document.getElementById('cart-panel').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+    document.getElementById('cart-panel').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function addToCart(name, price, btn) {
+    const existing = cart.find(i => i.name === name);
+    const product = products[name];
+    const maxStock = Number(product?.stock || 0);
+    if (maxStock <= 0) {
+        showToast('⚠️ Tento produkt už nie je skladom');
+        scheduleProductReload();
+        return;
+    }
+    if (existing) {
+        if (existing.qty >= maxStock) {
+            showToast(`⚠️ Maximum skladom: ${maxStock} ks`);
+            return;
+        }
+        existing.qty++;
+    } else {
+        cart.push({ name, price, qty: 1 });
+    }
+    updateCartUI();
+    btn.textContent = 'Pridané ✓';
+    btn.classList.add('added');
+    setTimeout(() => { btn.textContent = 'Do košíka 🛒'; btn.classList.remove('added'); }, 1500);
+    showToast('🛒 ' + name + ' pridaný do košíka');
+    openCart();
+}
+
+function changeQty(name, delta) {
+    const item = cart.find(i => i.name === name);
+    if (!item) return;
+    if (delta > 0) {
+        const maxStock = Number(products[name]?.stock || 0);
+        if (maxStock > 0 && item.qty >= maxStock) {
+            showToast(`⚠️ Maximum skladom: ${maxStock} ks`);
+            return;
+        }
+    }
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(i => i.name !== name);
+    updateCartUI();
+}
+
+function removeFromCart(name) {
+    cart = cart.filter(i => i.name !== name);
+    updateCartUI();
+}
+
+function updateCartUI() {
+    saveCart();
+    const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+    const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+    const countEl = document.getElementById('cart-count');
+    countEl.textContent = totalItems;
+    countEl.classList.toggle('visible', totalItems > 0);
+
+    document.getElementById('cart-total').textContent = totalPrice + '€';
+    document.getElementById('to-step2-btn').disabled = cart.length === 0;
+
+    const container = document.getElementById('cart-items');
+    if (cart.length === 0) {
+        container.innerHTML = `<div class="cart-empty"><div class="icon">🛒</div><p>Košík je prázdny</p><small>Pridajte produkty z ponuky</small></div>`;
+        if (wizardStep !== 1) goStep(1);
+        return;
+    }
+    container.innerHTML = '';
+    cart.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
+            <div class="cart-item-icon">🖥️</div>
+            <div class="cart-item-info">
+                <div class="cart-item-name">${safeAttr(item.name)}</div>
+                <div class="cart-item-price">${money(item.price * item.qty)} <span style="color:var(--muted);font-size:0.8rem;font-weight:400;">(${money(item.price)}/ks)</span></div>
+            </div>
+            <div class="cart-item-controls">
+                <button class="qty-btn" onclick="changeQty(${jsArg(item.name)}, -1)">−</button>
+                <span class="qty-num">${item.qty}</span>
+                <button class="qty-btn" onclick="changeQty(${jsArg(item.name)}, 1)">+</button>
+                <button class="remove-btn" onclick="removeFromCart(${jsArg(item.name)})">🗑</button>
+            </div>
+        `;
+        container.appendChild(el);
+    });
+}
+
+restoreCheckoutDraft();
+updateCartUI();
+
+// ============================================================
+//  ORDER WIZARD
+// ============================================================
+function goStep(step) {
+    if (step === 3) {
+        saveCheckoutDraft();
+        const problem = validateCheckoutDetails(getCheckoutDetails(), false);
+        if (problem) {
+            showToast('⚠️ ' + problem);
+            return;
+        }
+    }
+    wizardStep = step;
+    document.querySelectorAll('.wizard-panel').forEach((p, i) => p.classList.toggle('active', i + 1 === step));
+    document.querySelectorAll('.wizard-step').forEach((s, i) => {
+        s.classList.remove('active', 'done');
+        if (i + 1 === step) s.classList.add('active');
+        else if (i + 1 < step) s.classList.add('done');
+    });
+    if (step === 3) buildOrderSummary();
+}
+
+function buildOrderSummary() {
+    const deliveryMap = {
+        'kurier': 'Kuriér GLS – 5,90€',
+        'packeta': 'Packeta – 3,90€',
+        'osobne': 'Osobný odber – zdarma'
+    };
+    const deliveryPriceMap = { 'kurier': 5.90, 'packeta': 3.90, 'osobne': 0 };
+    const sel = document.getElementById('d-delivery').value;
+    const deliveryPrice = deliveryPriceMap[sel] || 0;
+    const productsTotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const services = selectedServices();
+    const servicesTotal = selectedServicesTotal();
+    const total = productsTotal + deliveryPrice + servicesTotal;
+
+    let html = cart.map(i => `<div class="summary-item"><span>${Number(i.qty || 1)}× ${safeAttr(i.name)}</span><span>${money(i.price * i.qty)}</span></div>`).join('');
+    services.forEach(service => {
+        html += `<div class="summary-item"><span>Služba: ${safeAttr(service.name)}</span><span>${money(service.price)}</span></div>`;
+    });
+    html += `<div class="summary-item"><span>Doprava</span><span>${deliveryPrice === 0 ? 'Zdarma' : deliveryPrice.toFixed(2) + '€'}</span></div>`;
+    html += `<div class="summary-item"><span>Celkom</span><span>${total.toFixed(2)}€</span></div>`;
+    document.getElementById('order-summary-items').innerHTML = html;
+
+    const name = document.getElementById('d-name').value;
+    const city = document.getElementById('d-city').value;
+    document.getElementById('delivery-summary').innerHTML =
+        `📦 <strong>${safeAttr(deliveryMap[sel])}</strong>${name ? ' · ' + safeAttr(name) : ''}${city ? ', ' + safeAttr(city) : ''}`;
+}
+
+async function fetchLiveProducts() {
+    const res = await fetch(`${SB_URL}/rest/v1/products?select=*&order=id.asc`, {
+        cache: 'no-store',
+        headers: {
+            apikey: SB_KEY,
+            Authorization: `Bearer ${SB_KEY}`,
+            'Cache-Control': 'no-cache'
+        }
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return (await res.json()).map(normalizeProduct);
+}
+
+async function validateCartAgainstLiveStock() {
+    const liveProducts = await fetchLiveProducts();
+    const liveByName = new Map(liveProducts.map(product => [product.name.toLowerCase(), product]));
+    let changed = false;
+    cart = cart.map(item => {
+        const live = liveByName.get(String(item.name).toLowerCase());
+        if (!live || live.status === 'sold' || Number(live.stock || 0) <= 0) {
+            changed = true;
+            return null;
+        }
+        const maxQty = Number(live.stock || 0);
+        if (item.qty > maxQty) {
+            changed = true;
+            return { ...item, qty: maxQty, price: Number(live.price || item.price) };
+        }
+        if (Number(item.price) !== Number(live.price)) {
+            changed = true;
+            return { ...item, price: Number(live.price || item.price) };
+        }
+        return item;
+    }).filter(Boolean);
+    if (changed) {
+        activeProducts = liveProducts.filter(p => p.name && p.status !== 'sold' && p.stock > 0);
+        renderProducts();
+        updateCartUI();
+        buildOrderSummary();
+        showToast('⚠️ Košík bol upravený podľa aktuálneho skladu');
+    }
+    if (!cart.length) throw new Error('Košík je prázdny alebo produkty už nie sú skladom.');
+    return true;
+}
+
+function orderNumber() {
+    const d = new Date();
+    const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+    return `CTX-${stamp}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+}
+
+async function createSupabaseOrder(orderPayload) {
+    const res = await fetch(`${SB_URL}/rest/v1/rpc/create_order_and_purchase`, {
+        method: 'POST',
+        headers: {
+            apikey: SB_KEY,
+            Authorization: `Bearer ${SB_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ order_payload: orderPayload })
+    });
+    const text = await res.text();
+    if (!res.ok) {
+        let err = {};
+        try { err = JSON.parse(text || '{}'); } catch(e) { err = { message: text }; }
+        throw new Error(err.message || text || 'Objednávku sa nepodarilo uložiť.');
+    }
+    return text ? JSON.parse(text) : {};
+}
+
+function friendlyOrderError(error) {
+    const message = String(error?.message || error || '').toLowerCase();
+    if (message.includes('too many recent orders')) return 'Poslali ste viac objednávok za krátky čas. Skúste to prosím znova o pár minút.';
+    if (message.includes('not enough stock')) return 'Niektorý produkt už nemá dostatočný sklad. Obnovte sklad a skúste to znova.';
+    if (message.includes('product not found') || message.includes('product is not available')) return 'Niektorý produkt už nie je dostupný. Obnovte ponuku a skúste to znova.';
+    if (message.includes('invalid customer email')) return 'Zadajte platný e-mail.';
+    if (message.includes('invalid customer phone')) return 'Zadajte platné telefónne číslo.';
+    if (message.includes('delivery address is required') || message.includes('invalid delivery address')) return 'Skontrolujte doručovaciu adresu.';
+    if (message.includes('terms must be accepted')) return 'Potvrďte obchodné podmienky.';
+    if (message.includes('invalid order total') || message.includes('invalid order metadata') || message.includes('invalid order note')) return 'Objednávku sa nepodarilo overiť. Obnovte stránku a skúste to znova.';
+    return error?.message || 'Objednávku sa nepodarilo odoslať.';
+}
+
+async function submitOrder() {
+    if (document.getElementById('d-company')?.value.trim()) {
+        closeCart();
+        showToast('✅ Objednávka je odoslaná');
+        return;
+    }
+    const details = getCheckoutDetails();
+    saveCheckoutDraft();
+    const problem = validateCheckoutDetails(details, true);
+    if (problem) { showToast('⚠️ ' + problem); return; }
+
+    const btn = document.querySelector('#wp-3 .wizard-btn:last-child');
+    btn.textContent = 'Overujem sklad...';
+    btn.disabled = true;
+
+    try {
+        await validateCartAgainstLiveStock();
+    } catch(e) {
+        btn.textContent = '✓ Objednávka s povinnosťou platby';
+        btn.disabled = false;
+        showToast('❌ ' + (e.message || 'Sklad sa nepodarilo overiť'));
+        return;
+    }
+
+    const deliveryPriceMap = { 'kurier': 5.90, 'packeta': 3.90, 'osobne': 0 };
+    const deliveryPrice = deliveryPriceMap[details.deliveryKey] || 0;
+    const productsTotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const services = selectedServices();
+    const servicesTotal = selectedServicesTotal();
+    const total = (productsTotal + deliveryPrice + servicesTotal).toFixed(2);
+
+    const itemsList = cart.map(i => `${i.qty}× ${i.name} – ${(i.price * i.qty)}€`).join('\n');
+    const servicesList = services.length
+        ? services.map(service => `- ${service.name} – ${service.price}€`).join('\n')
+        : '- Bez doplnkových služieb';
+
+    const message =
+        `--- NOVÁ OBJEDNÁVKA ---\n\n` +
+        `Produkty:\n${itemsList}\n\n` +
+        `Doplnkové služby:\n${servicesList}\n\n` +
+        `Doprava: ${details.delivery}\n` +
+        `Celková suma: ${total}€\n\n` +
+        `--- DORUČOVACIE ÚDAJE ---\n` +
+        `Meno: ${details.name}\n` +
+        `Email: ${details.email}\n` +
+        `Telefón: ${details.phone || '–'}\n` +
+        `Adresa: ${details.street}, ${details.zip} ${details.city}`;
+
+    const params = {
+        from_name: details.name,
+        from_email: details.email,
+        phone: details.phone || '–',
+        message: message,
+    };
+
+    const payload = {
+        order_number: orderNumber(),
+        customer_name: details.name,
+        customer_email: details.email,
+        customer_phone: details.phone || '',
+        address: [details.street, details.zip, details.city].filter(Boolean).join(', '),
+        delivery: details.delivery,
+        items: cart.map(item => ({ name: item.name, qty: item.qty, price: item.price })),
+        total: Number(total),
+        note: services.length ? `Doplnkové služby:\n${servicesList}` : '',
+        terms_accepted: true,
+        terms_accepted_at: new Date().toISOString(),
+        payment_method: 'cod',
+        payment_status: 'pending',
+        warehouse_sync_status: 'reserved'
+    };
+
+    try {
+        btn.textContent = 'Rezervujem sklad...';
+        await createSupabaseOrder(payload);
+        localStorage.setItem('ctrax_products_updated_at', String(Date.now()));
+        try {
+            btn.textContent = 'Odosielam potvrdenie...';
+            await emailjs.send('service_46n3hin', 'template_f6qevxr', params);
+            await emailjs.send('service_46n3hin', 'template_r11q3r5', params);
+        } catch(emailError) {
+            console.warn('EmailJS notification failed:', emailError);
+        }
+        closeCart();
+        goStep(1);
+        cart = [];
+        updateCartUI();
+        clearCheckoutDraft();
+        await loadProductsFromSupabase();
+        if (customerSession?.access_token) loadCustomerOrders();
+        showToast('✅ Objednávka je odoslaná');
+    } catch(err) {
+        console.error('Order error:', err);
+        showToast('❌ ' + friendlyOrderError(err));
+    } finally {
+        btn.textContent = '✓ Objednávka s povinnosťou platby';
+        btn.disabled = false;
+    }
+}
+
+// ============================================================
+//  CONTACT FORM
+// ============================================================
+function contactCooldownLeft() {
+    const lastSent = Number(localStorage.getItem(CONTACT_COOLDOWN_KEY) || 0);
+    return Math.max(0, CONTACT_COOLDOWN_MS - (Date.now() - lastSent));
+}
+
+function rememberContactAttempt() {
+    localStorage.setItem(CONTACT_COOLDOWN_KEY, String(Date.now()));
+}
+
+function submitContact(e) {
+    e.preventDefault();
+    if (document.getElementById('c-company')?.value.trim()) {
+        e.target.reset();
+        showToast('✅ Správa odoslaná!');
+        return;
+    }
+    const cooldownLeft = contactCooldownLeft();
+    if (cooldownLeft > 0) {
+        showToast(`⚠️ Ďalšiu správu môžete poslať o ${formatWaitTime(cooldownLeft)}`);
+        return;
+    }
+    const name = document.getElementById('c-name').value.trim();
+    const email = document.getElementById('c-email').value.trim();
+    const model = document.getElementById('model-select').value;
+    const msg = document.getElementById('c-msg').value.trim();
+
+    if (name.length < 2) { showToast('⚠️ Zadajte meno'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('⚠️ Zadajte platný e-mail'); return; }
+    if (msg.length < 5) { showToast('⚠️ Napíšte krátku správu'); return; }
+    if (msg.length > 1200) { showToast('⚠️ Správa je príliš dlhá'); return; }
+
+    const message =
+        `--- KONTAKTNÝ FORMULÁR ---\n\n` +
+        `Meno: ${name}\n` +
+        `E-mail: ${email}\n` +
+        `Model PC: ${model || 'Všeobecná otázka'}\n\n` +
+        `Správa:\n${msg}`;
+
+    const btn = e.target.querySelector('.send-btn');
+    btn.textContent = 'Odosielam...';
+    btn.disabled = true;
+
+    const params = {
+        from_name: name,
+        from_email: email,
+        phone: '–',
+        message: message,
+    };
+
+    emailjs.send('service_46n3hin', 'template_f6qevxr', params)
+        .then(() => emailjs.send('service_46n3hin', 'template_r11q3r5', params))
+        .then(() => {
+            rememberContactAttempt();
+            showToast('✅ Správa odoslaná! Potvrdenie sme poslali na ' + email);
+            e.target.reset();
+            btn.textContent = 'Odoslať dopyt ✉️';
+            btn.disabled = false;
+        }).catch(err => {
+            console.error('EmailJS error:', err);
+            showToast('❌ Chyba odoslania. Skúste neskôr alebo zavolajte.');
+            btn.textContent = 'Odoslať dopyt ✉️';
+            btn.disabled = false;
+        });
+}
+
+function selectPC(model) {
+    document.getElementById('model-select').value = model;
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+let toastTimer;
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ============================================================
+//  COOKIES
+// ============================================================
+function acceptCookies() {
+    localStorage.setItem('ctrax_cookies', 'accepted');
+    document.getElementById('cookie-banner').classList.remove('visible');
+}
+function declineCookies() {
+    localStorage.setItem('ctrax_cookies', 'declined');
+    document.getElementById('cookie-banner').classList.remove('visible');
+}
+window.addEventListener('load', () => {
+    if (!localStorage.getItem('ctrax_cookies')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.add('visible'), 1500);
+    }
+});
+</script>
+</body>
+</html>
