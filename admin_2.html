@@ -270,6 +270,10 @@ CREATE TABLE IF NOT EXISTS orders (
   payment_status TEXT NOT NULL DEFAULT 'pending',
   payment_reference TEXT,
   payment_url TEXT,
+  reservation_expires_at TIMESTAMPTZ,
+  invoice_status TEXT NOT NULL DEFAULT 'not_created',
+  invoice_reference TEXT,
+  invoice_url TEXT,
   warehouse_sync_status TEXT NOT NULL DEFAULT 'pending',
   warehouse_reference TEXT,
   created_at TIMESTAMPTZ DEFAULT now(),
@@ -282,6 +286,10 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_method TEXT NOT NULL DEFAULT
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_status TEXT NOT NULL DEFAULT 'pending';
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_reference TEXT;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_url TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS reservation_expires_at TIMESTAMPTZ;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_status TEXT NOT NULL DEFAULT 'not_created';
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_reference TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_url TEXT;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS warehouse_sync_status TEXT NOT NULL DEFAULT 'pending';
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS warehouse_reference TEXT;
 
@@ -535,7 +543,7 @@ BEGIN
       RAISE EXCEPTION 'Not enough stock for %', item_name;
     END IF;
 
-    IF current_stock = item_qty THEN
+    IF current_stock = item_qty AND submitted_payment_method NOT IN ('gopay','stripe') THEN
       DELETE FROM products WHERE name = item_name;
     ELSE
       UPDATE products
@@ -715,6 +723,7 @@ BEGIN
     payment_status,
     payment_reference,
     payment_url,
+    reservation_expires_at,
     warehouse_sync_status,
     warehouse_reference
   )
@@ -736,6 +745,7 @@ BEGIN
     submitted_payment_status,
     NULLIF(BTRIM(order_payload->>'payment_reference'), ''),
     NULLIF(BTRIM(order_payload->>'payment_url'), ''),
+    COALESCE(NULLIF(BTRIM(order_payload->>'reservation_expires_at'), '')::TIMESTAMPTZ, CASE WHEN submitted_payment_method IN ('gopay','stripe') THEN now() + interval '30 minutes' ELSE NULL END),
     submitted_warehouse_status,
     NULLIF(BTRIM(order_payload->>'warehouse_reference'), '')
   )
@@ -916,6 +926,18 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
         <input class="form-input" id="s-bank-account">
       </div>
       <div class="form-group">
+        <label class="form-label">Splatnosť faktúry (dni)</label>
+        <input class="form-input" id="s-invoice-due-days" type="number" min="0" step="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">DPH režim faktúr</label>
+        <select class="form-select" id="s-invoice-vat-mode">
+          <option value="non_payer">Nie som platiteľ DPH</option>
+          <option value="vat_included">Ceny obsahujú DPH 20%</option>
+          <option value="no_vat_note">Bez rozpisu DPH / skontrolovať účtovníkom</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label class="form-label">Dátum právnych textov</label>
         <input class="form-input" id="s-legal-updated">
       </div>
@@ -926,6 +948,39 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
           <option value="gopay">GoPay pripravené</option>
           <option value="stripe">Stripe pripravené</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">GoPay režim</label>
+        <select class="form-select" id="s-gopay-mode">
+          <option value="disabled">Vypnuté</option>
+          <option value="prepare_only">Pripraviť objednávku bez presmerovania</option>
+          <option value="edge_function">Supabase Edge Function redirect</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Rezervácia online platby (min)</label>
+        <input class="form-input" id="s-payment-reservation-minutes" type="number" min="5" max="240" step="5">
+      </div>
+      <div class="form-group">
+        <label class="form-label">GoPay Edge Function URL</label>
+        <input class="form-input" id="s-gopay-function-url" placeholder="https://...supabase.co/functions/v1/gopay-create-payment">
+      </div>
+      <div class="form-group">
+        <label class="form-label">iDoklad režim</label>
+        <select class="form-select" id="s-idoklad-mode">
+          <option value="disabled">Vypnuté</option>
+          <option value="manual_export">Ručný export / HTML faktúry</option>
+          <option value="edge_function">Supabase Edge Function po zaplatení</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">iDoklad Edge Function URL</label>
+        <input class="form-input" id="s-idoklad-function-url" placeholder="https://...supabase.co/functions/v1/idoklad-create-invoice">
+      </div>
+      <div class="form-group form-full" style="border:1px solid rgba(59,130,246,0.35);border-radius:14px;padding:1rem;background:rgba(59,130,246,0.06)">
+        <label class="form-label">Integrácie GoPay + iDoklad</label>
+        <small style="color:var(--muted);display:block;margin-bottom:0.75rem">Tajné API kľúče nepatria do HTML. Sem patrí iba verejná URL tvojej Supabase Edge Function; client secret, GoPay credentials a iDoklad tokeny budú uložené ako Supabase secrets.</small>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="copyIntegrationBlueprint()">Kopírovať integračný plán</button>
       </div>
       <div class="form-group">
         <label class="form-label">Skladové prepojenie</label>
@@ -1044,6 +1099,7 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
         <button class="btn btn-success btn-sm" onclick="syncPendingOrders()">Sync lokálne</button>
         <button class="btn btn-ghost btn-sm" onclick="copyVisiblePackingLists()">Baliace listy</button>
         <button class="btn btn-ghost btn-sm" onclick="copyVisibleCustomerMessages()">Správy</button>
+        <button class="btn btn-ghost btn-sm" onclick="downloadVisibleInvoicesHtml()">Faktúry HTML</button>
         <button class="btn btn-ghost btn-sm" onclick="exportWarehousePickList()">Sklad export</button>
         <button class="btn btn-ghost btn-sm" onclick="exportOrders()">Export CSV</button>
       </div>
@@ -1334,7 +1390,7 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
             <input class="form-input" id="f-image-url" placeholder="https://... (URL obrázka)" style="flex:1;" oninput="previewUrl(this.value)">
             <button type="button" class="btn btn-ghost btn-sm" onclick="clearImageInput()">Vymazať fotku</button>
           </div>
-          <div id="img-status" style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem">Fotka nie je povinná. Najistejšie funguje https URL; súbor sa nahrá do Supabase Storage, ak je bucket product-images pripravený.</div>
+          <div id="img-status" style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem">Fotka nie je povinná. Pri nahratí súboru ju admin automaticky oreže na 4:3 a zmenší na 1000×750px WebP/JPG pred uložením.</div>
         </div>
       </div>
     </div>
@@ -1368,6 +1424,10 @@ const AUTH_SESSION_KEY = 'ctrax_admin_auth_session';
 const ADMIN_SESSION_KEY = 'ctrax_admin_session';
 const ADMIN_SESSION_STARTED_KEY = 'ctrax_admin_session_started';
 const ADMIN_SESSION_TTL_MS = 2 * 60 * 60 * 1000;
+const ADMIN_LOGIN_ATTEMPTS_KEY = 'ctrax_admin_login_attempts';
+const ADMIN_LOGIN_LOCK_UNTIL_KEY = 'ctrax_admin_login_lock_until';
+const ADMIN_LOGIN_MAX_ATTEMPTS = 5;
+const ADMIN_LOGIN_LOCK_MS = 5 * 60 * 1000;
 const SITE_SETTINGS_KEY = 'ctrax_site_settings';
 let SB_KEY = localStorage.getItem('ctrax_sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeWphcWV4ZmdhbHhhaXNlcXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNjk5NzUsImV4cCI6MjA5NTY0NTk3NX0.m6PTVqVvjGWeVGdvSIfbcBPs7OLg_P8MjVw9ziN-_BA';
 
@@ -1387,8 +1447,15 @@ const DEFAULT_SITE_SETTINGS = {
     taxId: 'Doplň DIČ',
     vatId: '',
     bankAccount: '',
+    invoiceDueDays: 14,
+    invoiceVatMode: 'non_payer',
     legalUpdated: '06.06.2026',
     paymentGateway: 'manual',
+    gopayMode: 'disabled',
+    gopayFunctionUrl: '',
+    paymentReservationMinutes: 30,
+    idokladMode: 'manual_export',
+    idokladFunctionUrl: '',
     warehouseProvider: 'manual',
     phone: '0949 835 923',
     email: 'computrax.sk@gmail.com',
@@ -2054,8 +2121,15 @@ function loadSiteSettingsForm() {
         's-tax-id': s.taxId,
         's-vat-id': s.vatId,
         's-bank-account': s.bankAccount,
+        's-invoice-due-days': s.invoiceDueDays,
+        's-invoice-vat-mode': s.invoiceVatMode,
         's-legal-updated': s.legalUpdated,
         's-payment-gateway': s.paymentGateway,
+        's-gopay-mode': s.gopayMode,
+        's-gopay-function-url': s.gopayFunctionUrl,
+        's-payment-reservation-minutes': s.paymentReservationMinutes,
+        's-idoklad-mode': s.idokladMode,
+        's-idoklad-function-url': s.idokladFunctionUrl,
         's-warehouse-provider': s.warehouseProvider,
         's-phone': s.phone,
         's-email': s.email,
@@ -2115,8 +2189,15 @@ function readSiteSettingsForm() {
         taxId: document.getElementById('s-tax-id').value.trim(),
         vatId: document.getElementById('s-vat-id').value.trim(),
         bankAccount: document.getElementById('s-bank-account').value.trim(),
+        invoiceDueDays: Math.max(0, parseInt(document.getElementById('s-invoice-due-days')?.value || DEFAULT_SITE_SETTINGS.invoiceDueDays, 10) || 0),
+        invoiceVatMode: document.getElementById('s-invoice-vat-mode')?.value || DEFAULT_SITE_SETTINGS.invoiceVatMode,
         legalUpdated: document.getElementById('s-legal-updated').value.trim(),
         paymentGateway: document.getElementById('s-payment-gateway').value,
+        gopayMode: document.getElementById('s-gopay-mode')?.value || DEFAULT_SITE_SETTINGS.gopayMode,
+        gopayFunctionUrl: document.getElementById('s-gopay-function-url')?.value.trim() || '',
+        paymentReservationMinutes: Math.min(240, Math.max(5, parseInt(document.getElementById('s-payment-reservation-minutes')?.value || DEFAULT_SITE_SETTINGS.paymentReservationMinutes, 10) || DEFAULT_SITE_SETTINGS.paymentReservationMinutes)),
+        idokladMode: document.getElementById('s-idoklad-mode')?.value || DEFAULT_SITE_SETTINGS.idokladMode,
+        idokladFunctionUrl: document.getElementById('s-idoklad-function-url')?.value.trim() || '',
         warehouseProvider: document.getElementById('s-warehouse-provider').value,
         phone: document.getElementById('s-phone').value.trim(),
         email: document.getElementById('s-email').value.trim(),
@@ -2159,6 +2240,71 @@ Použi link/button s:
 Nesmie tam zostať localhost:3000 ani ručne napísaný starý link.
 Potom pošli nový confirmation/reset email. Staré emaily môžu stále smerovať na zlú URL.`,
         '🔐 Auth URL setup skopírovaný'
+    );
+}
+
+function copyIntegrationBlueprint() {
+    const settings = readSiteSettingsForm();
+    const publicUrl = settings.publicSiteUrl || DEFAULT_SITE_SETTINGS.publicSiteUrl;
+    copyText(
+`GoPay + iDoklad plán pre Computrax
+
+1. Supabase Secrets
+Ulož v Supabase Edge Functions secrets, nikdy nie do index.html/admin_2.html:
+GOPAY_GO_ID=
+GOPAY_CLIENT_ID=
+GOPAY_CLIENT_SECRET=
+GOPAY_SANDBOX=true
+IDOKLAD_CLIENT_ID=
+IDOKLAD_CLIENT_SECRET=
+IDOKLAD_COMPANY_ID=
+
+2. GoPay Edge Function
+Názov odporúčanej funkcie:
+gopay-create-payment
+
+Úloha:
+- prijme order_number alebo order_id
+- načíta objednávku zo Supabase
+- overí sumu, email, telefón a stav objednávky
+- vytvorí GoPay platbu server-side
+- zapíše payment_reference, payment_url, payment_status='pending'
+- vráti redirect_url zákazníkovi
+
+3. GoPay webhook
+Názov odporúčanej funkcie:
+gopay-webhook
+
+Úloha:
+- overí podpis / stav platby cez GoPay API
+- pri zaplatení nastaví payment_status='paid'
+- môže nastaviť status='confirmed'
+- spustí iDoklad faktúru až po reálnej platbe
+
+4. iDoklad Edge Function
+Názov odporúčanej funkcie:
+idoklad-create-invoice
+
+Úloha:
+- prijme zaplatenú objednávku
+- načíta firemné údaje z objednávky a site_settings
+- vytvorí faktúru v iDoklad
+- uloží invoice_reference a invoice_url k objednávke
+- pri chybe nechá objednávku označenú ako paid, ale invoice_status='failed'
+
+5. Frontend nastavenia
+Public URL stránky:
+${publicUrl}
+
+GoPay Function URL v admine:
+${settings.gopayFunctionUrl || 'https://PROJECT.supabase.co/functions/v1/gopay-create-payment'}
+
+iDoklad Function URL v admine:
+${settings.idokladFunctionUrl || 'https://PROJECT.supabase.co/functions/v1/idoklad-create-invoice'}
+
+6. Bezpečnostné pravidlo
+HTML smie poznať iba verejné function URL. Všetky API secrets patria iba do Supabase Edge Function secrets.`,
+        '🔌 Integračný plán skopírovaný'
     );
 }
 
@@ -2264,6 +2410,25 @@ function isAuthenticated() {
     return true;
 }
 
+function adminLoginLockRemaining() {
+    const until = Number(localStorage.getItem(ADMIN_LOGIN_LOCK_UNTIL_KEY) || 0);
+    return Math.max(0, until - Date.now());
+}
+
+function recordFailedAdminLogin() {
+    const attempts = Number(localStorage.getItem(ADMIN_LOGIN_ATTEMPTS_KEY) || 0) + 1;
+    localStorage.setItem(ADMIN_LOGIN_ATTEMPTS_KEY, String(attempts));
+    if (attempts >= ADMIN_LOGIN_MAX_ATTEMPTS) {
+        localStorage.setItem(ADMIN_LOGIN_LOCK_UNTIL_KEY, String(Date.now() + ADMIN_LOGIN_LOCK_MS));
+        localStorage.setItem(ADMIN_LOGIN_ATTEMPTS_KEY, '0');
+    }
+}
+
+function clearFailedAdminLogin() {
+    localStorage.removeItem(ADMIN_LOGIN_ATTEMPTS_KEY);
+    localStorage.removeItem(ADMIN_LOGIN_LOCK_UNTIL_KEY);
+}
+
 function hasSupabaseWriteAuth() {
     if (!authSession?.access_token) return false;
     const payload = jwtPayload(authSession.access_token);
@@ -2314,10 +2479,18 @@ async function login() {
     const pw = document.getElementById('pw-input').value;
     const btn = document.getElementById('login-btn');
     if (!pw) return;
+    const lockMs = adminLoginLockRemaining();
+    if (lockMs > 0) {
+        const minutes = Math.ceil(lockMs / 60000);
+        document.getElementById('gate-err').textContent = `Príliš veľa pokusov. Skús znova o ${minutes} min.`;
+        document.getElementById('gate-err').style.display = 'block';
+        return;
+    }
     btn.textContent = 'Prihlasujem...';
     btn.disabled = true;
     try {
         if (await passwordHash(pw) !== ADMIN_PASSWORD_HASH) throw new Error('Nesprávne heslo');
+        clearFailedAdminLogin();
         sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
         sessionStorage.setItem(ADMIN_SESSION_STARTED_KEY, String(Date.now()));
         document.getElementById('pw-input').value = '';
@@ -2330,6 +2503,7 @@ async function login() {
         if (!SB_KEY) showSetupBanner();
         else { loadProducts(); loadOrders(); loadActivity(); loadAdminEvents(); runSupabaseHealthCheck(false); }
     } catch(e) {
+        recordFailedAdminLogin();
         document.getElementById('gate-err').textContent = e.message || 'Nesprávne heslo';
         document.getElementById('gate-err').style.display = 'block';
         setTimeout(() => document.getElementById('gate-err').style.display = 'none', 2000);
@@ -2835,6 +3009,10 @@ function adminRepairSql(uid) {
         'GRANT USAGE, SELECT ON SEQUENCE orders_id_seq TO anon, authenticated;',
         'GRANT USAGE, SELECT ON SEQUENCE stock_movements_id_seq TO authenticated;',
         'GRANT USAGE, SELECT ON SEQUENCE admin_events_id_seq TO authenticated;',
+        'ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_status TEXT NOT NULL DEFAULT \'not_created\';',
+        'ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_reference TEXT;',
+        'ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_url TEXT;',
+        'ALTER TABLE orders ADD COLUMN IF NOT EXISTS reservation_expires_at TIMESTAMPTZ;',
         'CREATE UNIQUE INDEX IF NOT EXISTS products_name_unique ON products(name);',
         'CREATE INDEX IF NOT EXISTS orders_lower_email_created_at_idx ON orders (lower(customer_email), created_at DESC);',
         'CREATE INDEX IF NOT EXISTS orders_created_at_desc_idx ON orders (created_at DESC);',
@@ -2959,6 +3137,24 @@ function paymentStatusLabel(status) {
     }[status] || status || 'Čaká na platbu';
 }
 
+function invoiceStatusLabel(status) {
+    return {
+        not_created: 'Nevytvorená',
+        draft: 'Koncept',
+        created: 'Vytvorená',
+        sent: 'Odoslaná',
+        failed: 'Chyba faktúry'
+    }[status] || status || 'Nevytvorená';
+}
+
+function reservationLabel(order) {
+    if (!order?.reservation_expires_at) return '';
+    const expires = new Date(order.reservation_expires_at);
+    if (Number.isNaN(expires.getTime())) return '';
+    const expired = expires.getTime() < Date.now() && (order.payment_status || 'pending') === 'pending';
+    return `${expired ? 'Rezervácia vypršala' : 'Rezervované do'} ${expires.toLocaleString('sk-SK')}`;
+}
+
 function warehouseStatusLabel(status) {
     return {
         pending: 'Čaká na sklad',
@@ -2984,15 +3180,19 @@ function orderSummaryText(order) {
         `Telefón: ${order.customer_phone || ''}`,
         `Adresa: ${order.address || ''}`,
         `Doprava: ${order.delivery || ''}`,
-        `Platba: ${paymentMethodLabel(order.payment_method)} · ${paymentStatusLabel(order.payment_status)}`,
+        `Platba: ${paymentMethodLabel(order.payment_method)} · ${paymentStatusLabel(order.payment_status)}${order.payment_reference ? ` · ${order.payment_reference}` : ''}`,
+        reservationLabel(order) ? `Rezervácia platby: ${reservationLabel(order)}` : '',
+        `Faktúra: ${invoiceStatusLabel(order.invoice_status)}${order.invoice_reference ? ` · ${order.invoice_reference}` : ''}${order.invoice_url ? ` · ${order.invoice_url}` : ''}`,
         `Sklad sync: ${warehouseStatusLabel(order.warehouse_sync_status)}`,
         `Suma: ${order.total || 0}€`,
         '',
         'Produkty:',
         products,
         '',
+        order.note ? `Poznámka / fakturácia:\n${order.note}` : 'Poznámka / fakturácia: —',
+        '',
         order.terms_accepted ? 'Podmienky/GDPR: potvrdené' : 'Podmienky/GDPR: chýba potvrdenie'
-    ].join('\n');
+    ].filter(line => line !== '').join('\n');
 }
 
 function orderPackingText(order) {
@@ -3037,6 +3237,159 @@ function orderCustomerMessage(order) {
     return `${base}\n\nKontakt: ${contact.email || ''} · ${contact.phone || ''}`;
 }
 
+function orderInvoiceDraft(order) {
+    const settings = getSiteSettings();
+    const data = invoiceData(order, settings);
+    const products = data.items.map(item => `${item.qty}x ${item.name} · ${item.unit.toFixed(2)}€/ks · ${item.total.toFixed(2)}€`).join('\n') || '- Bez položiek';
+    return [
+        'FAKTÚRA / FAKTURAČNÝ PODKLAD',
+        `Číslo faktúry: ${data.invoiceNo}`,
+        `Objednávka: ${order.order_number || ('#' + order.id)}`,
+        `Variabilný symbol: ${data.variableSymbol}`,
+        `Dátum vystavenia: ${data.issueDate}`,
+        `Dátum dodania: ${data.deliveryDate}`,
+        `Dátum splatnosti: ${data.dueDate}`,
+        '',
+        'Predávajúci:',
+        `${settings.companyName || ''}`,
+        `${settings.companyAddress || ''}`,
+        `IČO: ${settings.companyId || ''}`,
+        `DIČ: ${settings.taxId || ''}`,
+        settings.vatId ? `IČ DPH: ${settings.vatId}` : '',
+        settings.bankAccount ? `IBAN: ${settings.bankAccount}` : '',
+        '',
+        'Odberateľ:',
+        `${order.customer_name || ''}`,
+        `${order.customer_email || ''}`,
+        `${order.customer_phone || ''}`,
+        `${order.address || ''}`,
+        order.note ? `\nPoznámka / fakturačné údaje:\n${order.note}` : '',
+        '',
+        'Položky:',
+        products,
+        '',
+        `Doprava: ${order.delivery || ''}`,
+        data.vatMode === 'vat_included' ? `Základ DPH: ${data.base.toFixed(2)}€\nDPH 20%: ${data.vat.toFixed(2)}€` : data.vatNote,
+        `Celkom k úhrade: ${data.total.toFixed(2)}€`,
+        `Platba: ${paymentMethodLabel(order.payment_method)} · ${paymentStatusLabel(order.payment_status)}`
+    ].filter(line => line !== '').join('\n');
+}
+
+function invoiceNumber(order) {
+    const date = order.created_at ? new Date(order.created_at) : new Date();
+    const year = date.getFullYear();
+    const raw = String(order.order_number || order.id || Date.now()).replace(/\D/g, '').slice(-5).padStart(5, '0');
+    return `FV-${year}-${raw}`;
+}
+
+function invoiceVariableSymbol(order) {
+    const digits = String(order.order_number || order.id || '').replace(/\D/g, '');
+    return digits.slice(-10) || String(order.id || Date.now()).slice(-10);
+}
+
+function addDays(date, days) {
+    const copy = new Date(date);
+    copy.setDate(copy.getDate() + Number(days || 0));
+    return copy;
+}
+
+function skDate(date) {
+    return date.toLocaleDateString('sk-SK');
+}
+
+function invoiceData(order, settings = getSiteSettings()) {
+    const created = order.created_at ? new Date(order.created_at) : new Date();
+    const issue = new Date();
+    const due = addDays(issue, Number(settings.invoiceDueDays ?? 14));
+    const items = (Array.isArray(order.items) ? order.items : []).map(item => {
+        const qty = Number(item.qty || 1);
+        const unit = Number(item.price || 0);
+        return {
+            name: String(item.name || ''),
+            qty,
+            unit,
+            total: qty * unit
+        };
+    });
+    const total = Number(order.total || items.reduce((sum, item) => sum + item.total, 0));
+    const vatMode = settings.invoiceVatMode || (settings.vatId ? 'vat_included' : 'non_payer');
+    const base = vatMode === 'vat_included' ? total / 1.2 : total;
+    const vat = vatMode === 'vat_included' ? total - base : 0;
+    const vatNote = vatMode === 'non_payer'
+        ? 'Dodávateľ nie je platiteľ DPH.'
+        : 'DPH režim nie je automaticky rozpočítaný. Skontrolujte účtovníkom.';
+    return {
+        invoiceNo: invoiceNumber(order),
+        variableSymbol: invoiceVariableSymbol(order),
+        issueDate: skDate(issue),
+        deliveryDate: skDate(created),
+        dueDate: skDate(due),
+        items,
+        total,
+        base,
+        vat,
+        vatMode,
+        vatNote
+    };
+}
+
+function invoiceHtml(order) {
+    const settings = getSiteSettings();
+    const data = invoiceData(order, settings);
+    const rows = data.items.map(item => {
+        return `<tr><td>${escapeHTML(item.name || '')}</td><td>${item.qty}</td><td>${item.unit.toFixed(2)} €</td><td>${item.total.toFixed(2)} €</td></tr>`;
+    }).join('');
+    return `<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<title>${escapeHTML(data.invoiceNo)}</title>
+<style>
+body{font-family:Arial,sans-serif;color:#111827;margin:40px;line-height:1.45}
+h1{margin:0 0 8px;font-size:30px}
+.muted{color:#6b7280}
+.top{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}
+.pill{display:inline-block;border:1px solid #d1d5db;border-radius:999px;padding:5px 10px;font-size:12px;color:#374151}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:28px 0}
+.box{border:1px solid #d1d5db;border-radius:10px;padding:16px}
+table{width:100%;border-collapse:collapse;margin-top:24px}
+th,td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:left}
+th{background:#f3f4f6}
+.summary{margin-left:auto;margin-top:18px;max-width:360px}
+.summary div{display:flex;justify-content:space-between;border-bottom:1px solid #e5e7eb;padding:7px 0}
+.total{font-size:22px;font-weight:700}
+pre{white-space:pre-wrap;font-family:Arial,sans-serif}
+@media print{body{margin:18mm}.no-print{display:none}}
+</style>
+</head>
+<body>
+<div class="top">
+<div>
+<h1>Faktúra</h1>
+<div class="muted">Číslo: ${escapeHTML(data.invoiceNo)} · Objednávka: ${escapeHTML(order.order_number || ('#' + order.id))}</div>
+</div>
+<div>
+<span class="pill">VS: ${escapeHTML(data.variableSymbol)}</span><br>
+<span class="pill">Splatnosť: ${escapeHTML(data.dueDate)}</span>
+</div>
+</div>
+<p class="muted">Vystavenie: ${escapeHTML(data.issueDate)} · Dodanie: ${escapeHTML(data.deliveryDate)} · Platba: ${escapeHTML(paymentMethodLabel(order.payment_method))} / ${escapeHTML(paymentStatusLabel(order.payment_status))}</p>
+<div class="grid">
+<div class="box"><strong>Predávajúci</strong><br>${escapeHTML(settings.companyName || '')}<br>${escapeHTML(settings.companyAddress || '')}<br>IČO: ${escapeHTML(settings.companyId || '')}<br>DIČ: ${escapeHTML(settings.taxId || '')}${settings.vatId ? '<br>IČ DPH: ' + escapeHTML(settings.vatId) : ''}${settings.bankAccount ? '<br>IBAN: ' + escapeHTML(settings.bankAccount) : ''}</div>
+<div class="box"><strong>Odberateľ</strong><br>${escapeHTML(order.customer_name || '')}<br>${escapeHTML(order.customer_email || '')}<br>${escapeHTML(order.customer_phone || '')}<br>${escapeHTML(order.address || '')}</div>
+</div>
+<table><thead><tr><th>Položka</th><th>Ks</th><th>Cena/ks</th><th>Spolu</th></tr></thead><tbody>${rows || '<tr><td colspan="4">Bez položiek</td></tr>'}</tbody></table>
+<div class="summary">
+${data.vatMode === 'vat_included' ? `<div><span>Základ DPH</span><strong>${data.base.toFixed(2)} €</strong></div><div><span>DPH 20%</span><strong>${data.vat.toFixed(2)} €</strong></div>` : `<div><span>DPH</span><strong>${escapeHTML(data.vatNote)}</strong></div>`}
+<div class="total"><span>Celkom k úhrade</span><strong>${data.total.toFixed(2)} €</strong></div>
+</div>
+<p><strong>Doprava:</strong> ${escapeHTML(order.delivery || '')}</p>
+${order.note ? `<p><strong>Poznámka / fakturácia:</strong></p><pre>${escapeHTML(order.note)}</pre>` : ''}
+<p class="muted">Automaticky vytvorené v administrácii Computrax. Pred odoslaním zákazníkovi skontrolujte účtovné a zákonné náležitosti.</p>
+<p class="no-print"><button onclick="window.print()">Tlačiť / uložiť ako PDF</button></p>
+</body></html>`;
+}
+
 function nextOrderStatus(status) {
     return {
         new: 'confirmed',
@@ -3062,6 +3415,44 @@ function copyOrderCustomerMessage(id) {
     const order = allOrders.find(o => Number(o.id) === Number(id));
     if (!order) { showToast('⚠️ Objednávka sa nenašla', true); return; }
     copyText(orderCustomerMessage(order), '✉️ Správa zákazníkovi skopírovaná');
+}
+
+function copyOrderInvoiceDraft(id) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) { showToast('⚠️ Objednávka sa nenašla', true); return; }
+    copyText(orderInvoiceDraft(order), '🧾 Fakturačný podklad skopírovaný');
+}
+
+function downloadOrderInvoiceHtml(id) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) { showToast('⚠️ Objednávka sa nenašla', true); return; }
+    const blob = new Blob([invoiceHtml(order)], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${invoiceNumber(order)}.html`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast('🧾 Fakturačný podklad stiahnutý');
+}
+
+function downloadVisibleInvoicesHtml() {
+    const orders = getFilteredOrders();
+    if (!orders.length) { showToast('⚠️ Nie sú žiadne objednávky na faktúry', true); return; }
+    const docs = orders.map(order => invoiceHtml(order).replace('<p class="no-print"><button onclick="window.print()">Tlačiť / uložiť ako PDF</button></p>', '')).join('<div style="break-after:page;page-break-after:always"></div>');
+    const html = `<!doctype html><html lang="sk"><head><meta charset="utf-8"><title>Faktúry Computrax</title></head><body>${docs}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),300));<\/script></body></html>`;
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `faktury-computrax-${new Date().toISOString().slice(0,10)}.html`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast(`🧾 Stiahnuté faktúry: ${orders.length}`);
 }
 
 async function advanceOrderStatus(id) {
@@ -3148,7 +3539,9 @@ function renderOrders() {
             <div class="order-meta">${escapeHTML(order.customer_email || '')}${order.customer_phone ? ' · ' + escapeHTML(order.customer_phone) : ''}</div>
             <div class="order-items">${itemText}</div>
             <div class="order-meta">${escapeHTML(order.delivery || '')}${order.address ? '<br>' + escapeHTML(order.address) : ''}</div>
-            <div class="order-meta">💳 ${escapeHTML(paymentMethodLabel(order.payment_method))} · ${escapeHTML(paymentStatusLabel(order.payment_status))}</div>
+            <div class="order-meta">💳 ${escapeHTML(paymentMethodLabel(order.payment_method))} · ${escapeHTML(paymentStatusLabel(order.payment_status))}${order.payment_reference ? ' · ' + escapeHTML(order.payment_reference) : ''}${order.payment_url ? ` · <a href="${escapeHTML(order.payment_url)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">platba</a>` : ''}</div>
+            ${reservationLabel(order) ? `<div class="order-meta">⏱️ ${escapeHTML(reservationLabel(order))}</div>` : ''}
+            <div class="order-meta">🧾 Faktúra: ${escapeHTML(invoiceStatusLabel(order.invoice_status))}${order.invoice_reference ? ' · ' + escapeHTML(order.invoice_reference) : ''}${order.invoice_url ? ` · <a href="${escapeHTML(order.invoice_url)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">iDoklad</a>` : ''}</div>
             <div class="order-meta">📦 Sklad sync: ${escapeHTML(warehouseStatusLabel(order.warehouse_sync_status))}${order.warehouse_reference ? ' · ' + escapeHTML(order.warehouse_reference) : ''}</div>
             <div class="order-meta" style="margin-top:0.5rem">${order.terms_accepted ? '✅ Podmienky/GDPR potvrdené' : '⚠️ Chýba potvrdenie podmienok'}</div>
             <div class="order-control-grid">
@@ -3165,6 +3558,8 @@ function renderOrders() {
                 </select>
                 <button class="btn btn-ghost btn-sm" onclick="copyOrderSummary(${Number(order.id)})">Kopírovať</button>
                 <button class="btn btn-ghost btn-sm" onclick="copyOrderPackingList(${Number(order.id)})">Baliť</button>
+                <button class="btn btn-ghost btn-sm" onclick="copyOrderInvoiceDraft(${Number(order.id)})">Faktúra</button>
+                <button class="btn btn-ghost btn-sm" onclick="downloadOrderInvoiceHtml(${Number(order.id)})">HTML</button>
                 <button class="btn btn-ghost btn-sm" onclick="copyOrderCustomerMessage(${Number(order.id)})">Správa</button>
                 ${nextOrderStatus(order.status) ? `<button class="btn btn-primary btn-sm" onclick="advanceOrderStatus(${Number(order.id)})">Ďalší: ${escapeHTML(orderStatusLabel(nextOrderStatus(order.status)))}</button>` : ''}
                 ${order.sync_status === 'pending' ? '<span class="status-pill pill-reserved">Lokálne</span>' : ''}
@@ -3395,12 +3790,18 @@ function exportOrders() {
     const orders = getFilteredOrders();
     if (!orders.length) { showToast('⚠️ Nie sú žiadne objednávky na export', true); return; }
     const rows = [
-        ['cislo','stav','platba','stav_platby','sklad_sync','meno','email','telefon','adresa','doprava','produkty','suma','datum'],
+        ['cislo','stav','platba','stav_platby','platba_ref','platba_url','rezervacia_do','faktura_stav','faktura_ref','faktura_url','sklad_sync','meno','email','telefon','adresa','doprava','produkty','poznamka_fakturacia','suma','datum'],
         ...orders.map(o => [
             o.order_number || o.id,
             orderStatusLabel(o.status),
             paymentMethodLabel(o.payment_method),
             paymentStatusLabel(o.payment_status),
+            o.payment_reference || '',
+            o.payment_url || '',
+            o.reservation_expires_at || '',
+            o.invoice_status || 'not_created',
+            o.invoice_reference || '',
+            o.invoice_url || '',
             o.warehouse_sync_status || 'pending',
             o.customer_name,
             o.customer_email,
@@ -3408,6 +3809,7 @@ function exportOrders() {
             o.address,
             o.delivery,
             Array.isArray(o.items) ? o.items.map(i => `${i.qty || 1}x ${i.name}`).join('; ') : '',
+            o.note || '',
             o.total,
             o.created_at || ''
         ])
@@ -3999,17 +4401,81 @@ async function migrateProducts() {
 
 // ---- IMAGE UPLOAD ----
 let pendingImageFile = null;
+const PRODUCT_IMAGE_WIDTH = 1000;
+const PRODUCT_IMAGE_HEIGHT = 750;
+const PRODUCT_IMAGE_QUALITY = 0.86;
 
-function handleImageSelect(input) {
+async function handleImageSelect(input) {
     const file = input.files[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) { showToast('⚠️ Súbor je príliš veľký (max 2MB)', true); return; }
     if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { showToast('⚠️ Povolené sú iba JPG, PNG alebo WebP', true); return; }
-    pendingImageFile = file;
     document.getElementById('f-image-url').value = '';
-    const reader = new FileReader();
-    reader.onload = e => setPreview(e.target.result, `Vybraná fotka: ${file.name}. Pri uložení sa skúsi nahrať do Supabase Storage.`);
-    reader.readAsDataURL(file);
+    setImageStatus('Upravujem fotku na jednotný produktový formát...');
+    try {
+        pendingImageFile = await prepareProductImage(file);
+        const reader = new FileReader();
+        reader.onload = e => setPreview(e.target.result, `Fotka upravená na ${PRODUCT_IMAGE_WIDTH}×${PRODUCT_IMAGE_HEIGHT}px (${Math.round(pendingImageFile.size / 1024)} KB). Pri uložení sa nahrá do Supabase Storage.`);
+        reader.readAsDataURL(pendingImageFile);
+    } catch(e) {
+        pendingImageFile = null;
+        input.value = '';
+        setImageStatus('Fotku sa nepodarilo upraviť. Skúste iný JPG, PNG alebo WebP súbor.', true);
+        showToast('❌ Fotku sa nepodarilo spracovať', true);
+    }
+}
+
+function canvasToBlob(canvas, type, quality) {
+    return new Promise((resolve, reject) => {
+        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Canvas export zlyhal')), type, quality);
+    });
+}
+
+function imageFromFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve(img);
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error('Obrázok sa nepodarilo načítať'));
+        };
+        img.src = url;
+    });
+}
+
+async function prepareProductImage(file) {
+    const img = await imageFromFile(file);
+    const targetRatio = PRODUCT_IMAGE_WIDTH / PRODUCT_IMAGE_HEIGHT;
+    const sourceRatio = img.naturalWidth / img.naturalHeight;
+    let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
+    if (sourceRatio > targetRatio) {
+        sw = Math.round(img.naturalHeight * targetRatio);
+        sx = Math.round((img.naturalWidth - sw) / 2);
+    } else if (sourceRatio < targetRatio) {
+        sh = Math.round(img.naturalWidth / targetRatio);
+        sy = Math.round((img.naturalHeight - sh) / 2);
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = PRODUCT_IMAGE_WIDTH;
+    canvas.height = PRODUCT_IMAGE_HEIGHT;
+    const ctx = canvas.getContext('2d', { alpha: false });
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+    let type = 'image/webp';
+    let blob = await canvasToBlob(canvas, type, PRODUCT_IMAGE_QUALITY).catch(() => null);
+    if (!blob) {
+        type = 'image/jpeg';
+        blob = await canvasToBlob(canvas, type, PRODUCT_IMAGE_QUALITY);
+    }
+    const baseName = file.name.replace(/\.[^.]+$/, '').replace(/[^a-z0-9_-]+/gi, '_').slice(0, 60) || 'product';
+    const ext = type === 'image/webp' ? 'webp' : 'jpg';
+    return new File([blob], `${baseName}_${PRODUCT_IMAGE_WIDTH}x${PRODUCT_IMAGE_HEIGHT}.${ext}`, { type, lastModified: Date.now() });
 }
 
 function previewUrl(url) {
@@ -4037,7 +4503,7 @@ function setPreview(src, message = '') {
 function setImageStatus(message, isError = false) {
     const status = document.getElementById('img-status');
     if (!status) return;
-    status.textContent = message || 'Fotka nie je povinná. Najistejšie funguje https URL; súbor sa nahrá do Supabase Storage, ak je bucket product-images pripravený.';
+    status.textContent = message || 'Fotka nie je povinná. Pri nahratí súboru ju admin automaticky oreže na 4:3 a zmenší na 1000×750px WebP/JPG pred uložením.';
     status.style.color = isError ? 'var(--danger)' : 'var(--muted)';
 }
 

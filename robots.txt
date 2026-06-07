@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin_2.html
 
 Sitemap: https://8twk58fzg9-sudo.github.io/8/sitemap.xml

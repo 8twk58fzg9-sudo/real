@@ -569,6 +569,23 @@
         </div>
         <label class="wizard-label">Mesto</label>
         <input class="wizard-input" id="d-city" autocomplete="address-level2" placeholder="Žilina">
+        <label class="wizard-label">Fakturačné údaje pre firmu (voliteľné)</label>
+        <div class="wizard-row">
+            <div>
+                <input class="wizard-input" id="d-billing-company" autocomplete="organization" placeholder="Názov firmy">
+            </div>
+            <div>
+                <input class="wizard-input" id="d-billing-id" inputmode="numeric" placeholder="IČO">
+            </div>
+        </div>
+        <div class="wizard-row">
+            <div>
+                <input class="wizard-input" id="d-billing-tax" placeholder="DIČ">
+            </div>
+            <div>
+                <input class="wizard-input" id="d-billing-vat" placeholder="IČ DPH">
+            </div>
+        </div>
         <input id="d-company" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0;">
         <label class="wizard-label">Spôsob doručenia</label>
         <select class="wizard-input" id="d-delivery">
@@ -1027,7 +1044,7 @@
 </footer>
 
 <!-- WHATSAPP FAB -->
-<a class="whatsapp-fab" href="https://wa.me/421949835923?text=Dobr%C3%BD+de%C5%88%2C+zauj%C3%ADmal+by+ma+jeden+z+va%C5%A1ich+po%C4%8D%C3%ADta%C4%8Dov." target="_blank" rel="noopener">
+<a class="whatsapp-fab" href="https://wa.me/421949835923?text=Dobr%C3%BD+de%C5%88%2C+zauj%C3%ADmal+by+ma+jeden+z+va%C5%A1ich+po%C4%8D%C3%ADta%C4%8Dov." target="_blank" rel="noopener noreferrer">
     <span class="wa-icon">💬</span>
     <span class="wa-label">Napísať na WhatsApp</span>
 </a>
@@ -1073,6 +1090,12 @@ const DEFAULT_SITE_SETTINGS = {
     taxId: 'Doplň DIČ',
     vatId: '',
     bankAccount: '',
+    paymentGateway: 'manual',
+    gopayMode: 'disabled',
+    gopayFunctionUrl: '',
+    paymentReservationMinutes: 30,
+    idokladMode: 'manual_export',
+    idokladFunctionUrl: '',
     legalUpdated: '06.06.2026',
     phone: '0949 835 923',
     email: 'computrax.sk@gmail.com',
@@ -1090,6 +1113,7 @@ const DEFAULT_SERVICE_ADDONS = [
 let serviceAddons = DEFAULT_SERVICE_ADDONS.map(service => ({ ...service, enabled: true }));
 let activeProducts = PRODUCTS_DATA.map(normalizeProduct);
 let customerSession = loadCustomerSession();
+let currentSiteSettings = { ...DEFAULT_SITE_SETTINGS };
 
 function normalizeProduct(p) {
     const name = String(p.name || '').trim();
@@ -1468,7 +1492,7 @@ async function loadCustomerOrders() {
     }
     wrap.innerHTML = '<div style="color:var(--muted);">Načítavam objednávky...</div>';
     try {
-        const query = `orders?select=order_number,items,total,status,payment_status,delivery,address,note,created_at&customer_email=eq.${encodeURIComponent(customerEmail())}&order=created_at.desc&limit=20`;
+        const query = `orders?select=order_number,items,total,status,payment_method,payment_status,reservation_expires_at,delivery,address,note,created_at&customer_email=eq.${encodeURIComponent(customerEmail())}&order=created_at.desc&limit=20`;
         const res = await fetch(`${SB_URL}/rest/v1/${query}`, {
             cache: 'no-store',
             headers: authHeaders(customerSession.access_token)
@@ -1485,6 +1509,10 @@ async function loadCustomerOrders() {
             const items = Array.isArray(order.items) ? order.items.map(item => `${Number(item.qty || 1)}× ${safeAttr(item.name || 'Produkt')}`).join(', ') : 'Produkty';
             const date = order.created_at ? new Date(order.created_at).toLocaleDateString('sk-SK') : '';
             const statusIndex = orderStatusIndex(order.status);
+            const reservationDate = order.reservation_expires_at ? new Date(order.reservation_expires_at) : null;
+            const reservationText = reservationDate && !Number.isNaN(reservationDate.getTime())
+                ? `${reservationDate.getTime() < Date.now() && order.payment_status === 'pending' ? 'Rezervácia platby vypršala' : 'Rezervované do'} ${reservationDate.toLocaleString('sk-SK')}`
+                : '';
             const supportHref = `mailto:computrax.sk@gmail.com?subject=${encodeURIComponent('Objednávka ' + (order.order_number || ''))}&body=${encodeURIComponent('Dobrý deň, mám otázku k objednávke ' + (order.order_number || '') + '.')}`;
             return `
                 <div class="account-order">
@@ -1495,6 +1523,7 @@ async function loadCustomerOrders() {
                     <div class="account-order-meta">${safeAttr(date)} · ${safeAttr(items)}</div>
                     <div class="account-order-meta">${safeAttr(order.delivery || '')}</div>
                     ${order.address ? `<div class="account-order-meta">Adresa: ${safeAttr(order.address)}</div>` : ''}
+                    ${reservationText ? `<div class="account-order-meta">Platba: ${safeAttr(order.payment_method || 'manual')} · ${safeAttr(reservationText)}</div>` : ''}
                     ${order.note ? `<div class="account-order-meta">Poznámka: ${safeAttr(order.note).replace(/\n/g, '<br>')}</div>` : ''}
                     <div class="order-timeline" title="Nová · Potvrdená · Odoslaná · Dokončená">
                         ${[0,1,2,3].map(step => `<span class="order-step ${step <= statusIndex ? 'done' : ''}"></span>`).join('')}
@@ -1616,6 +1645,18 @@ function safeInternalLink(value) {
     }
 }
 
+function safePublicFunctionUrl(value) {
+    const url = String(value || '').trim();
+    if (!url) return '';
+    try {
+        const parsed = new URL(url);
+        if (parsed.protocol !== 'https:') return '';
+        return parsed.href;
+    } catch(e) {
+        return '';
+    }
+}
+
 function setText(id, value) {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
@@ -1674,6 +1715,7 @@ function applyLegalSettings(s) {
 
 function applySiteSettings(settings = {}) {
     const s = { ...DEFAULT_SITE_SETTINGS, ...(settings || {}) };
+    currentSiteSettings = s;
     if (/^https:\/\/.+/i.test(String(s.publicSiteUrl || ''))) {
         localStorage.setItem('ctrax_public_site_url', String(s.publicSiteUrl).replace(/\/$/, ''));
     }
@@ -2427,7 +2469,7 @@ function saveCart() {
 }
 
 function checkoutFieldIds() {
-    return ['d-name', 'd-email', 'd-phone', 'd-street', 'd-zip', 'd-city', 'd-delivery'];
+    return ['d-name', 'd-email', 'd-phone', 'd-street', 'd-zip', 'd-city', 'd-billing-company', 'd-billing-id', 'd-billing-tax', 'd-billing-vat', 'd-delivery'];
 }
 
 function saveCheckoutDraft() {
@@ -2473,6 +2515,50 @@ function selectedServicesTotal() {
     return selectedServices().reduce((sum, service) => sum + service.price, 0);
 }
 
+function checkoutPaymentConfig(settings = currentSiteSettings) {
+    const gateway = String(settings.paymentGateway || 'manual');
+    const reservationMinutes = Math.min(240, Math.max(5, Number(settings.paymentReservationMinutes || 30)));
+    if (gateway === 'gopay') {
+        return {
+            method: 'gopay',
+            status: 'pending',
+            label: 'GoPay online platba',
+            reservationMinutes,
+            note: settings.gopayMode === 'edge_function' && safePublicFunctionUrl(settings.gopayFunctionUrl)
+                ? `Po odoslaní objednávky sa otvorí bezpečná platba. Sklad držíme ${reservationMinutes} min.`
+                : `GoPay je pripravené, platbu zatiaľ potvrdíme manuálne. Sklad držíme ${reservationMinutes} min.`
+        };
+    }
+    if (gateway === 'stripe') {
+        return {
+            method: 'stripe',
+            status: 'pending',
+            label: 'Online platba',
+            reservationMinutes,
+            note: `Online platba je pripravená na budúce serverové napojenie. Sklad držíme ${reservationMinutes} min.`
+        };
+    }
+    return {
+        method: 'cod',
+        status: 'pending',
+        label: 'Dobierka / platba pri prevzatí',
+        reservationMinutes: 0,
+        note: 'Platba bude riešená manuálne podľa potvrdenia objednávky.'
+    };
+}
+
+function reservationExpiryIso(payment) {
+    const minutes = Number(payment?.reservationMinutes || 0);
+    if (!minutes || !['gopay', 'stripe'].includes(payment.method)) return '';
+    return new Date(Date.now() + minutes * 60000).toISOString();
+}
+
+function invoiceIntegrationNote(settings = currentSiteSettings) {
+    if (settings.idokladMode === 'edge_function') return 'Faktúra: iDoklad sa vytvorí automaticky po zaplatení.';
+    if (settings.idokladMode === 'manual_export') return 'Faktúra: predajca vystaví doklad z objednávky.';
+    return 'Faktúra: vystavenie dokladu podľa objednávky.';
+}
+
 function normalizePhone(value) {
     const raw = String(value || '').trim();
     const digits = raw.replace(/\D/g, '');
@@ -2493,6 +2579,10 @@ function getCheckoutDetails() {
         street: document.getElementById('d-street').value.trim(),
         zip: document.getElementById('d-zip').value.trim(),
         city: document.getElementById('d-city').value.trim(),
+        billingCompany: document.getElementById('d-billing-company')?.value.trim() || '',
+        billingId: document.getElementById('d-billing-id')?.value.trim() || '',
+        billingTax: document.getElementById('d-billing-tax')?.value.trim() || '',
+        billingVat: document.getElementById('d-billing-vat')?.value.trim() || '',
         deliveryKey: document.getElementById('d-delivery').value,
         delivery: document.getElementById('d-delivery').options[document.getElementById('d-delivery').selectedIndex].text
     };
@@ -2503,6 +2593,7 @@ function validateCheckoutDetails(details = getCheckoutDetails(), includeTerms = 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email)) return 'Zadajte platný e-mail';
     if (details.phone && details.phone.replace(/[^\d]/g, '').length < 9) return 'Zadajte platné telefónne číslo';
     if (details.deliveryKey !== 'osobne' && (!details.street || !details.zip || !details.city)) return 'Vyplňte adresu doručenia';
+    if ((details.billingId || details.billingTax || details.billingVat) && !details.billingCompany) return 'Pri firemných údajoch vyplňte názov firmy';
     if (includeTerms && !document.getElementById('terms-accepted')?.checked) return 'Potvrďte obchodné podmienky';
     return '';
 }
@@ -2639,6 +2730,7 @@ function goStep(step) {
 }
 
 function buildOrderSummary() {
+    const details = getCheckoutDetails();
     const deliveryMap = {
         'kurier': 'Kuriér GLS – 5,90€',
         'packeta': 'Packeta – 3,90€',
@@ -2651,19 +2743,22 @@ function buildOrderSummary() {
     const services = selectedServices();
     const servicesTotal = selectedServicesTotal();
     const total = productsTotal + deliveryPrice + servicesTotal;
+    const payment = checkoutPaymentConfig();
 
     let html = cart.map(i => `<div class="summary-item"><span>${Number(i.qty || 1)}× ${safeAttr(i.name)}</span><span>${money(i.price * i.qty)}</span></div>`).join('');
     services.forEach(service => {
         html += `<div class="summary-item"><span>Služba: ${safeAttr(service.name)}</span><span>${money(service.price)}</span></div>`;
     });
     html += `<div class="summary-item"><span>Doprava</span><span>${deliveryPrice === 0 ? 'Zdarma' : deliveryPrice.toFixed(2) + '€'}</span></div>`;
+    if (details.billingCompany) {
+        html += `<div class="summary-item"><span>Faktúra pre firmu</span><span>${safeAttr(details.billingCompany)}</span></div>`;
+    }
+    html += `<div class="summary-item"><span>Platba</span><span>${safeAttr(payment.label)}</span></div>`;
     html += `<div class="summary-item"><span>Celkom</span><span>${total.toFixed(2)}€</span></div>`;
     document.getElementById('order-summary-items').innerHTML = html;
 
-    const name = document.getElementById('d-name').value;
-    const city = document.getElementById('d-city').value;
     document.getElementById('delivery-summary').innerHTML =
-        `📦 <strong>${safeAttr(deliveryMap[sel])}</strong>${name ? ' · ' + safeAttr(name) : ''}${city ? ', ' + safeAttr(city) : ''}`;
+        `📦 <strong>${safeAttr(deliveryMap[sel])}</strong>${details.name ? ' · ' + safeAttr(details.name) : ''}${details.city ? ', ' + safeAttr(details.city) : ''}<br><span style="display:block;margin-top:0.45rem">💳 ${safeAttr(payment.note)}</span><span style="display:block;margin-top:0.3rem">🧾 ${safeAttr(invoiceIntegrationNote())}</span>`;
 }
 
 async function fetchLiveProducts() {
@@ -2736,6 +2831,32 @@ async function createSupabaseOrder(orderPayload) {
     return text ? JSON.parse(text) : {};
 }
 
+async function startGoPayPayment(orderPayload, createdOrder = {}) {
+    const settings = currentSiteSettings || {};
+    const functionUrl = safePublicFunctionUrl(settings.gopayFunctionUrl);
+    if (settings.paymentGateway !== 'gopay' || settings.gopayMode !== 'edge_function' || !functionUrl) return null;
+    const res = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            apikey: SB_KEY,
+            Authorization: `Bearer ${SB_KEY}`
+        },
+        body: JSON.stringify({
+            order_number: orderPayload.order_number,
+            order_id: createdOrder?.id || createdOrder?.order_id || null,
+            total: orderPayload.total,
+            customer_email: orderPayload.customer_email,
+            return_url: `${location.origin}${location.pathname}?order=${encodeURIComponent(orderPayload.order_number)}`
+        })
+    });
+    const text = await res.text();
+    let data = {};
+    try { data = text ? JSON.parse(text) : {}; } catch(e) { data = { message: text }; }
+    if (!res.ok) throw new Error(data.message || data.error || text || 'GoPay platbu sa nepodarilo vytvoriť.');
+    return data.redirect_url || data.payment_url || data.url || null;
+}
+
 function friendlyOrderError(error) {
     const message = String(error?.message || error || '').toLowerCase();
     if (message.includes('too many recent orders')) return 'Poslali ste viac objednávok za krátky čas. Skúste to prosím znova o pár minút.';
@@ -2779,16 +2900,31 @@ async function submitOrder() {
     const services = selectedServices();
     const servicesTotal = selectedServicesTotal();
     const total = (productsTotal + deliveryPrice + servicesTotal).toFixed(2);
+    const payment = checkoutPaymentConfig();
 
     const itemsList = cart.map(i => `${i.qty}× ${i.name} – ${(i.price * i.qty)}€`).join('\n');
     const servicesList = services.length
         ? services.map(service => `- ${service.name} – ${service.price}€`).join('\n')
         : '- Bez doplnkových služieb';
+    const billingLines = [
+        details.billingCompany ? `Firma: ${details.billingCompany}` : '',
+        details.billingId ? `IČO: ${details.billingId}` : '',
+        details.billingTax ? `DIČ: ${details.billingTax}` : '',
+        details.billingVat ? `IČ DPH: ${details.billingVat}` : ''
+    ].filter(Boolean);
+    const billingList = billingLines.length ? billingLines.join('\n') : '- Bez firemných fakturačných údajov';
+    const orderNoteParts = [];
+    if (services.length) orderNoteParts.push(`Doplnkové služby:\n${servicesList}`);
+    if (billingLines.length) orderNoteParts.push(`Fakturačné údaje:\n${billingList}`);
+    orderNoteParts.push(`Platobná integrácia: ${payment.label} (${currentSiteSettings.paymentGateway || 'manual'} / ${currentSiteSettings.gopayMode || 'disabled'})`);
+    if (payment.reservationMinutes) orderNoteParts.push(`Rezervácia online platby: ${payment.reservationMinutes} minút`);
+    orderNoteParts.push(`Fakturačná integrácia: iDoklad ${currentSiteSettings.idokladMode || 'manual_export'}`);
 
     const message =
         `--- NOVÁ OBJEDNÁVKA ---\n\n` +
         `Produkty:\n${itemsList}\n\n` +
         `Doplnkové služby:\n${servicesList}\n\n` +
+        `Fakturačné údaje:\n${billingList}\n\n` +
         `Doprava: ${details.delivery}\n` +
         `Celková suma: ${total}€\n\n` +
         `--- DORUČOVACIE ÚDAJE ---\n` +
@@ -2813,18 +2949,34 @@ async function submitOrder() {
         delivery: details.delivery,
         items: cart.map(item => ({ name: item.name, qty: item.qty, price: item.price })),
         total: Number(total),
-        note: services.length ? `Doplnkové služby:\n${servicesList}` : '',
+        note: orderNoteParts.join('\n\n'),
         terms_accepted: true,
         terms_accepted_at: new Date().toISOString(),
-        payment_method: 'cod',
-        payment_status: 'pending',
+        payment_method: payment.method,
+        payment_status: payment.status,
+        payment_reference: payment.method === 'gopay' ? `GOPAY-PENDING-${Date.now()}` : '',
+        payment_url: '',
+        reservation_expires_at: reservationExpiryIso(payment),
         warehouse_sync_status: 'reserved'
     };
 
     try {
         btn.textContent = 'Rezervujem sklad...';
-        await createSupabaseOrder(payload);
+        const createdOrder = await createSupabaseOrder(payload);
         localStorage.setItem('ctrax_products_updated_at', String(Date.now()));
+        if (payment.method === 'gopay') {
+            try {
+                btn.textContent = 'Pripravujem GoPay...';
+                const redirectUrl = await startGoPayPayment(payload, createdOrder);
+                if (redirectUrl) {
+                    location.href = redirectUrl;
+                    return;
+                }
+            } catch(paymentError) {
+                console.warn('GoPay start failed:', paymentError);
+                showToast('⚠️ Objednávka je uložená, GoPay zatiaľ nie je pripojené. Ozveme sa vám.');
+            }
+        }
         try {
             btn.textContent = 'Odosielam potvrdenie...';
             await emailjs.send('service_46n3hin', 'template_f6qevxr', params);
