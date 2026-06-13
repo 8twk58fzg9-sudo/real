@@ -226,8 +226,9 @@
 
         /* PRODUCTS GRID */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-        .pc-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; backdrop-filter: blur(10px); transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; }
+        .pc-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; backdrop-filter: blur(10px); transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; cursor: pointer; }
         .pc-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .pc-card:focus-visible { outline: 3px solid rgba(59,130,246,0.85); outline-offset: 4px; border-color: var(--accent); }
         .pc-card.wishlisted { border-color: rgba(251,113,133,0.5); }
         .pc-image { width: 100%; aspect-ratio: 16 / 10; border-radius: 14px; border: 1px solid var(--border); background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(255,255,255,0.04)); overflow: hidden; display: flex; align-items: center; justify-content: center; margin: 0.9rem 0 1.2rem; }
         .pc-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -1417,10 +1418,10 @@ function money(value) {
 }
 
 function productShareUrl(name) {
-    const publicBase = (currentSiteSettings.publicSiteUrl || DEFAULT_SITE_SETTINGS.publicSiteUrl || '').replace(/\/$/, '');
+    const configuredBase = cleanPublicSiteBase(currentSiteSettings.publicSiteUrl) || cleanPublicSiteBase(DEFAULT_SITE_SETTINGS.publicSiteUrl);
     const runtimeBase = `${location.origin}${location.pathname}`.replace(/\/$/, '/index.html');
     const base = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?/i.test(runtimeBase) || location.protocol === 'file:'
-        ? `${publicBase}/index.html`
+        ? `${configuredBase}/index.html`
         : runtimeBase;
     const url = new URL(base);
     url.searchParams.set('pc', name);
@@ -1474,6 +1475,22 @@ function safePublicImageUrl(value) {
     }
 }
 
+function cleanPublicSiteBase(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    try {
+        const url = new URL(raw);
+        if (url.protocol !== 'https:') return '';
+        url.username = '';
+        url.password = '';
+        url.search = '';
+        url.hash = '';
+        return url.href.replace(/\/(?:index\.html)?$/i, '');
+    } catch(e) {
+        return '';
+    }
+}
+
 function productImageMarkup(p, className = 'pc-image') {
     const src = safePublicImageUrl(p.imageUrl || p.image_url || '');
     if (!src) return `<div class="${className}"><div class="pc-image-fallback">Fotka produktu bude doplnená v admine</div></div>`;
@@ -1481,9 +1498,10 @@ function productImageMarkup(p, className = 'pc-image') {
 }
 
 function authRedirectUrl() {
-    const stored = localStorage.getItem('ctrax_public_site_url') || '';
-    if (/^https:\/\/.+/i.test(stored)) return stored.replace(/\/$/, '') + '/index.html';
-    if (/^https:\/\/.+/i.test(DEFAULT_SITE_SETTINGS.publicSiteUrl)) return DEFAULT_SITE_SETTINGS.publicSiteUrl.replace(/\/$/, '') + '/index.html';
+    const stored = cleanPublicSiteBase(localStorage.getItem('ctrax_public_site_url') || '');
+    if (stored) return stored + '/index.html';
+    const fallback = cleanPublicSiteBase(DEFAULT_SITE_SETTINGS.publicSiteUrl);
+    if (fallback) return fallback + '/index.html';
     return location.origin + location.pathname;
 }
 
@@ -1841,6 +1859,40 @@ async function logoutCustomer() {
     showToast('👋 Odhlásené');
 }
 
+function isCustomerSessionExpiredError(message = '') {
+    return /jwt|token|401|403/i.test(String(message || ''));
+}
+
+function customerOrdersErrorHtml(message = '') {
+    const normalized = String(message || '').toLowerCase();
+    const supportHref = supportMailtoHref(
+        'Neviem načítať objednávky',
+        'Dobrý deň, po prihlásení neviem načítať moje objednávky. Prosím o kontrolu účtu.'
+    );
+    if (isCustomerSessionExpiredError(message)) {
+        return '<div class="account-order-extra" style="border-color:rgba(252,165,165,0.45);background:rgba(239,68,68,0.08);"><strong>Prihlásenie vypršalo</strong>Prihláste sa znova, potom objednávky obnovte.</div>';
+    }
+    if (/permission denied|row-level security|rls|42501|not authorized|grant|policy/i.test(normalized)) {
+        return `<div class="account-order-extra" style="border-color:rgba(252,165,165,0.45);background:rgba(239,68,68,0.08);">
+            <strong>Objednávky blokuje nastavenie Supabase</strong>
+            Účet je prihlásený, ale databáza ešte nepúšťa čítanie objednávok pre zákazníka. V admine otvor Audit a spusti/kopíruj opravný SQL pre orders RLS/GRANT.
+            <br><a class="order-support" href="${safeAttr(supportHref)}">Kontaktovať podporu</a>
+        </div>`;
+    }
+    if (/failed to fetch|network|load failed/i.test(normalized)) {
+        return `<div class="account-order-extra" style="border-color:rgba(252,165,165,0.45);background:rgba(239,68,68,0.08);">
+            <strong>Objednávky sa nedajú načítať</strong>
+            Skontrolujte internet alebo Supabase projekt a skúste Obnoviť.
+            <br><a class="order-support" href="${safeAttr(supportHref)}">Kontaktovať podporu</a>
+        </div>`;
+    }
+    return `<div class="account-order-extra" style="border-color:rgba(252,165,165,0.45);background:rgba(239,68,68,0.08);">
+        <strong>Objednávky sa nepodarilo načítať</strong>
+        Skúste Obnoviť. Ak sa to zopakuje, kontaktujte podporu.
+        <br><a class="order-support" href="${safeAttr(supportHref)}">Kontaktovať podporu</a>
+    </div>`;
+}
+
 async function loadCustomerOrders() {
     const wrap = document.getElementById('account-orders');
     if (!wrap) return;
@@ -1915,13 +1967,13 @@ async function loadCustomerOrders() {
     } catch(e) {
         customerOrdersCache = [];
         const message = String(e.message || '');
-        const authProblem = /jwt|token|401|403|permission/i.test(message);
+        const authProblem = isCustomerSessionExpiredError(message);
         if (authProblem) {
             customerSession = null;
             sessionStorage.removeItem(CUSTOMER_SESSION_KEY);
             updateAccountUI();
         }
-        wrap.innerHTML = `<div style="color:#fca5a5;">${authProblem ? 'Prihlásenie vypršalo alebo nemá prístup. Prihláste sa znova.' : 'Objednávky sa nepodarilo načítať. Skúste obnoviť alebo kontaktujte podporu.'}</div>`;
+        wrap.innerHTML = customerOrdersErrorHtml(message);
         console.warn('Customer orders load failed:', e.message);
     }
 }
@@ -2608,6 +2660,9 @@ function renderProducts() {
         card.setAttribute('data-stock', stockData);
         card.setAttribute('data-popular', p.popular);
         card.setAttribute('data-newest', p.newest);
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `Otvoriť detail produktu ${p.name}`);
 
         card.innerHTML = `
             <div class="pc-card-top">
@@ -2638,6 +2693,17 @@ function renderProducts() {
                 ${cartBtn}
             </div>
         `;
+        const openCardDetail = event => {
+            if (event.target.closest('button,a,input,label,select,textarea')) return;
+            openProductDetail(p.name);
+        };
+        card.addEventListener('click', openCardDetail);
+        card.addEventListener('keydown', event => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            if (event.target.closest('button,a,input,label,select,textarea')) return;
+            event.preventDefault();
+            openProductDetail(p.name);
+        });
         grid.appendChild(card);
         observer.observe(card);
     });
@@ -3391,7 +3457,8 @@ function normalizePhone(value) {
     if (digits.startsWith('421')) return `+${digits}`;
     if (digits.startsWith('09')) return `+421${digits.slice(1)}`;
     if (digits.startsWith('9') && digits.length === 9) return `+421${digits}`;
-    return raw;
+    if (raw.startsWith('+') && digits.length >= 9 && digits.length <= 15) return `+${digits}`;
+    return digits.length >= 9 && digits.length <= 15 ? `+${digits}` : '';
 }
 
 function getCheckoutDetails() {
@@ -3720,6 +3787,7 @@ async function submitOrder() {
     try {
         await validateCartAgainstLiveStock();
     } catch(e) {
+        orderSubmitting = false;
         btn.textContent = '✓ Objednávka s povinnosťou platby';
         btn.disabled = false;
         showToast('❌ ' + (e.message || 'Sklad sa nepodarilo overiť'));

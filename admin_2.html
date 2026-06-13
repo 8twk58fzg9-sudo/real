@@ -4828,11 +4828,18 @@ const PRODUCT_IMAGE_WIDTH = 1000;
 const PRODUCT_IMAGE_HEIGHT = 750;
 const PRODUCT_IMAGE_QUALITY = 0.86;
 const PRODUCT_IMAGE_SUBJECT_PADDING = 0.16;
+const PRODUCT_IMAGE_MAX_BYTES = 10 * 1024 * 1024;
+const PRODUCT_IMAGE_TYPES = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp'
+};
 
 async function handleImageSelect(input) {
     const file = input.files[0];
     if (!file) return;
-    if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { showToast('⚠️ Povolené sú iba JPG, PNG alebo WebP', true); return; }
+    if (!PRODUCT_IMAGE_TYPES[file.type]) { showToast('⚠️ Povolené sú iba JPG, PNG alebo WebP', true); input.value = ''; return; }
+    if (file.size > PRODUCT_IMAGE_MAX_BYTES) { showToast('⚠️ Fotka je príliš veľká. Max 10 MB.', true); input.value = ''; return; }
     document.getElementById('f-image-url').value = '';
     setImageStatus('Hľadám počítač na fotke a pripravujem produktový výrez...');
     try {
@@ -5070,8 +5077,10 @@ function clearImageInput() {
 
 async function uploadImage(file, productName) {
     if (!useLocalStorage && !(await ensureSupabaseWriteAuth(false))) throw new Error('Najprv pripoj Supabase admin zápis');
-    const ext = file.name.split('.').pop();
-    const path = `${productName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${Date.now()}.${ext}`;
+    const ext = PRODUCT_IMAGE_TYPES[file.type];
+    if (!ext || file.size > PRODUCT_IMAGE_MAX_BYTES) throw new Error('Neplatný obrázok. Povolené sú JPG, PNG alebo WebP do 10 MB.');
+    const safeBase = String(productName || 'produkt').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '').toLowerCase().slice(0, 70) || 'produkt';
+    const path = `${safeBase}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
     const res = await fetch(`${SB_URL}/storage/v1/object/product-images/${path}`, {
         method: 'POST',
         headers: {
