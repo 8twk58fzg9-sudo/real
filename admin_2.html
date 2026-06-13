@@ -6,6 +6,9 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="theme-color" content="#0b0f1a">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
 <title>Admin Panel | Computrax.sk</title>
@@ -24,6 +27,7 @@ window.PRODUCTS_DATA = PRODUCTS_DATA;
 :root{--bg:#0b0f1a;--card:#111827;--accent:#3b82f6;--text:#f1f5f9;--muted:#94a3b8;--border:rgba(255,255,255,0.08);--danger:#ef4444;--success:#22c55e;--radius:16px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(96,165,250,0.85);outline-offset:3px}
 /* GATE */
 .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
 .gate-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:3rem;width:100%;max-width:380px;text-align:center}
@@ -122,7 +126,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
 /* IMAGE UPLOAD */
 .img-upload-wrap{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.8rem}
 .img-preview{width:100%;height:180px;border-radius:10px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px dashed var(--border)}
-.img-preview img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.img-preview img{width:100%;height:100%;object-fit:contain;border-radius:10px;background:#0f172a}
 .img-placeholder{color:var(--muted);font-size:0.9rem}
 .img-actions{display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap}
 /* CARD IMAGE */
@@ -172,7 +176,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
   <div class="gate-box">
     <div class="gate-logo">Compu<span>trax</span></div>
     <div class="gate-sub">Admin Panel — zadaj heslo</div>
-    <input class="gate-input" id="pw-input" type="password" placeholder="Heslo" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    <input class="gate-input" id="pw-input" type="password" placeholder="Heslo" autocomplete="current-password" spellcheck="false" maxlength="128" onkeydown="if(event.key==='Enter')login()">
     <button class="gate-btn" id="login-btn" onclick="login()">Prihlásiť sa</button>
     <div class="gate-error" id="gate-err">Nesprávne heslo</div>
   </div>
@@ -187,7 +191,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
       <button class="btn btn-ghost btn-sm" onclick="migrateProducts()" id="migrate-btn">⬆️ Nahrať vzorové produkty</button>
       <button class="btn btn-primary btn-sm" onclick="useSupabaseMode()">☁️ Supabase režim</button>
       <button class="btn btn-ghost btn-sm" onclick="useLocalMode()">💾 Lokálny režim</button>
-      <a href="index.html" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">🌐 Web</a>
+      <a href="index.html" class="btn btn-ghost btn-sm" target="_blank" rel="noopener noreferrer">🌐 Web</a>
       <button class="btn btn-ghost btn-sm" onclick="logout()">Odhlásiť</button>
     </div>
   </header>
@@ -336,14 +340,14 @@ REVOKE ALL ON TABLE admin_users FROM anon, authenticated;
 GRANT SELECT ON TABLE products TO anon, authenticated;
 GRANT INSERT, UPDATE, DELETE ON TABLE products TO authenticated;
 GRANT SELECT ON TABLE admin_users TO authenticated;
-GRANT INSERT ON TABLE orders TO anon, authenticated;
+GRANT INSERT ON TABLE orders TO authenticated;
 GRANT SELECT, UPDATE, DELETE ON TABLE orders TO authenticated;
 GRANT SELECT ON TABLE stock_movements TO authenticated;
 GRANT SELECT, INSERT ON TABLE admin_events TO authenticated;
 GRANT SELECT ON TABLE site_settings TO anon, authenticated;
 GRANT INSERT, UPDATE ON TABLE site_settings TO authenticated;
 GRANT USAGE, SELECT ON SEQUENCE products_id_seq TO authenticated;
-GRANT USAGE, SELECT ON SEQUENCE orders_id_seq TO anon, authenticated;
+GRANT USAGE, SELECT ON SEQUENCE orders_id_seq TO authenticated;
 GRANT USAGE, SELECT ON SEQUENCE stock_movements_id_seq TO authenticated;
 GRANT USAGE, SELECT ON SEQUENCE admin_events_id_seq TO authenticated;
 
@@ -380,6 +384,7 @@ ALTER TABLE stock_movements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public order insert" ON orders;
+DROP POLICY IF EXISTS "Admin order insert" ON orders;
 DROP POLICY IF EXISTS "Customer own order read" ON orders;
 DROP POLICY IF EXISTS "Admin order read" ON orders;
 DROP POLICY IF EXISTS "Authenticated order read" ON orders;
@@ -391,15 +396,7 @@ DROP POLICY IF EXISTS "Admin event insert" ON admin_events;
 DROP POLICY IF EXISTS "Public settings read" ON site_settings;
 DROP POLICY IF EXISTS "Admin settings insert" ON site_settings;
 DROP POLICY IF EXISTS "Admin settings update" ON site_settings;
-CREATE POLICY "Public order insert" ON orders FOR INSERT TO anon, authenticated WITH CHECK (
-  char_length(customer_name) BETWEEN 2 AND 120
-  AND customer_email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'
-  AND jsonb_typeof(items) = 'array'
-  AND jsonb_array_length(items) BETWEEN 1 AND 20
-  AND total >= 0
-  AND status = 'new'
-  AND terms_accepted = true
-);
+CREATE POLICY "Admin order insert" ON orders FOR INSERT TO authenticated WITH CHECK ((select is_admin()));
 CREATE POLICY "Authenticated order read" ON orders FOR SELECT TO authenticated USING ((select is_admin()) OR lower(customer_email) = lower((select auth.email())));
 CREATE POLICY "Admin order update" ON orders FOR UPDATE TO authenticated USING ((select is_admin())) WITH CHECK ((select is_admin()));
 CREATE POLICY "Admin order delete" ON orders FOR DELETE TO authenticated USING ((select is_admin()));
@@ -484,7 +481,7 @@ INSERT INTO site_settings(key, settings) VALUES ('main', jsonb_build_object(
   'heroTitle','Získajte &lt;span&gt;výkon&lt;/span&gt; bez kompromisov.',
   'heroText','Sme špecialisti na prémiové repasované stanice. Ponúkame stroje s výkonom nových PC, ale za zlomok ich ceny. Každý kus prešiel 24-hodinovým záťažovým testom.',
   'countdownLabel','Objednaj dnes do 18:00 → doručenie zajtra',
-  'publicSiteUrl','https://8twk58fzg9-sudo.github.io/8',
+  'publicSiteUrl','https://8twk58fzg9-sudo.github.io/real',
   'announcementEnabled',false,
   'announcementText','Akcia: ku každému PC základné nastavenie zdarma tento týždeň.',
   'announcementLink','#ponuka',
@@ -543,7 +540,7 @@ BEGIN
       RAISE EXCEPTION 'Not enough stock for %', item_name;
     END IF;
 
-    IF current_stock = item_qty AND submitted_payment_method NOT IN ('gopay','stripe') THEN
+    IF current_stock = item_qty THEN
       DELETE FROM products WHERE name = item_name;
     ELSE
       UPDATE products
@@ -648,6 +645,7 @@ BEGIN
   IF char_length(COALESCE(order_payload->>'order_number', '')) > 80
      OR char_length(COALESCE(order_payload->>'payment_reference', '')) > 160
      OR char_length(COALESCE(order_payload->>'payment_url', '')) > 500
+     OR (NULLIF(BTRIM(order_payload->>'payment_url'), '') IS NOT NULL AND BTRIM(order_payload->>'payment_url') !~* '^https://')
      OR char_length(COALESCE(order_payload->>'warehouse_reference', '')) > 160 THEN
     RAISE EXCEPTION 'Invalid order metadata';
   END IF;
@@ -819,8 +817,8 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
       <strong style="font-size:0.9rem">🔐 Supabase admin zápis</strong>
       <p style="font-size:0.78rem;color:var(--muted);margin:0">Na verejné pridávanie/upravovanie produktov sa prihlás admin účtom zo Supabase Auth.</p>
     </div>
-    <input id="auth-email" class="gate-input" type="email" placeholder="admin@email.sk" autocomplete="username" style="width:220px;margin:0;font-size:0.85rem;padding:0.65rem 0.8rem">
-    <input id="auth-password" class="gate-input" type="password" placeholder="Supabase heslo" autocomplete="current-password" style="width:180px;margin:0;font-size:0.85rem;padding:0.65rem 0.8rem" onkeydown="if(event.key==='Enter')loginSupabaseAdmin()">
+    <input id="auth-email" class="gate-input" type="email" placeholder="admin@email.sk" autocomplete="username" spellcheck="false" maxlength="254" style="width:220px;margin:0;font-size:0.85rem;padding:0.65rem 0.8rem">
+    <input id="auth-password" class="gate-input" type="password" placeholder="Supabase heslo" autocomplete="current-password" spellcheck="false" maxlength="128" style="width:180px;margin:0;font-size:0.85rem;padding:0.65rem 0.8rem" onkeydown="if(event.key==='Enter')loginSupabaseAdmin()">
     <button class="btn btn-primary btn-sm" onclick="loginSupabaseAdmin()">Pripojiť admin zápis</button>
     <button class="btn btn-ghost btn-sm" onclick="logoutSupabaseAdmin()" id="auth-logout-btn" style="display:none">Odpojiť</button>
   </div>
@@ -1390,7 +1388,7 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
             <input class="form-input" id="f-image-url" placeholder="https://... (URL obrázka)" style="flex:1;" oninput="previewUrl(this.value)">
             <button type="button" class="btn btn-ghost btn-sm" onclick="clearImageInput()">Vymazať fotku</button>
           </div>
-          <div id="img-status" style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem">Fotka nie je povinná. Pri nahratí súboru ju admin automaticky oreže na 4:3 a zmenší na 1000×750px WebP/JPG pred uložením.</div>
+          <div id="img-status" style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem">Fotka nie je povinná. Pri nahratí sa admin pokúsi nájsť počítač na fotke, vycentrovať ho, orezať na 4:3 a zmenšiť na 1000×750px WebP/JPG pred uložením.</div>
         </div>
       </div>
     </div>
@@ -1423,13 +1421,16 @@ const DATA_MODE_KEY = 'ctrax_data_mode';
 const AUTH_SESSION_KEY = 'ctrax_admin_auth_session';
 const ADMIN_SESSION_KEY = 'ctrax_admin_session';
 const ADMIN_SESSION_STARTED_KEY = 'ctrax_admin_session_started';
+const ADMIN_LAST_ACTIVE_KEY = 'ctrax_admin_last_active';
 const ADMIN_SESSION_TTL_MS = 2 * 60 * 60 * 1000;
+const ADMIN_IDLE_TTL_MS = 30 * 60 * 1000;
 const ADMIN_LOGIN_ATTEMPTS_KEY = 'ctrax_admin_login_attempts';
 const ADMIN_LOGIN_LOCK_UNTIL_KEY = 'ctrax_admin_login_lock_until';
 const ADMIN_LOGIN_MAX_ATTEMPTS = 5;
 const ADMIN_LOGIN_LOCK_MS = 5 * 60 * 1000;
 const SITE_SETTINGS_KEY = 'ctrax_site_settings';
-let SB_KEY = localStorage.getItem('ctrax_sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeWphcWV4ZmdhbHhhaXNlcXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNjk5NzUsImV4cCI6MjA5NTY0NTk3NX0.m6PTVqVvjGWeVGdvSIfbcBPs7OLg_P8MjVw9ziN-_BA';
+const DEFAULT_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeWphcWV4ZmdhbHhhaXNlcXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNjk5NzUsImV4cCI6MjA5NTY0NTk3NX0.m6PTVqVvjGWeVGdvSIfbcBPs7OLg_P8MjVw9ziN-_BA';
+let SB_KEY = safeStartupSupabaseKey(localStorage.getItem('ctrax_sb_key'));
 
 const DEFAULT_SITE_SETTINGS = {
     heroBadge: 'Skladom · Doručenie do 48h',
@@ -1440,7 +1441,7 @@ const DEFAULT_SITE_SETTINGS = {
     announcementText: 'Akcia: ku každému PC základné nastavenie zdarma tento týždeň.',
     announcementLink: '#ponuka',
     announcementLinkLabel: 'Pozrieť ponuku',
-    publicSiteUrl: 'https://8twk58fzg9-sudo.github.io/8',
+    publicSiteUrl: 'https://8twk58fzg9-sudo.github.io/real',
     companyName: 'Computrax.sk',
     companyAddress: 'Doplň adresu predávajúceho',
     companyId: 'Doplň IČO',
@@ -1523,6 +1524,13 @@ function showAdminSection(section = 'products') {
     }
 }
 
+document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape') return;
+    document.getElementById('sql-modal')?.classList.remove('open');
+    document.getElementById('product-modal')?.classList.remove('open');
+    document.getElementById('del-modal')?.classList.remove('open');
+});
+
 function getBundledProducts() {
     if (Array.isArray(window.PRODUCTS_DATA)) return window.PRODUCTS_DATA;
     try {
@@ -1563,6 +1571,19 @@ async function copyText(text, message = '📋 Skopírované') {
     }
 }
 
+function publicProductUrl(name) {
+    const settings = getSiteSettings();
+    const base = String(settings.publicSiteUrl || DEFAULT_SITE_SETTINGS.publicSiteUrl || '').replace(/\/$/, '');
+    const url = new URL(`${base}/index.html`);
+    url.searchParams.set('pc', String(name || ''));
+    url.hash = 'ponuka';
+    return url.href;
+}
+
+function copyProductPublicLink(name) {
+    copyText(publicProductUrl(name), '🔗 Verejný link produktu skopírovaný');
+}
+
 function jsString(value) {
     return String(value ?? '')
         .replace(/\\/g, '\\\\')
@@ -1578,6 +1599,46 @@ function safeImageUrl(url) {
     try {
         const parsed = new URL(value, location.href);
         return ['https:', 'http:'].includes(parsed.protocol) ? parsed.href : '';
+    } catch(e) {
+        return '';
+    }
+}
+
+function safeExternalUrl(url) {
+    const value = String(url || '').trim();
+    if (!value) return '';
+    try {
+        const parsed = new URL(value);
+        return parsed.protocol === 'https:' ? parsed.href : '';
+    } catch(e) {
+        return '';
+    }
+}
+
+function cleanPublicHttpsUrl(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    try {
+        const url = new URL(raw);
+        if (url.protocol !== 'https:') return '';
+        url.hash = '';
+        return url.href.replace(/\/$/, '');
+    } catch(e) {
+        return '';
+    }
+}
+
+function cleanSupabaseFunctionUrl(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    try {
+        const url = new URL(raw);
+        const validHost = /^[a-z0-9-]+\.supabase\.co$/i.test(url.hostname);
+        const validPath = /^\/functions\/v1\/[A-Za-z0-9_-]+\/?$/.test(url.pathname);
+        if (url.protocol !== 'https:' || !validHost || !validPath) return '';
+        url.search = '';
+        url.hash = '';
+        return url.href.replace(/\/$/, '');
     } catch(e) {
         return '';
     }
@@ -1889,7 +1950,7 @@ async function runAdminAutopilot() {
                     fixedZeroStock++;
                 }
                 if (!String(next.sku || '').trim()) {
-                    next.sku = `CTX-PC-${next.id || Date.now()}`;
+                    next.sku = generatedProductSku(next);
                     generatedSkus++;
                 }
                 if (!String(next.warehouse_sku || '').trim()) {
@@ -2020,11 +2081,16 @@ function copySystemReport() {
     const lowStock = allProducts.filter(p => Number(p.stock || 0) > 0 && Number(p.stock || 0) <= 2);
     const missingFilters = allProducts.filter(productHasMissingFilters);
     const revenue = allOrders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+    const settings = getSiteSettings();
+    const firstActive = allProducts.find(p => p.status === 'active' && Number(p.stock || 0) > 0);
     const lines = [
         'COMPUTRAX ADMIN REPORT',
         `Vygenerované: ${new Date().toLocaleString('sk-SK')}`,
         `Režim: ${useLocalStorage ? 'Lokálny' : 'Supabase'}`,
         `Supabase admin login: ${hasSupabaseWriteAuth() ? 'pripojený' : 'nepripojený'}`,
+        `Admin auto-lock: ${Math.round(ADMIN_IDLE_TTL_MS / 60000)} min neaktivity / ${Math.round(ADMIN_SESSION_TTL_MS / 3600000)} h max session`,
+        `Verejná URL: ${settings.publicSiteUrl || '(nie je nastavená)'}`,
+        firstActive ? `Ukážkový produktový link: ${publicProductUrl(firstActive.name)}` : 'Ukážkový produktový link: nie je aktívny produkt',
         '',
         `Produkty celkom: ${allProducts.length}`,
         `Aktívne produkty: ${allProducts.filter(p => p.status === 'active').length}`,
@@ -2104,8 +2170,8 @@ function plainTextSetting(value) {
         .trim();
 }
 
-function loadSiteSettingsForm() {
-    const s = getSiteSettings();
+function loadSiteSettingsForm(settingsOverride = null) {
+    const s = settingsOverride ? { ...DEFAULT_SITE_SETTINGS, ...settingsOverride } : getSiteSettings();
     const map = {
         's-hero-badge': s.heroBadge,
         's-hero-title': s.heroTitle,
@@ -2173,12 +2239,15 @@ async function loadPublicSiteSettingsForm() {
 function readSiteSettingsForm() {
     const priceMin = Math.max(0, parseInt(document.getElementById('s-price-min').value) || 0);
     const priceMax = Math.max(priceMin + 50, parseInt(document.getElementById('s-price-max').value) || 10000);
+    const publicSiteUrl = cleanPublicHttpsUrl(document.getElementById('s-public-site-url').value) || DEFAULT_SITE_SETTINGS.publicSiteUrl;
+    const gopayFunctionUrl = cleanSupabaseFunctionUrl(document.getElementById('s-gopay-function-url')?.value || '');
+    const idokladFunctionUrl = cleanSupabaseFunctionUrl(document.getElementById('s-idoklad-function-url')?.value || '');
     return {
         heroBadge: document.getElementById('s-hero-badge').value.trim(),
         heroTitle: document.getElementById('s-hero-title').value.trim(),
         heroText: document.getElementById('s-hero-text').value.trim(),
         countdownLabel: document.getElementById('s-countdown-label').value.trim(),
-        publicSiteUrl: document.getElementById('s-public-site-url').value.trim().replace(/\/$/, ''),
+        publicSiteUrl,
         announcementEnabled: document.getElementById('s-announcement-enabled')?.checked === true,
         announcementText: document.getElementById('s-announcement-text').value.trim(),
         announcementLink: document.getElementById('s-announcement-link').value.trim(),
@@ -2194,10 +2263,10 @@ function readSiteSettingsForm() {
         legalUpdated: document.getElementById('s-legal-updated').value.trim(),
         paymentGateway: document.getElementById('s-payment-gateway').value,
         gopayMode: document.getElementById('s-gopay-mode')?.value || DEFAULT_SITE_SETTINGS.gopayMode,
-        gopayFunctionUrl: document.getElementById('s-gopay-function-url')?.value.trim() || '',
+        gopayFunctionUrl,
         paymentReservationMinutes: Math.min(240, Math.max(5, parseInt(document.getElementById('s-payment-reservation-minutes')?.value || DEFAULT_SITE_SETTINGS.paymentReservationMinutes, 10) || DEFAULT_SITE_SETTINGS.paymentReservationMinutes)),
         idokladMode: document.getElementById('s-idoklad-mode')?.value || DEFAULT_SITE_SETTINGS.idokladMode,
-        idokladFunctionUrl: document.getElementById('s-idoklad-function-url')?.value.trim() || '',
+        idokladFunctionUrl,
         warehouseProvider: document.getElementById('s-warehouse-provider').value,
         phone: document.getElementById('s-phone').value.trim(),
         email: document.getElementById('s-email').value.trim(),
@@ -2212,7 +2281,7 @@ function readSiteSettingsForm() {
 
 function copyAuthUrlSetup() {
     const settings = readSiteSettingsForm();
-    const base = settings.publicSiteUrl || 'https://8twk58fzg9-sudo.github.io/8';
+    const base = settings.publicSiteUrl || 'https://8twk58fzg9-sudo.github.io/real';
     const normalized = base.replace(/\/$/, '');
     copyText(
 `Supabase → Authentication → URL Configuration
@@ -2310,6 +2379,7 @@ HTML smie poznať iba verejné function URL. Všetky API secrets patria iba do S
 
 async function saveSiteSettings() {
     const settings = readSiteSettingsForm();
+    loadSiteSettingsForm(settings);
     localStorage.setItem(SITE_SETTINGS_KEY, JSON.stringify(settings));
     if (!useLocalStorage && await ensureSupabaseWriteAuth(false)) {
         try {
@@ -2373,6 +2443,18 @@ function jwtPayload(token) {
     }
 }
 
+function safeStartupSupabaseKey(storedKey) {
+    const key = String(storedKey || '').trim();
+    if (!key) return DEFAULT_SB_KEY;
+    const payload = jwtPayload(key);
+    if (payload.role === 'service_role') {
+        localStorage.removeItem('ctrax_sb_key');
+        localStorage.setItem(DATA_MODE_KEY, 'supabase');
+        return DEFAULT_SB_KEY;
+    }
+    return key.startsWith('eyJ') ? key : DEFAULT_SB_KEY;
+}
+
 function getStoredAuthSession() {
     try {
         const session = JSON.parse(sessionStorage.getItem(AUTH_SESSION_KEY) || 'null');
@@ -2398,13 +2480,36 @@ function clearAuthSession() {
     sessionStorage.removeItem(AUTH_SESSION_KEY);
 }
 
+function touchAdminActivity() {
+    if (sessionStorage.getItem(ADMIN_SESSION_KEY) === '1') {
+        sessionStorage.setItem(ADMIN_LAST_ACTIVE_KEY, String(Date.now()));
+    }
+}
+
+function clearAdminGateSession() {
+    clearAuthSession();
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    sessionStorage.removeItem(ADMIN_SESSION_STARTED_KEY);
+    sessionStorage.removeItem(ADMIN_LAST_ACTIVE_KEY);
+}
+
+function lockAdmin(reason = '') {
+    clearAdminGateSession();
+    if (reason) sessionStorage.setItem('ctrax_admin_lock_reason', reason);
+    location.reload();
+}
+
 function isAuthenticated() {
     if (sessionStorage.getItem(ADMIN_SESSION_KEY) !== '1') return false;
     const started = Number(sessionStorage.getItem(ADMIN_SESSION_STARTED_KEY) || 0);
     if (!started || Date.now() - started > ADMIN_SESSION_TTL_MS) {
-        clearAuthSession();
-        sessionStorage.removeItem(ADMIN_SESSION_KEY);
-        sessionStorage.removeItem(ADMIN_SESSION_STARTED_KEY);
+        clearAdminGateSession();
+        return false;
+    }
+    const lastActive = Number(sessionStorage.getItem(ADMIN_LAST_ACTIVE_KEY) || started);
+    if (Date.now() - lastActive > ADMIN_IDLE_TTL_MS) {
+        clearAdminGateSession();
+        sessionStorage.setItem('ctrax_admin_lock_reason', 'Admin bol zamknutý po 30 minútach neaktivity.');
         return false;
     }
     return true;
@@ -2493,6 +2598,7 @@ async function login() {
         clearFailedAdminLogin();
         sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
         sessionStorage.setItem(ADMIN_SESSION_STARTED_KEY, String(Date.now()));
+        touchAdminActivity();
         document.getElementById('pw-input').value = '';
         document.getElementById('gate').style.display = 'none';
         document.getElementById('admin').style.display = 'block';
@@ -2513,10 +2619,7 @@ async function login() {
     }
 }
 function logout() {
-    clearAuthSession();
-    sessionStorage.removeItem(ADMIN_SESSION_KEY);
-    sessionStorage.removeItem(ADMIN_SESSION_STARTED_KEY);
-    location.reload();
+    lockAdmin('');
 }
 
 async function loginSupabaseAdmin() {
@@ -2762,7 +2865,20 @@ function markProductsUpdated() {
     localStorage.setItem('ctrax_products_updated_at', String(Date.now()));
 }
 
+function setupAdminIdleLock() {
+    ['click','keydown','input','scroll','mousemove','touchstart'].forEach(eventName => {
+        window.addEventListener(eventName, touchAdminActivity, { passive: true });
+    });
+    setInterval(() => {
+        if (sessionStorage.getItem(ADMIN_SESSION_KEY) === '1' && !isAuthenticated()) {
+            location.reload();
+        }
+    }, 60 * 1000);
+}
+
 if (isAuthenticated()) {
+    touchAdminActivity();
+    setupAdminIdleLock();
     document.getElementById('gate').style.display = 'none';
     document.getElementById('admin').style.display = 'block';
     showAdminSection(currentAdminSection);
@@ -2780,6 +2896,16 @@ if (isAuthenticated()) {
             runSupabaseHealthCheck(false);
         }
         if (currentAdminSection === 'automation') renderInsights();
+    }
+} else {
+    const reason = sessionStorage.getItem('ctrax_admin_lock_reason');
+    if (reason) {
+        const err = document.getElementById('gate-err');
+        if (err) {
+            err.textContent = reason;
+            err.style.display = 'block';
+        }
+        sessionStorage.removeItem('ctrax_admin_lock_reason');
     }
 }
 
@@ -2935,7 +3061,16 @@ function renderInsights() {
     const cards = [];
     const lowStock = allProducts.filter(p => Number(p.stock || 0) > 0 && Number(p.stock || 0) <= 2);
     const missingFilters = allProducts.filter(productHasMissingFilters);
+    const missingImages = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && !String(p.image_url || '').trim());
+    const activeInvalidPrices = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && (!Number.isFinite(Number(p.price)) || Number(p.price) <= 0));
+    const duplicateNames = duplicateValues(allProducts, p => p.name);
+    const duplicateSku = duplicateValues(allProducts, p => p.sku || p.warehouse_sku);
     const newOrders = allOrders.filter(order => order.status === 'new');
+    const paidWithoutInvoice = allOrders.filter(order => order.payment_status === 'paid' && !['created','sent'].includes(order.invoice_status || 'not_created'));
+    const unsafeOrderLinks = allOrders.filter(order =>
+        (order.payment_url && !safeExternalUrl(order.payment_url)) ||
+        (order.invoice_url && !safeExternalUrl(order.invoice_url))
+    );
     const pendingLocal = getLocalOrders().filter(order => order.sync_status === 'pending');
     const settings = getSiteSettings();
     const legalMissing = ['companyAddress', 'companyId', 'taxId'].filter(key => !settings[key] || /^Doplň/i.test(String(settings[key])));
@@ -2951,14 +3086,35 @@ function renderInsights() {
     if (newOrders.length) {
         cards.push(insightCard('bad', 'Nové objednávky', `${newOrders.length} objednávok čaká na spracovanie.`, `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('order-filter').value='new';renderOrders()">Zobraziť nové</button>`));
     }
+    if (paidWithoutInvoice.length) {
+        cards.push(insightCard('warn', 'Zaplatené bez faktúry', `${paidWithoutInvoice.length} zaplatených objednávok ešte nemá vystavený doklad.`, `<button class="btn btn-ghost btn-sm" onclick="showAdminSection('orders')">Zobraziť objednávky</button>`));
+    }
+    if (unsafeOrderLinks.length) {
+        cards.push(insightCard('bad', 'Neplatné odkazy v objednávkach', `${unsafeOrderLinks.length} objednávok má platobný alebo fakturačný link, ktorý nie je bezpečné https:// URL.`, `<button class="btn btn-ghost btn-sm" onclick="showAdminSection('orders')">Skontrolovať objednávky</button>`));
+    }
     if (lowStock.length) {
         cards.push(insightCard('warn', 'Nízky sklad', `${lowStock.length} produktov má posledné 1-2 kusy.`, `<button class="btn btn-ghost btn-sm" onclick="showLowStockTab()">Zobraziť sklad</button>`));
     }
     if (missingFilters.length) {
         cards.push(insightCard('info', 'Chýbajúce filtre', `${missingFilters.length} produktov môže mať doplnené filtre automaticky.`, `<button class="btn btn-primary btn-sm" onclick="bulkAutoFillProductFilters()">Doplniť filtre</button>`));
     }
+    if (missingImages.length) {
+        cards.push(insightCard('warn', 'Produkty bez fotky', `${missingImages.length} aktívnych produktov nemá fotku. Na indexe sa zobrazí fallback, ale fotka predáva lepšie.`, `<button class="btn btn-ghost btn-sm" onclick="showAdminSection('products')">Doplniť fotky</button>`));
+    }
+    if (activeInvalidPrices.length) {
+        cards.push(insightCard('bad', 'Neplatné ceny', `${activeInvalidPrices.length} aktívnych produktov má cenu 0 alebo neplatnú cenu.`, `<button class="btn btn-ghost btn-sm" onclick="showAdminSection('products')">Opraviť produkty</button>`));
+    }
+    if (duplicateNames.length || duplicateSku.length) {
+        cards.push(insightCard('bad', 'Duplicity v sklade', `${duplicateNames.length} duplicitných názvov, ${duplicateSku.length} duplicitných SKU. Môže to pomýliť košík alebo sklad.`, `<button class="btn btn-ghost btn-sm" onclick="copyPublicReadyReport()">Kopírovať report</button>`));
+    }
     if (pendingLocal.length) {
         cards.push(insightCard('warn', 'Lokálne objednávky na sync', `${pendingLocal.length} objednávok čaká na synchronizáciu do Supabase.`, `<button class="btn btn-success btn-sm" onclick="syncPendingOrders()">Sync lokálne</button>`));
+    }
+    if (settings.gopayMode === 'edge_function' && !cleanSupabaseFunctionUrl(settings.gopayFunctionUrl)) {
+        cards.push(insightCard('bad', 'GoPay URL neplatná', 'GoPay Edge Function URL musí byť https://PROJECT.supabase.co/functions/v1/gopay-create-payment.', `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-gopay-function-url')?.focus()">Doplniť URL</button>`));
+    }
+    if (settings.idokladMode === 'edge_function' && !cleanSupabaseFunctionUrl(settings.idokladFunctionUrl)) {
+        cards.push(insightCard('bad', 'iDoklad URL neplatná', 'iDoklad Edge Function URL musí byť https://PROJECT.supabase.co/functions/v1/idoklad-create-invoice.', `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-idoklad-function-url')?.focus()">Doplniť URL</button>`));
     }
     if (legalMissing.length) {
         cards.push(insightCard('warn', 'Doplň právne údaje', `Chýba alebo je predvolená hodnota v ${legalMissing.length} firemných poliach.`, `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-company-address')?.focus()">Upraviť údaje</button>`));
@@ -2998,7 +3154,7 @@ function adminRepairSql(uid) {
         'REVOKE ALL ON TABLE admin_users FROM anon, authenticated;',
         'GRANT SELECT ON TABLE products TO anon, authenticated;',
         'GRANT INSERT, UPDATE, DELETE ON TABLE products TO authenticated;',
-        'GRANT INSERT ON TABLE orders TO anon, authenticated;',
+        'GRANT INSERT ON TABLE orders TO authenticated;',
         'GRANT SELECT, UPDATE, DELETE ON TABLE orders TO authenticated;',
         'GRANT SELECT ON TABLE stock_movements TO authenticated;',
         'GRANT SELECT, INSERT ON TABLE admin_events TO authenticated;',
@@ -3006,7 +3162,7 @@ function adminRepairSql(uid) {
         'GRANT SELECT ON TABLE admin_users TO authenticated;',
         'GRANT INSERT, UPDATE ON TABLE site_settings TO authenticated;',
         'GRANT USAGE, SELECT ON SEQUENCE products_id_seq TO authenticated;',
-        'GRANT USAGE, SELECT ON SEQUENCE orders_id_seq TO anon, authenticated;',
+        'GRANT USAGE, SELECT ON SEQUENCE orders_id_seq TO authenticated;',
         'GRANT USAGE, SELECT ON SEQUENCE stock_movements_id_seq TO authenticated;',
         'GRANT USAGE, SELECT ON SEQUENCE admin_events_id_seq TO authenticated;',
         'ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_status TEXT NOT NULL DEFAULT \'not_created\';',
@@ -3025,6 +3181,9 @@ function adminRepairSql(uid) {
         'DROP POLICY IF EXISTS "Customer own order read" ON orders;',
         'DROP POLICY IF EXISTS "Admin order read" ON orders;',
         'DROP POLICY IF EXISTS "Authenticated order read" ON orders;',
+        'DROP POLICY IF EXISTS "Public order insert" ON orders;',
+        'DROP POLICY IF EXISTS "Admin order insert" ON orders;',
+        'CREATE POLICY "Admin order insert" ON orders FOR INSERT TO authenticated WITH CHECK ((select is_admin()));',
         `CREATE POLICY "Authenticated order read" ON orders FOR SELECT TO authenticated USING ((select is_admin()) OR lower(customer_email) = lower((select auth.email())));`,
         'REVOKE EXECUTE ON FUNCTION purchase_products(JSONB) FROM anon, authenticated;',
         'REVOKE EXECUTE ON FUNCTION admin_autopilot() FROM anon, authenticated;',
@@ -3226,6 +3385,7 @@ function orderCustomerMessage(order) {
     const orderNo = order.order_number || ('#' + order.id);
     const total = `${order.total || 0}€`;
     const contact = getSiteSettings();
+    const extra = orderCustomerMessageExtras(order);
     const base = {
         new: `Dobrý deň ${order.customer_name || ''}, ďakujeme za objednávku ${orderNo}. Prijali sme ju a čoskoro ju potvrdíme. Suma objednávky je ${total}.`,
         confirmed: `Dobrý deň ${order.customer_name || ''}, vaša objednávka ${orderNo} je potvrdená. Pripravujeme ju na zabalenie. Suma objednávky je ${total}.`,
@@ -3234,7 +3394,30 @@ function orderCustomerMessage(order) {
         done: `Dobrý deň ${order.customer_name || ''}, objednávka ${orderNo} je dokončená. Ďakujeme za nákup a prajeme veľa výkonu.`,
         cancelled: `Dobrý deň ${order.customer_name || ''}, objednávka ${orderNo} bola zrušená. Ak ide o omyl, kontaktujte nás prosím.`
     }[order.status || 'new'];
-    return `${base}\n\nKontakt: ${contact.email || ''} · ${contact.phone || ''}`;
+    return [base, extra, `Kontakt: ${contact.email || ''} · ${contact.phone || ''}`].filter(Boolean).join('\n\n');
+}
+
+function orderCustomerMessageExtras(order) {
+    const lines = [];
+    const paymentUrl = safeExternalUrl(order.payment_url);
+    const invoiceUrl = safeExternalUrl(order.invoice_url);
+    if (order.payment_status === 'pending' && paymentUrl) {
+        lines.push(`Platba čaká na dokončenie: ${paymentUrl}`);
+    } else if (order.payment_status === 'pending' && order.payment_url) {
+        lines.push('Platobný link treba skontrolovať v admine.');
+    } else {
+        lines.push(`Platba: ${paymentMethodLabel(order.payment_method)} · ${paymentStatusLabel(order.payment_status)}`);
+    }
+    if (reservationLabel(order)) lines.push(`Rezervácia: ${reservationLabel(order)}`);
+    if (invoiceUrl) {
+        lines.push(`Doklad/faktúra: ${invoiceUrl}`);
+    } else if (order.invoice_url) {
+        lines.push('Link na doklad treba skontrolovať v admine.');
+    } else if (order.invoice_reference) {
+        lines.push(`Doklad/faktúra: ${invoiceStatusLabel(order.invoice_status)} · ${order.invoice_reference}`);
+    }
+    if (order.delivery) lines.push(`Doručenie: ${order.delivery}`);
+    return lines.join('\n');
 }
 
 function orderInvoiceDraft(order) {
@@ -3287,6 +3470,43 @@ function invoiceVariableSymbol(order) {
     return digits.slice(-10) || String(order.id || Date.now()).slice(-10);
 }
 
+function amountFromText(value) {
+    const match = String(value || '').match(/(\d+(?:[,.]\d{1,2})?)\s*€/);
+    if (!match) return 0;
+    return Number(match[1].replace(',', '.')) || 0;
+}
+
+function orderExtraInvoiceLines(order, subtotal, total) {
+    const lines = [];
+    const note = String(order.note || '');
+    const serviceBlock = note.match(/Doplnkové služby:\s*([\s\S]*?)(?:\n\n|$)/i)?.[1] || '';
+    serviceBlock.split(/\n+/).forEach(row => {
+        const clean = row.replace(/^-\s*/, '').trim();
+        const price = amountFromText(clean);
+        const name = clean.replace(/[–-]\s*\d+(?:[,.]\d{1,2})?\s*€.*/, '').trim();
+        if (name && price > 0 && !/bez doplnkov/i.test(name)) {
+            lines.push({ name: `Služba: ${name}`, qty: 1, unit: price, total: price });
+        }
+    });
+
+    const deliveryPrice = amountFromText(order.delivery);
+    if (deliveryPrice > 0) {
+        lines.push({
+            name: `Doprava: ${String(order.delivery || '').replace(/\s*[–-]\s*\d+(?:[,.]\d{1,2})?\s*€/, '').trim() || 'Doručenie'}`,
+            qty: 1,
+            unit: deliveryPrice,
+            total: deliveryPrice
+        });
+    }
+
+    const knownExtraTotal = lines.reduce((sum, line) => sum + Number(line.total || 0), 0);
+    const remaining = Number((Number(total || 0) - Number(subtotal || 0) - knownExtraTotal).toFixed(2));
+    if (remaining > 0.009) {
+        lines.push({ name: 'Doplatok / služby k objednávke', qty: 1, unit: remaining, total: remaining });
+    }
+    return lines;
+}
+
 function addDays(date, days) {
     const copy = new Date(date);
     copy.setDate(copy.getDate() + Number(days || 0));
@@ -3301,7 +3521,7 @@ function invoiceData(order, settings = getSiteSettings()) {
     const created = order.created_at ? new Date(order.created_at) : new Date();
     const issue = new Date();
     const due = addDays(issue, Number(settings.invoiceDueDays ?? 14));
-    const items = (Array.isArray(order.items) ? order.items : []).map(item => {
+    let items = (Array.isArray(order.items) ? order.items : []).map(item => {
         const qty = Number(item.qty || 1);
         const unit = Number(item.price || 0);
         return {
@@ -3312,6 +3532,10 @@ function invoiceData(order, settings = getSiteSettings()) {
         };
     });
     const total = Number(order.total || items.reduce((sum, item) => sum + item.total, 0));
+    const subtotal = items.reduce((sum, item) => sum + Number(item.total || 0), 0);
+    if (total > subtotal + 0.009) {
+        items = items.concat(orderExtraInvoiceLines(order, subtotal, total));
+    }
     const vatMode = settings.invoiceVatMode || (settings.vatId ? 'vat_included' : 'non_payer');
     const base = vatMode === 'vat_included' ? total / 1.2 : total;
     const vat = vatMode === 'vat_included' ? total - base : 0;
@@ -3415,6 +3639,79 @@ function copyOrderCustomerMessage(id) {
     const order = allOrders.find(o => Number(o.id) === Number(id));
     if (!order) { showToast('⚠️ Objednávka sa nenašla', true); return; }
     copyText(orderCustomerMessage(order), '✉️ Správa zákazníkovi skopírovaná');
+}
+
+function orderReturnPack(order) {
+    const orderNo = order.order_number || ('#' + order.id);
+    const created = order.created_at ? new Date(order.created_at) : null;
+    const days = created && !Number.isNaN(created.getTime())
+        ? Math.max(0, Math.floor((Date.now() - created.getTime()) / 86400000))
+        : null;
+    const returnWindow = days === null
+        ? 'neznáme - overiť dátum objednávky'
+        : days <= 14
+            ? `pravdepodobne v lehote 14 dní (${days}. deň)`
+            : `pravdepodobne po 14-dňovej lehote (${days}. deň), riešiť ako reklamáciu/záruku`;
+    const items = Array.isArray(order.items) && order.items.length
+        ? order.items.map(item => `- ${item.qty || 1}x ${item.name || ''}`).join('\n')
+        : '- Bez položiek';
+    const customerReply = [
+        `Dobrý deň ${order.customer_name || ''},`,
+        '',
+        `ďakujeme za správu k objednávke ${orderNo}. Žiadosť o vrátenie/reklamáciu sme zaevidovali.`,
+        'Prosím, odpovedzte nám ešte s krátkym popisom problému a fotkami alebo videom, ak ide o poškodenie alebo technickú chybu.',
+        'Po kontrole vám pošleme ďalší postup, adresu pre zaslanie tovaru a predbežný termín vybavenia.',
+        '',
+        'Computrax'
+    ].join('\n');
+    return [
+        'VRÁTENIE / REKLAMÁCIA - INTERNÝ ZÁZNAM',
+        `Objednávka: ${orderNo}`,
+        `Zákazník: ${order.customer_name || ''}`,
+        `E-mail: ${order.customer_email || ''}`,
+        `Telefón: ${order.customer_phone || ''}`,
+        `Suma: ${order.total || 0}€`,
+        `Dátum objednávky: ${created && !Number.isNaN(created.getTime()) ? created.toLocaleDateString('sk-SK') : '—'}`,
+        `Lehota: ${returnWindow}`,
+        `Platba: ${paymentMethodLabel(order.payment_method)} · ${paymentStatusLabel(order.payment_status)}`,
+        `Stav objednávky: ${orderStatusLabel(order.status)}`,
+        '',
+        'Položky:',
+        items,
+        '',
+        'Checklist:',
+        '[ ] Overiť, že píše rovnaký e-mail alebo zákazník vie číslo objednávky',
+        '[ ] Vyžiadať popis problému a fotky/video',
+        '[ ] Rozhodnúť: odstúpenie / reklamácia / servisná kontrola',
+        '[ ] Po prijatí tovaru skontrolovať sériové číslo a stav PC',
+        '[ ] Pri refundácii zmeniť platbu na refunded a doplniť internú poznámku',
+        '',
+        'ODPOVEĎ ZÁKAZNÍKOVI:',
+        customerReply
+    ].join('\n');
+}
+
+function copyOrderReturnPack(id) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) { showToast('⚠️ Objednávka sa nenašla', true); return; }
+    copyText(orderReturnPack(order), '↩️ Vrátenie/reklamácia skopírované');
+}
+
+function copyPaymentReminder(id) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) { showToast('⚠️ Objednávka sa nenašla', true); return; }
+    const paymentUrl = safeExternalUrl(order.payment_url);
+    const text = [
+        `Dobrý deň ${order.customer_name || ''},`,
+        '',
+        `k objednávke ${order.order_number || ('#' + order.id)} ešte čakáme na dokončenie platby.`,
+        `Suma: ${order.total || 0}€`,
+        paymentUrl ? `Platobný link: ${paymentUrl}` : 'Platobný link teraz skontrolujeme a pošleme vám ho opäť.',
+        reservationLabel(order) ? `Rezervácia: ${reservationLabel(order)}` : '',
+        '',
+        'Ďakujeme, Computrax'
+    ].filter(Boolean).join('\n');
+    copyText(text, '💳 Platobná výzva skopírovaná');
 }
 
 function copyOrderInvoiceDraft(id) {
@@ -3526,6 +3823,10 @@ function renderOrders() {
         const items = Array.isArray(order.items) ? order.items : [];
         const itemText = items.map(i => `${escapeHTML(i.qty || 1)}× ${escapeHTML(i.name || '')}`).join('<br>') || 'Bez položiek';
         const date = order.created_at ? new Date(order.created_at).toLocaleString('sk-SK') : '';
+        const paymentUrl = safeExternalUrl(order.payment_url);
+        const invoiceUrl = safeExternalUrl(order.invoice_url);
+        const unsafePaymentUrl = order.payment_url && !paymentUrl;
+        const unsafeInvoiceUrl = order.invoice_url && !invoiceUrl;
         return `
         <div class="order-card">
             <div class="order-top">
@@ -3539,9 +3840,9 @@ function renderOrders() {
             <div class="order-meta">${escapeHTML(order.customer_email || '')}${order.customer_phone ? ' · ' + escapeHTML(order.customer_phone) : ''}</div>
             <div class="order-items">${itemText}</div>
             <div class="order-meta">${escapeHTML(order.delivery || '')}${order.address ? '<br>' + escapeHTML(order.address) : ''}</div>
-            <div class="order-meta">💳 ${escapeHTML(paymentMethodLabel(order.payment_method))} · ${escapeHTML(paymentStatusLabel(order.payment_status))}${order.payment_reference ? ' · ' + escapeHTML(order.payment_reference) : ''}${order.payment_url ? ` · <a href="${escapeHTML(order.payment_url)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">platba</a>` : ''}</div>
+            <div class="order-meta">💳 ${escapeHTML(paymentMethodLabel(order.payment_method))} · ${escapeHTML(paymentStatusLabel(order.payment_status))}${order.payment_reference ? ' · ' + escapeHTML(order.payment_reference) : ''}${paymentUrl ? ` · <a href="${escapeHTML(paymentUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">platba</a>` : unsafePaymentUrl ? ' · ⚠️ neplatný platobný link' : ''}</div>
             ${reservationLabel(order) ? `<div class="order-meta">⏱️ ${escapeHTML(reservationLabel(order))}</div>` : ''}
-            <div class="order-meta">🧾 Faktúra: ${escapeHTML(invoiceStatusLabel(order.invoice_status))}${order.invoice_reference ? ' · ' + escapeHTML(order.invoice_reference) : ''}${order.invoice_url ? ` · <a href="${escapeHTML(order.invoice_url)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">iDoklad</a>` : ''}</div>
+            <div class="order-meta">🧾 Faktúra: ${escapeHTML(invoiceStatusLabel(order.invoice_status))}${order.invoice_reference ? ' · ' + escapeHTML(order.invoice_reference) : ''}${invoiceUrl ? ` · <a href="${escapeHTML(invoiceUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">iDoklad</a>` : unsafeInvoiceUrl ? ' · ⚠️ neplatný link dokladu' : ''}</div>
             <div class="order-meta">📦 Sklad sync: ${escapeHTML(warehouseStatusLabel(order.warehouse_sync_status))}${order.warehouse_reference ? ' · ' + escapeHTML(order.warehouse_reference) : ''}</div>
             <div class="order-meta" style="margin-top:0.5rem">${order.terms_accepted ? '✅ Podmienky/GDPR potvrdené' : '⚠️ Chýba potvrdenie podmienok'}</div>
             <div class="order-control-grid">
@@ -3551,6 +3852,9 @@ function renderOrders() {
                 <select class="form-select" onchange="updateOrderWarehouseStatus(${Number(order.id)}, this.value)">
                     ${['pending','reserved','exported','synced','failed'].map(s => `<option value="${s}" ${(order.warehouse_sync_status || 'pending') === s ? 'selected' : ''}>${warehouseStatusLabel(s)}</option>`).join('')}
                 </select>
+                <select class="form-select" onchange="updateOrderInvoiceStatus(${Number(order.id)}, this.value)">
+                    ${['not_created','draft','created','sent','failed'].map(s => `<option value="${s}" ${(order.invoice_status || 'not_created') === s ? 'selected' : ''}>${invoiceStatusLabel(s)}</option>`).join('')}
+                </select>
             </div>
             <div class="order-actions" style="margin-top:0.9rem">
                 <select class="form-select order-select" onchange="updateOrderStatus(${Number(order.id)}, this.value)">
@@ -3559,8 +3863,11 @@ function renderOrders() {
                 <button class="btn btn-ghost btn-sm" onclick="copyOrderSummary(${Number(order.id)})">Kopírovať</button>
                 <button class="btn btn-ghost btn-sm" onclick="copyOrderPackingList(${Number(order.id)})">Baliť</button>
                 <button class="btn btn-ghost btn-sm" onclick="copyOrderInvoiceDraft(${Number(order.id)})">Faktúra</button>
+                <button class="btn btn-ghost btn-sm" onclick="editOrderInvoiceData(${Number(order.id)})">Doklad údaje</button>
                 <button class="btn btn-ghost btn-sm" onclick="downloadOrderInvoiceHtml(${Number(order.id)})">HTML</button>
                 <button class="btn btn-ghost btn-sm" onclick="copyOrderCustomerMessage(${Number(order.id)})">Správa</button>
+                <button class="btn btn-ghost btn-sm" onclick="copyOrderReturnPack(${Number(order.id)})">Vrátenie</button>
+                ${order.payment_status === 'pending' && paymentUrl ? `<button class="btn btn-ghost btn-sm" onclick="copyPaymentReminder(${Number(order.id)})">Platba</button>` : ''}
                 ${nextOrderStatus(order.status) ? `<button class="btn btn-primary btn-sm" onclick="advanceOrderStatus(${Number(order.id)})">Ďalší: ${escapeHTML(orderStatusLabel(nextOrderStatus(order.status)))}</button>` : ''}
                 ${order.sync_status === 'pending' ? '<span class="status-pill pill-reserved">Lokálne</span>' : ''}
             </div>
@@ -3786,6 +4093,72 @@ async function updateOrderWarehouseStatus(id, warehouseStatus) {
     }
 }
 
+async function updateOrderInvoiceStatus(id, invoiceStatus) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) return;
+    try {
+        const patch = { invoice_status: invoiceStatus, updated_at: new Date().toISOString() };
+        if ((invoiceStatus === 'created' || invoiceStatus === 'sent') && !order.invoice_reference) {
+            patch.invoice_reference = invoiceNumber(order);
+        }
+        if (useLocalStorage || order.sync_status === 'pending') {
+            allOrders = allOrders.map(o => Number(o.id) === Number(id) ? { ...o, ...patch } : o);
+            localStorage.setItem(LOCAL_ORDERS_KEY, JSON.stringify(allOrders));
+            localStorage.setItem('ctrax_orders_updated_at', String(Date.now()));
+        } else {
+            await sb('PATCH', `orders?id=eq.${id}`, patch);
+            await loadOrders();
+        }
+        await logAdminEvent('order_invoice_update', 'order', id, `Faktúra ${order.order_number || id}: ${invoiceStatusLabel(order.invoice_status)} → ${invoiceStatusLabel(invoiceStatus)}`, {
+            old_invoice_status: order.invoice_status || 'not_created',
+            new_invoice_status: invoiceStatus
+        });
+        loadAdminEvents();
+        showToast('✅ Stav faktúry zmenený');
+        renderOrders();
+    } catch(e) {
+        showToast('❌ ' + e.message, true);
+        loadOrders();
+    }
+}
+
+async function editOrderInvoiceData(id) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) return;
+    const reference = prompt('Číslo faktúry / dokladu:', order.invoice_reference || invoiceNumber(order));
+    if (reference === null) return;
+    const url = prompt('URL dokladu alebo faktúry (https://, môže zostať prázdne):', order.invoice_url || '');
+    if (url === null) return;
+    const cleanUrl = String(url || '').trim();
+    if (cleanUrl && !/^https:\/\/.+/i.test(cleanUrl)) {
+        showToast('⚠️ URL dokladu musí začínať na https://', true);
+        return;
+    }
+    const patch = {
+        invoice_reference: String(reference || '').trim() || null,
+        invoice_url: cleanUrl || null,
+        invoice_status: cleanUrl || String(reference || '').trim() ? (order.invoice_status === 'sent' ? 'sent' : 'created') : (order.invoice_status || 'not_created'),
+        updated_at: new Date().toISOString()
+    };
+    try {
+        if (useLocalStorage || order.sync_status === 'pending') {
+            allOrders = allOrders.map(o => Number(o.id) === Number(id) ? { ...o, ...patch } : o);
+            localStorage.setItem(LOCAL_ORDERS_KEY, JSON.stringify(allOrders));
+            localStorage.setItem('ctrax_orders_updated_at', String(Date.now()));
+        } else {
+            await sb('PATCH', `orders?id=eq.${id}`, patch);
+            await loadOrders();
+        }
+        await logAdminEvent('order_invoice_data_update', 'order', id, `Doplnené údaje faktúry: ${order.order_number || id}`, patch);
+        loadAdminEvents();
+        showToast('✅ Údaje faktúry uložené');
+        renderOrders();
+    } catch(e) {
+        showToast('❌ ' + e.message, true);
+        loadOrders();
+    }
+}
+
 function exportOrders() {
     const orders = getFilteredOrders();
     if (!orders.length) { showToast('⚠️ Nie sú žiadne objednávky na export', true); return; }
@@ -3948,6 +4321,7 @@ function renderList() {
             </div>
             <div class="card-actions">
                 <button class="btn btn-ghost btn-sm" onclick="openEdit(${p.id})">✏️ Upraviť</button>
+                <button class="btn btn-ghost btn-sm" onclick="copyProductPublicLink('${jsString(p.name)}')">🔗 Link</button>
                 <button class="btn btn-ghost btn-sm" onclick="duplicateProduct(${p.id})">⧉ Duplikovať</button>
                 <button class="btn btn-danger btn-sm" onclick="openDelete(${p.id}, '${jsString(p.name)}')">🗑️ Vymazať</button>
             </div>
@@ -3990,8 +4364,21 @@ function updateAutomationSummary() {
     const lowStock = allProducts.filter(p => Number(p.stock || 0) > 0 && Number(p.stock || 0) <= 2).length;
     const missingFilters = allProducts.filter(productHasMissingFilters).length;
     const missingSku = allProducts.filter(p => !String(p.sku || '').trim() || !String(p.warehouse_sku || '').trim()).length;
+    const missingImages = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && !String(p.image_url || '').trim()).length;
     const sold = allProducts.filter(p => Number(p.stock || 0) === 0 || p.status === 'sold').length;
-    summary.textContent = `Produkty: ${allProducts.length} · Nízky sklad: ${lowStock} · Chýbajúce filtre: ${missingFilters} · Chýbajúce SKU: ${missingSku} · Vypredané: ${sold}`;
+    summary.textContent = `Produkty: ${allProducts.length} · Nízky sklad: ${lowStock} · Chýbajúce filtre: ${missingFilters} · Chýbajúce SKU: ${missingSku} · Bez fotky: ${missingImages} · Vypredané: ${sold}`;
+}
+
+function duplicateValues(list, getter) {
+    const seen = new Map();
+    const duplicates = new Set();
+    list.forEach(item => {
+        const value = String(getter(item) || '').trim().toLowerCase();
+        if (!value) return;
+        if (seen.has(value)) duplicates.add(value);
+        seen.set(value, true);
+    });
+    return [...duplicates];
 }
 
 function publicReadyIssues() {
@@ -4000,24 +4387,51 @@ function publicReadyIssues() {
     const lowStock = allProducts.filter(p => Number(p.stock || 0) > 0 && Number(p.stock || 0) <= 2);
     const missingFilters = allProducts.filter(productHasMissingFilters);
     const missingSku = allProducts.filter(p => !String(p.sku || '').trim() || !String(p.warehouse_sku || '').trim());
+    const missingImages = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && !String(p.image_url || '').trim());
     const zeroNotSold = allProducts.filter(p => Number(p.stock || 0) === 0 && p.status !== 'sold');
+    const invalidActivePrices = activeProducts.filter(p => !Number.isFinite(Number(p.price)) || Number(p.price) <= 0);
+    const invalidStock = allProducts.filter(p => !Number.isFinite(Number(p.stock)) || Number(p.stock) < 0);
+    const duplicateNames = duplicateValues(allProducts, p => p.name);
+    const duplicateSku = duplicateValues(allProducts, p => p.sku || p.warehouse_sku);
     const settings = getSiteSettings();
     const missingLegal = ['companyAddress', 'companyId', 'taxId'].filter(key => !settings[key] || /^Doplň/i.test(String(settings[key])));
-    const brokenServices = serviceSettings(settings).filter(service => service.enabled !== false && (!String(service.name || '').trim() || Number(service.price) < 0));
+    const services = serviceSettings(settings);
+    const enabledServices = services.filter(service => service.enabled !== false);
+    const brokenServices = services.filter(service => service.enabled !== false && (!String(service.name || '').trim() || Number(service.price) < 0));
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(settings.email || '').trim());
+    const phoneDigits = String(settings.phone || settings.whatsappPhone || '').replace(/\D/g, '');
+    const unsafeOrderLinks = allOrders.filter(order =>
+        (order.payment_url && !safeExternalUrl(order.payment_url)) ||
+        (order.invoice_url && !safeExternalUrl(order.invoice_url))
+    );
 
     if (useLocalStorage) issues.push('Prepni na Supabase režim, aby produkty videli všetci návštevníci.');
     if (!allProducts.length) issues.push('Nie sú načítané žiadne produkty.');
     if (!activeProducts.length) issues.push('Na indexe nie je žiadny aktívny produkt so skladom.');
     if (missingFilters.length) issues.push(`${missingFilters.length} produktov má chýbajúce filtre.`);
     if (missingSku.length) issues.push(`${missingSku.length} produktov má chýbajúce SKU alebo skladové SKU.`);
+    if (missingImages.length) issues.push(`${missingImages.length} aktívnych produktov nemá fotku.`);
+    if (invalidActivePrices.length) issues.push(`${invalidActivePrices.length} aktívnych produktov má neplatnú cenu.`);
+    if (invalidStock.length) issues.push(`${invalidStock.length} produktov má neplatný sklad.`);
+    if (duplicateNames.length) issues.push(`Duplicitné názvy produktov: ${duplicateNames.slice(0, 5).join(', ')}.`);
+    if (duplicateSku.length) issues.push(`Duplicitné SKU: ${duplicateSku.slice(0, 5).join(', ')}.`);
     if (zeroNotSold.length) issues.push(`${zeroNotSold.length} produktov má 0 ks, ale nie je označených ako vypredané.`);
     if (missingLegal.length) issues.push(`Doplň právne/firemné údaje: ${missingLegal.join(', ')}.`);
+    if (!emailOk) issues.push('Kontaktný e-mail v nastaveniach nie je platný.');
+    if (phoneDigits.length < 9) issues.push('Kontaktný telefón v nastaveniach vyzerá neplatne.');
+    if (!enabledServices.length) issues.push('Nie je zapnutá žiadna doplnková služba v checkout-e.');
     if (brokenServices.length) issues.push(`${brokenServices.length} doplnkových služieb má neplatný názov alebo cenu.`);
+    if (unsafeOrderLinks.length) issues.push(`${unsafeOrderLinks.length} objednávok má nebezpečný alebo neplatný platobný/fakturačný link.`);
+    if (!cleanPublicHttpsUrl(settings.publicSiteUrl)) issues.push('Verejná URL stránky musí byť platná https:// adresa.');
+    if (settings.gopayMode === 'edge_function' && !cleanSupabaseFunctionUrl(settings.gopayFunctionUrl)) issues.push('GoPay Edge Function URL musí byť v tvare https://PROJECT.supabase.co/functions/v1/gopay-create-payment.');
+    if (settings.paymentGateway === 'manual' || settings.gopayMode === 'disabled') issues.push('Platobná brána je zatiaľ v manuálnom režime, online platby nebudú automatické.');
+    if (settings.idokladMode === 'edge_function' && !cleanSupabaseFunctionUrl(settings.idokladFunctionUrl)) issues.push('iDoklad Edge Function URL musí byť v tvare https://PROJECT.supabase.co/functions/v1/idoklad-create-invoice.');
+    if (settings.idokladMode === 'manual_export') issues.push('Faktúry sú v manuálnom/export režime, iDoklad automatizácia ešte nie je pripojená.');
     if (!SB_KEY) issues.push('Chýba Supabase anon/public key.');
     if (jwtPayload(SB_KEY).role === 'service_role') issues.push('V HTML je service_role key. Nahraď ho anon/public key.');
     if (!useLocalStorage && !hasSupabaseWriteAuth()) issues.push('Admin zápis do Supabase nie je prihlásený cez Supabase Auth.');
 
-    return { issues, activeProducts, lowStock, missingFilters, missingSku, zeroNotSold };
+    return { issues, activeProducts, lowStock, missingFilters, missingSku, missingImages, invalidActivePrices, invalidStock, duplicateNames, duplicateSku, zeroNotSold, unsafeOrderLinks, enabledServices, brokenServices };
 }
 
 async function runPublicReadyCheck() {
@@ -4059,6 +4473,15 @@ function buildPublicReadyReport() {
         `Nízky sklad: ${result.lowStock.length}`,
         `Chýbajúce filtre: ${result.missingFilters.length}`,
         `Chýbajúce SKU: ${result.missingSku.length}`,
+        `Produkty bez fotky: ${result.missingImages.length}`,
+        `Neplatné ceny: ${result.invalidActivePrices.length}`,
+        `Neplatný sklad: ${result.invalidStock.length}`,
+        `Duplicitné názvy: ${result.duplicateNames.length}`,
+        `Duplicitné SKU: ${result.duplicateSku.length}`,
+        `Doplnkové služby zapnuté: ${result.enabledServices.length}`,
+        `Neplatné služby: ${result.brokenServices.length}`,
+        `Platby: ${getSiteSettings().paymentGateway || 'manual'} / ${getSiteSettings().gopayMode || 'disabled'}`,
+        `Faktúry: ${getSiteSettings().idokladMode || 'manual_export'}`,
         `Objednávky celkom: ${allOrders.length}`,
         `Nové objednávky: ${newOrders}`,
         '',
@@ -4404,17 +4827,19 @@ let pendingImageFile = null;
 const PRODUCT_IMAGE_WIDTH = 1000;
 const PRODUCT_IMAGE_HEIGHT = 750;
 const PRODUCT_IMAGE_QUALITY = 0.86;
+const PRODUCT_IMAGE_SUBJECT_PADDING = 0.16;
 
 async function handleImageSelect(input) {
     const file = input.files[0];
     if (!file) return;
     if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { showToast('⚠️ Povolené sú iba JPG, PNG alebo WebP', true); return; }
     document.getElementById('f-image-url').value = '';
-    setImageStatus('Upravujem fotku na jednotný produktový formát...');
+    setImageStatus('Hľadám počítač na fotke a pripravujem produktový výrez...');
     try {
-        pendingImageFile = await prepareProductImage(file);
+        const prepared = await prepareProductImage(file);
+        pendingImageFile = prepared.file;
         const reader = new FileReader();
-        reader.onload = e => setPreview(e.target.result, `Fotka upravená na ${PRODUCT_IMAGE_WIDTH}×${PRODUCT_IMAGE_HEIGHT}px (${Math.round(pendingImageFile.size / 1024)} KB). Pri uložení sa nahrá do Supabase Storage.`);
+        reader.onload = e => setPreview(e.target.result, `${prepared.message} Výstup: ${PRODUCT_IMAGE_WIDTH}×${PRODUCT_IMAGE_HEIGHT}px (${Math.round(pendingImageFile.size / 1024)} KB). Pri uložení sa nahrá do Supabase Storage.`);
         reader.readAsDataURL(pendingImageFile);
     } catch(e) {
         pendingImageFile = null;
@@ -4449,15 +4874,8 @@ function imageFromFile(file) {
 async function prepareProductImage(file) {
     const img = await imageFromFile(file);
     const targetRatio = PRODUCT_IMAGE_WIDTH / PRODUCT_IMAGE_HEIGHT;
-    const sourceRatio = img.naturalWidth / img.naturalHeight;
-    let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
-    if (sourceRatio > targetRatio) {
-        sw = Math.round(img.naturalHeight * targetRatio);
-        sx = Math.round((img.naturalWidth - sw) / 2);
-    } else if (sourceRatio < targetRatio) {
-        sh = Math.round(img.naturalWidth / targetRatio);
-        sy = Math.round((img.naturalHeight - sh) / 2);
-    }
+    const smartBox = detectProductSubjectBox(img);
+    const source = smartBox ? expandBoxToRatio(smartBox, img.naturalWidth, img.naturalHeight, targetRatio, PRODUCT_IMAGE_SUBJECT_PADDING) : centerCropBox(img.naturalWidth, img.naturalHeight, targetRatio);
     const canvas = document.createElement('canvas');
     canvas.width = PRODUCT_IMAGE_WIDTH;
     canvas.height = PRODUCT_IMAGE_HEIGHT;
@@ -4466,7 +4884,7 @@ async function prepareProductImage(file) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, source.x, source.y, source.w, source.h, 0, 0, canvas.width, canvas.height);
     let type = 'image/webp';
     let blob = await canvasToBlob(canvas, type, PRODUCT_IMAGE_QUALITY).catch(() => null);
     if (!blob) {
@@ -4475,7 +4893,139 @@ async function prepareProductImage(file) {
     }
     const baseName = file.name.replace(/\.[^.]+$/, '').replace(/[^a-z0-9_-]+/gi, '_').slice(0, 60) || 'product';
     const ext = type === 'image/webp' ? 'webp' : 'jpg';
-    return new File([blob], `${baseName}_${PRODUCT_IMAGE_WIDTH}x${PRODUCT_IMAGE_HEIGHT}.${ext}`, { type, lastModified: Date.now() });
+    return {
+        file: new File([blob], `${baseName}_${PRODUCT_IMAGE_WIDTH}x${PRODUCT_IMAGE_HEIGHT}.${ext}`, { type, lastModified: Date.now() }),
+        message: smartBox ? 'Počítač bol automaticky nájdený a vycentrovaný.' : 'Automatické nájdenie počítača nebolo isté, použil sa bezpečný stredový výrez.'
+    };
+}
+
+function centerCropBox(width, height, targetRatio) {
+    const sourceRatio = width / height;
+    let w = width;
+    let h = height;
+    let x = 0;
+    let y = 0;
+    if (sourceRatio > targetRatio) {
+        w = Math.round(height * targetRatio);
+        x = Math.round((width - w) / 2);
+    } else if (sourceRatio < targetRatio) {
+        h = Math.round(width / targetRatio);
+        y = Math.round((height - h) / 2);
+    }
+    return { x, y, w, h };
+}
+
+function expandBoxToRatio(box, imageWidth, imageHeight, targetRatio, paddingRatio = 0.12) {
+    let x = box.x;
+    let y = box.y;
+    let w = box.w;
+    let h = box.h;
+    const pad = Math.round(Math.max(w, h) * paddingRatio);
+    x -= pad;
+    y -= pad;
+    w += pad * 2;
+    h += pad * 2;
+
+    if (w / h > targetRatio) {
+        const nextH = Math.round(w / targetRatio);
+        y -= Math.round((nextH - h) / 2);
+        h = nextH;
+    } else {
+        const nextW = Math.round(h * targetRatio);
+        x -= Math.round((nextW - w) / 2);
+        w = nextW;
+    }
+
+    if (w > imageWidth) {
+        w = imageWidth;
+        h = Math.round(w / targetRatio);
+    }
+    if (h > imageHeight) {
+        h = imageHeight;
+        w = Math.round(h * targetRatio);
+    }
+    x = Math.max(0, Math.min(imageWidth - w, x));
+    y = Math.max(0, Math.min(imageHeight - h, y));
+    return { x: Math.round(x), y: Math.round(y), w: Math.round(w), h: Math.round(h) };
+}
+
+function detectProductSubjectBox(img) {
+    const maxSide = 360;
+    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+    const width = Math.max(1, Math.round(img.naturalWidth * scale));
+    const height = Math.max(1, Math.round(img.naturalHeight * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0, width, height);
+    const data = ctx.getImageData(0, 0, width, height).data;
+    const bg = estimateCornerBackground(data, width, height);
+    const threshold = Math.max(32, bg.noise * 2.4 + 22);
+    let minX = width, minY = height, maxX = -1, maxY = -1, hits = 0;
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    for (let y = 0; y < height; y += 2) {
+        for (let x = 0; x < width; x += 2) {
+            const idx = (y * width + x) * 4;
+            const diff = colorDistance(data[idx], data[idx + 1], data[idx + 2], bg.r, bg.g, bg.b);
+            const alpha = data[idx + 3];
+            const centerBias = 1 - Math.min(0.28, Math.hypot((x - centerX) / width, (y - centerY) / height) * 0.18);
+            if (alpha > 20 && diff * centerBias > threshold) {
+                minX = Math.min(minX, x);
+                minY = Math.min(minY, y);
+                maxX = Math.max(maxX, x);
+                maxY = Math.max(maxY, y);
+                hits++;
+            }
+        }
+    }
+
+    const sampled = Math.ceil(width / 2) * Math.ceil(height / 2);
+    const hitRatio = hits / sampled;
+    const subjectW = maxX - minX + 1;
+    const subjectH = maxY - minY + 1;
+    if (hits < 80 || hitRatio < 0.015 || subjectW < width * 0.12 || subjectH < height * 0.12 || hitRatio > 0.72) return null;
+
+    return {
+        x: Math.max(0, Math.round(minX / scale)),
+        y: Math.max(0, Math.round(minY / scale)),
+        w: Math.min(img.naturalWidth, Math.round(subjectW / scale)),
+        h: Math.min(img.naturalHeight, Math.round(subjectH / scale))
+    };
+}
+
+function estimateCornerBackground(data, width, height) {
+    const samples = [];
+    const size = Math.max(8, Math.round(Math.min(width, height) * 0.12));
+    const corners = [
+        [0, 0],
+        [width - size, 0],
+        [0, height - size],
+        [width - size, height - size]
+    ];
+    corners.forEach(([startX, startY]) => {
+        for (let y = startY; y < startY + size; y += 3) {
+            for (let x = startX; x < startX + size; x += 3) {
+                const idx = (y * width + x) * 4;
+                samples.push([data[idx], data[idx + 1], data[idx + 2]]);
+            }
+        }
+    });
+    const median = channel => {
+        const values = samples.map(sample => sample[channel]).sort((a, b) => a - b);
+        return values[Math.floor(values.length / 2)] || 0;
+    };
+    const r = median(0);
+    const g = median(1);
+    const b = median(2);
+    const noiseValues = samples.map(sample => colorDistance(sample[0], sample[1], sample[2], r, g, b)).sort((a, b) => a - b);
+    return { r, g, b, noise: noiseValues[Math.floor(noiseValues.length * 0.75)] || 0 };
+}
+
+function colorDistance(r1, g1, b1, r2, g2, b2) {
+    return Math.sqrt((r1 - r2) ** 2 * 0.3 + (g1 - g2) ** 2 * 0.59 + (b1 - b2) ** 2 * 0.11);
 }
 
 function previewUrl(url) {
@@ -4503,7 +5053,7 @@ function setPreview(src, message = '') {
 function setImageStatus(message, isError = false) {
     const status = document.getElementById('img-status');
     if (!status) return;
-    status.textContent = message || 'Fotka nie je povinná. Pri nahratí súboru ju admin automaticky oreže na 4:3 a zmenší na 1000×750px WebP/JPG pred uložením.';
+    status.textContent = message || 'Fotka nie je povinná. Pri nahratí sa admin pokúsi nájsť počítač na fotke, vycentrovať ho, orezať na 4:3 a zmenšiť na 1000×750px WebP/JPG pred uložením.';
     status.style.color = isError ? 'var(--danger)' : 'var(--muted)';
 }
 
