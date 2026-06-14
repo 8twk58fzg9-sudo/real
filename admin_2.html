@@ -12,9 +12,11 @@
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
 <title>Admin Panel | Computrax.sk</title>
+<link rel="preload" href="computrax-logo.png" as="image" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+<script src="config.js?v=20260614"></script>
 <script>
 const PRODUCTS_DATA = [
   { id: 1, name: "Alienware Aurora R14", price: 949, cat: "gaming", stock: 2, status: "active", tag: "HERNÝ ŠPECIÁL", tagColor: "#f87171", cpu: "Ryzen 9 5900X", cpuBrand: "amd", gpu: "RTX 3080 10GB", gpuFilter: "RTX 3080", ram: "32GB DDR4", ramFilter: "32", ssd: "1TB NVMe", os: "Windows 11 Pro", delivery: "Doprava zdarma", popular: 3, newest: 1 },
@@ -31,7 +33,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* GATE */
 .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
 .gate-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:3rem;width:100%;max-width:380px;text-align:center}
-.gate-logo{font-family:'Outfit';font-size:2rem;font-weight:900;margin-bottom:0.5rem}
+.gate-logo{font-family:'Outfit';font-size:2rem;font-weight:900;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:center;line-height:1}
+.gate-logo img{width:190px;height:auto;object-fit:contain;display:block}
 .gate-logo span{color:var(--accent)}
 .gate-sub{color:var(--muted);font-size:0.9rem;margin-bottom:2rem}
 .gate-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);padding:1rem;border-radius:12px;font-size:1rem;outline:none;margin-bottom:1rem;transition:0.2s;font-family:'Inter'}
@@ -41,7 +44,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .gate-error{color:var(--danger);font-size:0.85rem;margin-top:0.5rem;display:none}
 /* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
-.h-logo{font-family:'Outfit';font-size:1.5rem;font-weight:900}
+.h-logo{font-family:'Outfit';font-size:1.5rem;font-weight:900;display:flex;align-items:center;gap:0.55rem;line-height:1}
+.h-logo img{width:145px;height:auto;object-fit:contain;display:block}
 .h-logo span{color:var(--accent)}
 .h-right{display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap}
 .btn{padding:0.65rem 1.2rem;border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;transition:0.2s;border:none}
@@ -164,6 +168,12 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
 .filter-bar.active-admin-section{display:flex!important}
 .admin-section-kicker{padding:.6rem 2rem;border-bottom:1px solid rgba(59,130,246,.14);background:rgba(59,130,246,.05);color:var(--muted);font-size:.82rem}
 @media(max-width:760px){.admin-nav{top:0;padding:.75rem 1rem}.admin-nav-btn{flex:1;min-width:120px}.search-box{width:100%;margin-left:0}}
+@media(prefers-reduced-motion:reduce){
+*,
+*::before,
+*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+.toast,.modal-bg,.del-modal{transition:none!important}
+}
 </style>
 </head>
 <body>
@@ -174,7 +184,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
 <!-- GATE -->
 <div class="gate" id="gate">
   <div class="gate-box">
-    <div class="gate-logo">Compu<span>trax</span></div>
+    <div class="gate-logo"><img src="computrax-logo.png" alt="Computrax" width="190" height="95"></div>
     <div class="gate-sub">Admin Panel — zadaj heslo</div>
     <input class="gate-input" id="pw-input" type="password" placeholder="Heslo" autocomplete="current-password" spellcheck="false" maxlength="128" onkeydown="if(event.key==='Enter')login()">
     <button class="gate-btn" id="login-btn" onclick="login()">Prihlásiť sa</button>
@@ -185,7 +195,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
 <!-- ADMIN -->
 <div id="admin" style="display:none">
   <header>
-    <div class="h-logo">Compu<span>trax</span> <span style="font-size:0.85rem;color:var(--muted);font-family:'Inter';font-weight:400">Admin</span></div>
+    <div class="h-logo"><img src="computrax-logo.png" alt="Computrax" width="145" height="72"> <span style="font-size:0.85rem;color:var(--muted);font-family:'Inter';font-weight:400">Admin</span></div>
     <div class="h-right">
       <button class="btn btn-success" onclick="openModal()">+ Pridať PC</button>
       <button class="btn btn-ghost btn-sm" onclick="migrateProducts()" id="migrate-btn">⬆️ Nahrať vzorové produkty</button>
@@ -231,6 +241,8 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
   cat TEXT DEFAULT 'office',
   stock INTEGER DEFAULT 1 CHECK (stock >= 0),
   status TEXT DEFAULT 'active' CHECK (status IN ('active','sold','reserved','incoming')),
+  pc_condition TEXT DEFAULT 'Repasované - veľmi dobrý stav',
+  pc_condition_note TEXT,
   tag TEXT, tag_color TEXT,
   cpu TEXT, cpu_brand TEXT,
   cpu_class TEXT, cpu_gen TEXT,
@@ -252,7 +264,10 @@ ALTER TABLE products ADD COLUMN IF NOT EXISTS sku TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS warehouse_sku TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS warehouse_location TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS external_id TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS pc_condition TEXT DEFAULT 'Repasované - veľmi dobrý stav';
+ALTER TABLE products ADD COLUMN IF NOT EXISTS pc_condition_note TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
+UPDATE products SET pc_condition = 'Repasované - veľmi dobrý stav' WHERE pc_condition IS NULL OR btrim(pc_condition) = '';
 CREATE UNIQUE INDEX IF NOT EXISTS products_name_unique ON products(name);
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -975,9 +990,13 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
         <label class="form-label">iDoklad Edge Function URL</label>
         <input class="form-input" id="s-idoklad-function-url" placeholder="https://...supabase.co/functions/v1/idoklad-create-invoice">
       </div>
+      <div class="form-group">
+        <label class="form-label">E-mail Edge Function URL</label>
+        <input class="form-input" id="s-email-function-url" placeholder="https://...supabase.co/functions/v1/send-notification">
+      </div>
       <div class="form-group form-full" style="border:1px solid rgba(59,130,246,0.35);border-radius:14px;padding:1rem;background:rgba(59,130,246,0.06)">
         <label class="form-label">Integrácie GoPay + iDoklad</label>
-        <small style="color:var(--muted);display:block;margin-bottom:0.75rem">Tajné API kľúče nepatria do HTML. Sem patrí iba verejná URL tvojej Supabase Edge Function; client secret, GoPay credentials a iDoklad tokeny budú uložené ako Supabase secrets.</small>
+        <small style="color:var(--muted);display:block;margin-bottom:0.75rem">Tajné API kľúče nepatria do HTML. Sem patria iba verejné URL tvojich Supabase Edge Functions; client secret, GoPay credentials, SMTP a iDoklad tokeny budú uložené ako Supabase secrets.</small>
         <button class="btn btn-ghost btn-sm" type="button" onclick="copyIntegrationBlueprint()">Kopírovať integračný plán</button>
       </div>
       <div class="form-group">
@@ -1155,6 +1174,8 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
         <button class="btn btn-ghost btn-sm" onclick="importProductsJson()">Import JSON</button>
         <button class="btn btn-ghost btn-sm" onclick="exportFullBackup()">Export záloha</button>
         <button class="btn btn-ghost btn-sm" onclick="importFullBackup()">Import záloha</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyDeployConfig()">Config.js</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyDeploymentChecklist()">Deploy checklist</button>
         <button class="btn btn-ghost btn-sm" onclick="copySystemReport()">Systémový report</button>
         <button class="btn btn-ghost btn-sm" onclick="markZeroStockSold()">0 ks → vypredané</button>
         <button class="btn btn-ghost btn-sm" onclick="loadProducts()">Obnoviť produkty</button>
@@ -1231,6 +1252,20 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
           <option value="reserved">🟡 Rezervované</option>
           <option value="incoming">🔵 Čoskoro</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stav PC / renovácie</label>
+        <select class="form-select" id="f-condition">
+          <option value="Repasované - ako nové">Repasované - ako nové</option>
+          <option value="Repasované - veľmi dobrý stav">Repasované - veľmi dobrý stav</option>
+          <option value="Repasované - dobrý stav">Repasované - dobrý stav</option>
+          <option value="Používané - kozmetické známky">Používané - kozmetické známky</option>
+          <option value="Nové / otvorené balenie">Nové / otvorené balenie</option>
+        </select>
+      </div>
+      <div class="form-group form-full">
+        <label class="form-label">Poznámka ku stavu PC</label>
+        <textarea class="form-input" id="f-condition-note" rows="3" maxlength="320" placeholder="napr. Vyčistený, bez výrazných škrabancov, 24h záťažový test, nová teplovodivá pasta."></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Tag / Nálepka</label>
@@ -1414,6 +1449,7 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
 </div>
 
 <script>
+const RUNTIME_CONFIG = Object.freeze(window.COMPUTRAX_CONFIG || {});
 const SB_URL = 'https://aryjaqexfgalxaiseqtp.supabase.co';
 const LOCAL_PRODUCTS_KEY = 'ctrax_local_products';
 const LOCAL_ORDERS_KEY = 'ctrax_local_orders';
@@ -1429,7 +1465,7 @@ const ADMIN_LOGIN_LOCK_UNTIL_KEY = 'ctrax_admin_login_lock_until';
 const ADMIN_LOGIN_MAX_ATTEMPTS = 5;
 const ADMIN_LOGIN_LOCK_MS = 5 * 60 * 1000;
 const SITE_SETTINGS_KEY = 'ctrax_site_settings';
-const DEFAULT_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeWphcWV4ZmdhbHhhaXNlcXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNjk5NzUsImV4cCI6MjA5NTY0NTk3NX0.m6PTVqVvjGWeVGdvSIfbcBPs7OLg_P8MjVw9ziN-_BA';
+const DEFAULT_SB_KEY = safeStartupSupabaseKey(RUNTIME_CONFIG.supabaseAnonKey || RUNTIME_CONFIG.SUPABASE_ANON_KEY || '');
 let SB_KEY = safeStartupSupabaseKey(localStorage.getItem('ctrax_sb_key'));
 
 const DEFAULT_SITE_SETTINGS = {
@@ -1457,6 +1493,8 @@ const DEFAULT_SITE_SETTINGS = {
     paymentReservationMinutes: 30,
     idokladMode: 'manual_export',
     idokladFunctionUrl: '',
+    emailFunctionUrl: '',
+    notificationFunctionUrl: '',
     warehouseProvider: 'manual',
     phone: '0949 835 923',
     email: 'computrax.sk@gmail.com',
@@ -1755,6 +1793,14 @@ function setSelectValue(id, value, force = false) {
     }
 }
 
+function defaultPcCondition() {
+    return 'Repasované - veľmi dobrý stav';
+}
+
+function defaultPcConditionNote() {
+    return 'Vyčistený, otestovaný a pripravený na používanie. Detailný stav konkrétneho kusu vieme potvrdiť pred odoslaním.';
+}
+
 function autoFillProductFilters(force = false) {
     const cpu = document.getElementById('f-cpu')?.value || '';
     const gpu = document.getElementById('f-gpu')?.value || '';
@@ -1766,6 +1812,9 @@ function autoFillProductFilters(force = false) {
     setSelectValue('f-ramfilter', getRamFilter(ram), force);
     setSelectValue('f-storagegb', storageBucket(getStorageGB(ssd)), force);
     setSelectValue('f-storagetype', getStorageType(ssd), force);
+    setSelectValue('f-condition', defaultPcCondition(), force);
+    const conditionNote = document.getElementById('f-condition-note');
+    if (conditionNote && (force || !conditionNote.value.trim())) conditionNote.value = defaultPcConditionNote();
     if (force) showToast('⚙️ Filtre doplnené podľa parametrov');
 }
 
@@ -1787,6 +1836,8 @@ function buildProductFilterPatch(product, force = false) {
     set('ram_filter', ramFilter);
     set('storage_gb', Number(storageGb) || 0);
     set('storage_type', storageType);
+    set('pc_condition', defaultPcCondition());
+    set('pc_condition_note', defaultPcConditionNote());
     return patch;
 }
 
@@ -1802,6 +1853,8 @@ function normalizeImportedProduct(product) {
         stock,
         cat: ['gaming', 'office'].includes(product.cat) ? product.cat : 'office',
         status: ['active', 'sold', 'reserved', 'incoming'].includes(product.status) ? product.status : (stock > 0 ? 'active' : 'sold'),
+        pc_condition: product.pc_condition || product.pcCondition || 'Repasované - veľmi dobrý stav',
+        pc_condition_note: product.pc_condition_note || product.pcConditionNote || defaultPcConditionNote(),
         tag: product.tag || null,
         tag_color: product.tag_color || product.tagColor || null,
         cpu: product.cpu || null,
@@ -1860,7 +1913,7 @@ function exportProductsJson() {
 
 function exportProductsCsv() {
     if (!allProducts.length) { showToast('⚠️ Nie sú žiadne produkty na export', true); return; }
-    const cols = ['name','price','stock','sku','warehouse_sku','warehouse_location','external_id','status','cat','cpu','cpu_class','cpu_gen','gpu','gpu_filter','ram','ram_filter','ssd','storage_gb','storage_type','os','delivery','image_url'];
+    const cols = ['name','price','stock','sku','warehouse_sku','warehouse_location','external_id','status','pc_condition','pc_condition_note','cat','cpu','cpu_class','cpu_gen','gpu','gpu_filter','ram','ram_filter','ssd','storage_gb','storage_type','os','delivery','image_url'];
     const rows = [cols, ...allProducts.map(product => cols.map(col => product[col] ?? ''))];
     copyText(rows.map(row => row.map(csvCell).join(',')).join('\n'), '📋 Produkty CSV skopírované');
 }
@@ -2110,6 +2163,63 @@ function copySystemReport() {
     copyText(lines.join('\n'), '📋 Systémový report skopírovaný');
 }
 
+function buildDeployConfigText() {
+    const settings = getSiteSettings();
+    const emailEndpoint = cleanSupabaseFunctionUrl(settings.emailFunctionUrl || settings.notificationFunctionUrl || '') || '';
+    const publicKey = SB_KEY && jwtPayload(SB_KEY).role !== 'service_role' ? SB_KEY : '';
+    return [
+        '// Computrax public runtime config.',
+        '// This file is safe for GitHub Pages only when it contains public/publishable values.',
+        '// Never paste service_role, SMTP, GoPay, iDoklad, provider private, or other secret keys here.',
+        'window.COMPUTRAX_CONFIG = Object.freeze({',
+        `  SUPABASE_ANON_KEY: ${JSON.stringify(publicKey || 'PASTE_PUBLIC_SUPABASE_ANON_KEY_HERE')},`,
+        `  EMAIL_ENDPOINT: ${JSON.stringify(emailEndpoint)}`,
+        '});'
+    ].join('\n');
+}
+
+function copyDeployConfig() {
+    copyText(buildDeployConfigText(), '📋 config.js obsah skopírovaný');
+}
+
+function deploymentChecklistItems() {
+    const settings = getSiteSettings();
+    const result = publicReadyIssues();
+    const items = [];
+    const add = (ok, label, detail = '') => items.push({ ok, label, detail });
+    add(Boolean(SB_KEY) && jwtPayload(SB_KEY).role !== 'service_role', 'Supabase public anon key je nastavený', 'Na GitHub Pages musí byť v config.js iba anon/publishable key.');
+    add(!/service_role/i.test(buildDeployConfigText()), 'Žiadny service_role key vo verejnom configu', 'Service role patrí iba do Supabase secrets.');
+    add(Boolean(cleanPublicHttpsUrl(settings.publicSiteUrl)), 'Verejná URL je https://', settings.publicSiteUrl || '');
+    add(result.activeProducts.length > 0, 'Aspoň jeden aktívny produkt skladom', `${result.activeProducts.length} aktívnych produktov`);
+    add(result.missingImages.length === 0, 'Aktívne produkty majú fotky', `${result.missingImages.length} bez fotky`);
+    add(result.missingConditionNotes.length === 0, 'Aktívne produkty majú stav renovácie a poznámku', `${result.missingConditionNotes.length} neúplných`);
+    add(result.missingFilters.length === 0, 'Produkty majú filtre', `${result.missingFilters.length} s chýbajúcimi filtrami`);
+    add(result.missingSku.length === 0, 'Produkty majú SKU/skladové SKU', `${result.missingSku.length} neúplných`);
+    add(result.invalidActivePrices.length === 0 && result.invalidStock.length === 0, 'Ceny a sklad sú platné', `${result.invalidActivePrices.length} zlé ceny, ${result.invalidStock.length} zlý sklad`);
+    add(!result.duplicateNames.length && !result.duplicateSku.length, 'Bez duplicitných názvov/SKU', `${result.duplicateNames.length} názvov, ${result.duplicateSku.length} SKU`);
+    add(!['companyAddress','companyId','taxId'].some(key => !settings[key] || /^Doplň/i.test(String(settings[key]))), 'Firemné a právne údaje sú doplnené', 'Adresa, IČO, DIČ.');
+    add(result.enabledServices.length > 0 && result.brokenServices.length === 0, 'Doplnkové služby sú použiteľné', `${result.enabledServices.length} zapnutých`);
+    add(settings.paymentGateway !== 'manual' && settings.gopayMode !== 'disabled', 'Platobná brána je pripojená', 'Manuálny režim je OK len pred ostrým predajom.');
+    add(settings.idokladMode !== 'manual_export', 'Faktúry sú automatizované', 'Manuálny export znamená ručnú kontrolu objednávok.');
+    add(Boolean(cleanSupabaseFunctionUrl(settings.emailFunctionUrl || settings.notificationFunctionUrl || '')), 'Serverový email endpoint je nastavený', 'Bez neho kontakt/objednávky použijú fallback bez browser secretov.');
+    return items;
+}
+
+function copyDeploymentChecklist() {
+    const items = deploymentChecklistItems();
+    const text = [
+        'COMPUTRAX DEPLOY / SECURITY CHECKLIST',
+        `Dátum: ${new Date().toLocaleString('sk-SK')}`,
+        '',
+        ...items.map(item => `${item.ok ? '[OK]' : '[ ]'} ${item.label}${item.detail ? ' - ' + item.detail : ''}`),
+        '',
+        'Poznámka:',
+        '- IP rate limiting musí byť v Supabase Edge Function alebo Cloudflare, nie iba v statickom HTML.',
+        '- Secret kľúče patria do Supabase Secrets / provider dashboardu, nikdy do GitHub Pages.'
+    ].join('\n');
+    copyText(text, '📋 Deploy checklist skopírovaný');
+}
+
 function getSiteSettings() {
     try {
         return { ...DEFAULT_SITE_SETTINGS, ...JSON.parse(localStorage.getItem(SITE_SETTINGS_KEY) || '{}') };
@@ -2196,6 +2306,7 @@ function loadSiteSettingsForm(settingsOverride = null) {
         's-payment-reservation-minutes': s.paymentReservationMinutes,
         's-idoklad-mode': s.idokladMode,
         's-idoklad-function-url': s.idokladFunctionUrl,
+        's-email-function-url': s.emailFunctionUrl || s.notificationFunctionUrl,
         's-warehouse-provider': s.warehouseProvider,
         's-phone': s.phone,
         's-email': s.email,
@@ -2242,6 +2353,7 @@ function readSiteSettingsForm() {
     const publicSiteUrl = cleanPublicHttpsUrl(document.getElementById('s-public-site-url').value) || DEFAULT_SITE_SETTINGS.publicSiteUrl;
     const gopayFunctionUrl = cleanSupabaseFunctionUrl(document.getElementById('s-gopay-function-url')?.value || '');
     const idokladFunctionUrl = cleanSupabaseFunctionUrl(document.getElementById('s-idoklad-function-url')?.value || '');
+    const emailFunctionUrl = cleanSupabaseFunctionUrl(document.getElementById('s-email-function-url')?.value || '');
     return {
         heroBadge: document.getElementById('s-hero-badge').value.trim(),
         heroTitle: document.getElementById('s-hero-title').value.trim(),
@@ -2267,6 +2379,8 @@ function readSiteSettingsForm() {
         paymentReservationMinutes: Math.min(240, Math.max(5, parseInt(document.getElementById('s-payment-reservation-minutes')?.value || DEFAULT_SITE_SETTINGS.paymentReservationMinutes, 10) || DEFAULT_SITE_SETTINGS.paymentReservationMinutes)),
         idokladMode: document.getElementById('s-idoklad-mode')?.value || DEFAULT_SITE_SETTINGS.idokladMode,
         idokladFunctionUrl,
+        emailFunctionUrl,
+        notificationFunctionUrl: emailFunctionUrl,
         warehouseProvider: document.getElementById('s-warehouse-provider').value,
         phone: document.getElementById('s-phone').value.trim(),
         email: document.getElementById('s-email').value.trim(),
@@ -2371,7 +2485,20 @@ ${settings.gopayFunctionUrl || 'https://PROJECT.supabase.co/functions/v1/gopay-c
 iDoklad Function URL v admine:
 ${settings.idokladFunctionUrl || 'https://PROJECT.supabase.co/functions/v1/idoklad-create-invoice'}
 
-6. Bezpečnostné pravidlo
+E-mail Function URL v admine:
+${settings.emailFunctionUrl || settings.notificationFunctionUrl || 'https://PROJECT.supabase.co/functions/v1/send-notification'}
+
+6. E-mail Edge Function
+Názov odporúčanej funkcie:
+send-notification
+
+Úloha:
+- prijme len validovaný payload z kontaktného formulára alebo objednávky
+- má IP rate limit a voliteľne user/email rate limit
+- SMTP alebo provider API key číta iba zo Supabase secrets
+- vracia 429 pri príliš veľa pokusoch
+
+7. Bezpečnostné pravidlo
 HTML smie poznať iba verejné function URL. Všetky API secrets patria iba do Supabase Edge Function secrets.`,
         '🔌 Integračný plán skopírovaný'
     );
@@ -2445,14 +2572,14 @@ function jwtPayload(token) {
 
 function safeStartupSupabaseKey(storedKey) {
     const key = String(storedKey || '').trim();
-    if (!key) return DEFAULT_SB_KEY;
+    if (!key) return '';
     const payload = jwtPayload(key);
     if (payload.role === 'service_role') {
         localStorage.removeItem('ctrax_sb_key');
         localStorage.setItem(DATA_MODE_KEY, 'supabase');
-        return DEFAULT_SB_KEY;
+        return '';
     }
-    return key.startsWith('eyJ') ? key : DEFAULT_SB_KEY;
+    return key.startsWith('eyJ') ? key : '';
 }
 
 function getStoredAuthSession() {
@@ -3074,6 +3201,7 @@ function renderInsights() {
     const pendingLocal = getLocalOrders().filter(order => order.sync_status === 'pending');
     const settings = getSiteSettings();
     const legalMissing = ['companyAddress', 'companyId', 'taxId'].filter(key => !settings[key] || /^Doplň/i.test(String(settings[key])));
+    const emailEndpoint = cleanSupabaseFunctionUrl(settings.emailFunctionUrl || settings.notificationFunctionUrl || '');
 
     if (useLocalStorage) {
         cards.push(insightCard('warn', 'Lokálny režim', 'Produkty a objednávky sú len v tomto prehliadači. Pre verejný web použi Supabase režim.', '<button class="btn btn-primary btn-sm" onclick="useSupabaseMode()">Supabase režim</button>'));
@@ -3115,6 +3243,9 @@ function renderInsights() {
     }
     if (settings.idokladMode === 'edge_function' && !cleanSupabaseFunctionUrl(settings.idokladFunctionUrl)) {
         cards.push(insightCard('bad', 'iDoklad URL neplatná', 'iDoklad Edge Function URL musí byť https://PROJECT.supabase.co/functions/v1/idoklad-create-invoice.', `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-idoklad-function-url')?.focus()">Doplniť URL</button>`));
+    }
+    if (!emailEndpoint) {
+        cards.push(insightCard('warn', 'E-mail endpoint chýba', 'Kontakt a objednávkové notifikácie fungujú bez tajných browser kľúčov, ale bez serverového endpointu použijú fallback.', `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-email-function-url')?.focus()">Doplniť URL</button>`));
     }
     if (legalMissing.length) {
         cards.push(insightCard('warn', 'Doplň právne údaje', `Chýba alebo je predvolená hodnota v ${legalMissing.length} firemných poliach.`, `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-company-address')?.focus()">Upraviť údaje</button>`));
@@ -3169,6 +3300,9 @@ function adminRepairSql(uid) {
         'ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_reference TEXT;',
         'ALTER TABLE orders ADD COLUMN IF NOT EXISTS invoice_url TEXT;',
         'ALTER TABLE orders ADD COLUMN IF NOT EXISTS reservation_expires_at TIMESTAMPTZ;',
+        'ALTER TABLE products ADD COLUMN IF NOT EXISTS pc_condition TEXT DEFAULT \'Repasované - veľmi dobrý stav\';',
+        'ALTER TABLE products ADD COLUMN IF NOT EXISTS pc_condition_note TEXT;',
+        'UPDATE products SET pc_condition = \'Repasované - veľmi dobrý stav\' WHERE pc_condition IS NULL OR btrim(pc_condition) = \'\';',
         'CREATE UNIQUE INDEX IF NOT EXISTS products_name_unique ON products(name);',
         'CREATE INDEX IF NOT EXISTS orders_lower_email_created_at_idx ON orders (lower(customer_email), created_at DESC);',
         'CREATE INDEX IF NOT EXISTS orders_created_at_desc_idx ON orders (created_at DESC);',
@@ -4304,6 +4438,7 @@ function renderList() {
             <div class="pc-admin-name">${escapeHTML(p.name)}</div>
             <div class="pc-admin-price">${escapeHTML(p.price)}€</div>
             <div class="pc-admin-specs">
+                <span class="spec-chip">Stav: ${escapeHTML(p.pc_condition || 'Repasované - veľmi dobrý stav')}</span>
                 ${p.cpu ? `<span class="spec-chip">CPU: ${escapeHTML(p.cpu)}</span>` : ''}
                 ${p.cpu_class ? `<span class="spec-chip">CPU filter: ${escapeHTML(p.cpu_class)}${p.cpu_gen ? ' / ' + escapeHTML(p.cpu_gen) : ''}</span>` : ''}
                 ${p.gpu ? `<span class="spec-chip">GPU: ${escapeHTML(p.gpu)}</span>` : ''}
@@ -4365,8 +4500,9 @@ function updateAutomationSummary() {
     const missingFilters = allProducts.filter(productHasMissingFilters).length;
     const missingSku = allProducts.filter(p => !String(p.sku || '').trim() || !String(p.warehouse_sku || '').trim()).length;
     const missingImages = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && !String(p.image_url || '').trim()).length;
+    const missingConditionNotes = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && (!String(p.pc_condition || '').trim() || !String(p.pc_condition_note || '').trim())).length;
     const sold = allProducts.filter(p => Number(p.stock || 0) === 0 || p.status === 'sold').length;
-    summary.textContent = `Produkty: ${allProducts.length} · Nízky sklad: ${lowStock} · Chýbajúce filtre: ${missingFilters} · Chýbajúce SKU: ${missingSku} · Bez fotky: ${missingImages} · Vypredané: ${sold}`;
+    summary.textContent = `Produkty: ${allProducts.length} · Nízky sklad: ${lowStock} · Chýbajúce filtre: ${missingFilters} · Chýbajúce SKU: ${missingSku} · Bez fotky: ${missingImages} · Bez stavu: ${missingConditionNotes} · Vypredané: ${sold}`;
 }
 
 function duplicateValues(list, getter) {
@@ -4388,6 +4524,7 @@ function publicReadyIssues() {
     const missingFilters = allProducts.filter(productHasMissingFilters);
     const missingSku = allProducts.filter(p => !String(p.sku || '').trim() || !String(p.warehouse_sku || '').trim());
     const missingImages = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && !String(p.image_url || '').trim());
+    const missingConditionNotes = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && (!String(p.pc_condition || '').trim() || !String(p.pc_condition_note || '').trim()));
     const zeroNotSold = allProducts.filter(p => Number(p.stock || 0) === 0 && p.status !== 'sold');
     const invalidActivePrices = activeProducts.filter(p => !Number.isFinite(Number(p.price)) || Number(p.price) <= 0);
     const invalidStock = allProducts.filter(p => !Number.isFinite(Number(p.stock)) || Number(p.stock) < 0);
@@ -4411,6 +4548,7 @@ function publicReadyIssues() {
     if (missingFilters.length) issues.push(`${missingFilters.length} produktov má chýbajúce filtre.`);
     if (missingSku.length) issues.push(`${missingSku.length} produktov má chýbajúce SKU alebo skladové SKU.`);
     if (missingImages.length) issues.push(`${missingImages.length} aktívnych produktov nemá fotku.`);
+    if (missingConditionNotes.length) issues.push(`${missingConditionNotes.length} aktívnych produktov nemá stav/poznámku renovácie.`);
     if (invalidActivePrices.length) issues.push(`${invalidActivePrices.length} aktívnych produktov má neplatnú cenu.`);
     if (invalidStock.length) issues.push(`${invalidStock.length} produktov má neplatný sklad.`);
     if (duplicateNames.length) issues.push(`Duplicitné názvy produktov: ${duplicateNames.slice(0, 5).join(', ')}.`);
@@ -4427,11 +4565,12 @@ function publicReadyIssues() {
     if (settings.paymentGateway === 'manual' || settings.gopayMode === 'disabled') issues.push('Platobná brána je zatiaľ v manuálnom režime, online platby nebudú automatické.');
     if (settings.idokladMode === 'edge_function' && !cleanSupabaseFunctionUrl(settings.idokladFunctionUrl)) issues.push('iDoklad Edge Function URL musí byť v tvare https://PROJECT.supabase.co/functions/v1/idoklad-create-invoice.');
     if (settings.idokladMode === 'manual_export') issues.push('Faktúry sú v manuálnom/export režime, iDoklad automatizácia ešte nie je pripojená.');
+    if (!cleanSupabaseFunctionUrl(settings.emailFunctionUrl || settings.notificationFunctionUrl || '')) issues.push('Serverový e-mail endpoint nie je nastavený; kontakt a objednávkové notifikácie použijú fallback bez automatického odoslania.');
     if (!SB_KEY) issues.push('Chýba Supabase anon/public key.');
     if (jwtPayload(SB_KEY).role === 'service_role') issues.push('V HTML je service_role key. Nahraď ho anon/public key.');
     if (!useLocalStorage && !hasSupabaseWriteAuth()) issues.push('Admin zápis do Supabase nie je prihlásený cez Supabase Auth.');
 
-    return { issues, activeProducts, lowStock, missingFilters, missingSku, missingImages, invalidActivePrices, invalidStock, duplicateNames, duplicateSku, zeroNotSold, unsafeOrderLinks, enabledServices, brokenServices };
+    return { issues, activeProducts, lowStock, missingFilters, missingSku, missingImages, missingConditionNotes, invalidActivePrices, invalidStock, duplicateNames, duplicateSku, zeroNotSold, unsafeOrderLinks, enabledServices, brokenServices };
 }
 
 async function runPublicReadyCheck() {
@@ -4474,6 +4613,7 @@ function buildPublicReadyReport() {
         `Chýbajúce filtre: ${result.missingFilters.length}`,
         `Chýbajúce SKU: ${result.missingSku.length}`,
         `Produkty bez fotky: ${result.missingImages.length}`,
+        `Produkty bez stavu/poznámky renovácie: ${result.missingConditionNotes.length}`,
         `Neplatné ceny: ${result.invalidActivePrices.length}`,
         `Neplatný sklad: ${result.invalidStock.length}`,
         `Duplicitné názvy: ${result.duplicateNames.length}`,
@@ -4609,6 +4749,8 @@ function openEdit(id) {
     document.getElementById('f-external-id').value = p.external_id || '';
     document.getElementById('f-cat').value = p.cat || 'office';
     document.getElementById('f-status').value = p.status || 'active';
+    document.getElementById('f-condition').value = p.pc_condition || defaultPcCondition();
+    document.getElementById('f-condition-note').value = p.pc_condition_note || defaultPcConditionNote();
     document.getElementById('f-tag').value = p.tag || '';
     document.getElementById('f-tagcolor').value = p.tag_color || '#60a5fa';
     document.getElementById('f-cpu').value = p.cpu || '';
@@ -4646,6 +4788,8 @@ function clearForm() {
     document.getElementById('f-stock').value = 1;
     document.getElementById('f-cat').value = 'gaming';
     document.getElementById('f-status').value = 'active';
+    document.getElementById('f-condition').value = defaultPcCondition();
+    document.getElementById('f-condition-note').value = defaultPcConditionNote();
     document.getElementById('f-tagcolor').value = '#60a5fa';
     document.getElementById('f-cpubrand').value = 'intel';
     document.getElementById('f-cpuclass').value = '';
@@ -4707,6 +4851,8 @@ async function saveProduct() {
         external_id: document.getElementById('f-external-id').value.trim() || null,
         cat: document.getElementById('f-cat').value,
         status: document.getElementById('f-status').value,
+        pc_condition: document.getElementById('f-condition').value || defaultPcCondition(),
+        pc_condition_note: document.getElementById('f-condition-note').value.trim() || defaultPcConditionNote(),
         tag: document.getElementById('f-tag').value,
         tag_color: document.getElementById('f-tagcolor').value,
         cpu: cpuText,
@@ -4797,6 +4943,8 @@ async function migrateProducts() {
             await sb('POST', 'products', {
                 name: p.name, price: p.price, cat: p.cat,
                 stock: p.stock, status: p.status || 'active',
+                pc_condition: p.pc_condition || p.pcCondition || 'Repasované - veľmi dobrý stav',
+                pc_condition_note: p.pc_condition_note || p.pcConditionNote || defaultPcConditionNote(),
                 tag: p.tag, tag_color: p.tagColor,
                 cpu: p.cpu, cpu_brand: p.cpuBrand,
                 cpu_class: p.cpuClass || p.cpu_class || getCpuClass(p.cpu || ''),

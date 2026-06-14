@@ -6,29 +6,39 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="theme-color" content="#0b0f1a">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co https://api.emailjs.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
     <title>Computrax | Prémiové repasované počítače</title>
 
     <!-- Open Graph / SEO -->
     <meta name="description" content="Repasované herné a kancelárske počítače so zárukou, kontrolou skladu, doplnkovými službami a rýchlym doručením po Slovensku.">
     <meta property="og:title" content="Computrax | Prémiové repasované počítače">
     <meta property="og:description" content="Výkon bez kompromisov. Repasované herné a kancelárske PC so zárukou, testované 24h.">
-    <meta property="og:image" content="https://8twk58fzg9-sudo.github.io/real/og-image.svg">
+    <meta property="og:site_name" content="Computrax">
+    <meta property="og:locale" content="sk_SK">
+    <meta property="og:image" content="https://8twk58fzg9-sudo.github.io/real/og-image.png">
+    <meta property="og:image:secure_url" content="https://8twk58fzg9-sudo.github.io/real/og-image.png">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Computrax - repasované počítače so skladom a zárukou">
     <meta property="og:url" content="https://8twk58fzg9-sudo.github.io/real/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Computrax | Prémiové repasované počítače">
+    <meta name="twitter:description" content="Repasované herné a kancelárske PC so zárukou, kontrolou skladu a rýchlym doručením.">
+    <meta name="twitter:image" content="https://8twk58fzg9-sudo.github.io/real/og-image.png">
+    <meta name="twitter:image:alt" content="Computrax - repasované počítače so skladom a zárukou">
     <link rel="canonical" href="https://8twk58fzg9-sudo.github.io/real/">
     <link rel="icon" href="og-image.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="preload" href="computrax-logo.png" as="image" type="image/png">
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script>emailjs.init('wFL29J-4MPhZmZYTf');</script>
+    <script src="config.js?v=20260614"></script>
     <script>
     const PRODUCTS_DATA = [
         { id: 1, name: "Alienware Aurora R14", price: 949, cat: "gaming", stock: 2, status: "active", tag: "HERNÝ ŠPECIÁL", tagColor: "#f87171", cpu: "Ryzen 9 5900X", cpuBrand: "amd", gpu: "RTX 3080 10GB", gpuFilter: "RTX 3080", ram: "32GB DDR4", ramFilter: "32", ssd: "1TB NVMe", os: "Windows 11 Pro", delivery: "Doprava zdarma", popular: 3, newest: 1 },
@@ -115,7 +125,8 @@
 
         /* NAV */
         nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 1.2rem 6%; display: flex; justify-content: space-between; align-items: center; background: rgba(11,15,26,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); gap: 1rem; }
-        .logo { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.8rem; color: white; text-decoration: none; flex-shrink: 0; }
+        .logo { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.8rem; color: white; text-decoration: none; flex-shrink: 0; display: inline-flex; align-items: center; line-height: 1; }
+        .logo img { width: 150px; height: auto; object-fit: contain; display: block; }
         .logo span { color: var(--accent); }
         nav ul { display: flex; gap: 1.5rem; list-style: none; }
         nav ul a { text-decoration: none; color: var(--muted); font-weight: 500; transition: 0.3s; font-size: 0.95rem; }
@@ -537,6 +548,7 @@
         @media (max-width: 720px) {
             nav { position: sticky; top: 0; align-items: flex-start; padding: 0.8rem 4%; flex-wrap: wrap; }
             .logo { font-size: 1.45rem; line-height: 1; padding-top: 0.25rem; }
+            .logo img { width: 128px; }
             .nav-right { width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
             .nav-search { grid-column: 1 / -1; }
             .nav-search input, .nav-search input:focus { width: 100%; min-height: 44px; }
@@ -571,6 +583,22 @@
             .product-detail-actions .add-cart-btn, .product-detail-actions .detail-btn { width: 100%; }
             .account-summary { grid-template-columns: 1fr; }
         }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .blob { display: none; }
+            .js .reveal, .reveal { opacity: 1 !important; transform: none !important; }
+            .pc-card:hover, .btn-primary:hover, .add-cart-btn:hover, .detail-btn:hover, .whatsapp-fab:hover, .stat-card:hover, .remove-btn:hover {
+                transform: none !important;
+            }
+            .toast, .cookie-banner, .cart-panel, .cart-overlay, .compare-modal, .compare-bar {
+                transition: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -585,7 +613,7 @@
 
 <!-- NAV -->
 <nav>
-    <a href="#" class="logo">Compu<span>trax</span></a>
+    <a href="#" class="logo"><img src="computrax-logo.png" alt="Computrax" width="150" height="75"></a>
     <button class="nav-menu-btn" type="button" aria-label="Menu" aria-expanded="false" onclick="toggleMobileMenu()">☰</button>
     <ul id="main-nav-links">
         <li><a href="#ponuka">Ponuka</a></li>
@@ -614,11 +642,11 @@
 </nav>
 
 <!-- CART OVERLAY & PANEL -->
-<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
-<div class="cart-panel" id="cart-panel">
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()" aria-hidden="true"></div>
+<div class="cart-panel" id="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
     <div class="cart-header">
-        <h2>🛒 Košík</h2>
-        <button class="cart-close" onclick="closeCart()">✕</button>
+        <h2 id="cart-title">🛒 Košík</h2>
+        <button class="cart-close" aria-label="Zavrieť košík" onclick="closeCart()">✕</button>
     </div>
 
     <!-- WIZARD STEPS -->
@@ -723,11 +751,11 @@
 </div>
 
 <!-- WISHLIST PANEL -->
-<div class="cart-overlay" id="wish-overlay" onclick="closeWishlist()"></div>
-<div class="cart-panel" id="wish-panel">
+<div class="cart-overlay" id="wish-overlay" onclick="closeWishlist()" aria-hidden="true"></div>
+<div class="cart-panel" id="wish-panel" role="dialog" aria-modal="true" aria-labelledby="wish-title" aria-hidden="true">
     <div class="cart-header">
-        <h2>♥ Obľúbené</h2>
-        <button class="cart-close" onclick="closeWishlist()">✕</button>
+        <h2 id="wish-title">♥ Obľúbené</h2>
+        <button class="cart-close" aria-label="Zavrieť obľúbené" onclick="closeWishlist()">✕</button>
     </div>
     <div class="cart-items" id="wish-items">
         <div class="cart-empty"><div class="icon">♡</div><p>Žiadne obľúbené</p><small>Klikni na ♡ na produkte</small></div>
@@ -745,40 +773,40 @@
 </div>
 
 <!-- COMPARE MODAL -->
-<div class="compare-modal" id="compare-modal">
+<div class="compare-modal" id="compare-modal" role="dialog" aria-modal="true" aria-labelledby="compare-title" aria-hidden="true">
     <div class="compare-backdrop" onclick="closeCompare()"></div>
     <div class="compare-content">
-        <h3>⚖️ Porovnanie produktov</h3>
-        <button class="compare-close" onclick="closeCompare()">✕</button>
+        <h3 id="compare-title">⚖️ Porovnanie produktov</h3>
+        <button class="compare-close" aria-label="Zavrieť porovnanie" onclick="closeCompare()">✕</button>
         <div id="compare-table-wrap"></div>
     </div>
 </div>
 
 <!-- PRODUCT DETAIL MODAL -->
-<div class="compare-modal" id="product-modal">
+<div class="compare-modal" id="product-modal" role="dialog" aria-modal="true" aria-label="Detail produktu" aria-hidden="true">
     <div class="compare-backdrop" onclick="closeProductDetail()"></div>
     <div class="compare-content">
-        <button class="compare-close" onclick="closeProductDetail()">✕</button>
+        <button class="compare-close" aria-label="Zavrieť detail produktu" onclick="closeProductDetail()">✕</button>
         <div id="product-detail-wrap"></div>
     </div>
 </div>
 
 <!-- ORDER CONFIRMATION MODAL -->
-<div class="compare-modal" id="order-confirm-modal">
+<div class="compare-modal" id="order-confirm-modal" role="dialog" aria-modal="true" aria-label="Potvrdenie objednávky" aria-hidden="true">
     <div class="compare-backdrop" onclick="closeOrderConfirmation()"></div>
     <div class="compare-content">
-        <button class="compare-close" onclick="closeOrderConfirmation()">✕</button>
+        <button class="compare-close" aria-label="Zavrieť potvrdenie objednávky" onclick="closeOrderConfirmation()">✕</button>
         <div id="order-confirm-wrap"></div>
     </div>
 </div>
 
 <!-- CUSTOMER ACCOUNT MODAL -->
-<div class="compare-modal" id="account-modal">
+<div class="compare-modal" id="account-modal" role="dialog" aria-modal="true" aria-labelledby="account-title" aria-hidden="true">
     <div class="compare-backdrop" onclick="closeAccount()"></div>
     <div class="compare-content">
-        <button class="compare-close" onclick="closeAccount()">✕</button>
+        <button class="compare-close" aria-label="Zavrieť účet" onclick="closeAccount()">✕</button>
         <div id="auth-view">
-            <h3 style="margin-bottom:1rem;">Zákaznícky účet</h3>
+            <h3 id="account-title" style="margin-bottom:1rem;">Zákaznícky účet</h3>
             <div class="auth-tabs">
                 <button class="auth-tab active" id="auth-login-tab" onclick="setAuthMode('login')">Log in</button>
                 <button class="auth-tab" id="auth-signup-tab" onclick="setAuthMode('signup')">Sign up</button>
@@ -838,10 +866,10 @@
 </div>
 
 <!-- RETURN / CLAIM REQUEST MODAL -->
-<div class="compare-modal" id="return-modal">
+<div class="compare-modal" id="return-modal" role="dialog" aria-modal="true" aria-label="Vrátenie alebo reklamácia" aria-hidden="true">
     <div class="compare-backdrop" onclick="closeReturnRequest()"></div>
     <div class="compare-content">
-        <button class="compare-close" onclick="closeReturnRequest()">✕</button>
+        <button class="compare-close" aria-label="Zavrieť vrátenie alebo reklamáciu" onclick="closeReturnRequest()">✕</button>
         <div id="return-request-wrap"></div>
     </div>
 </div>
@@ -862,6 +890,7 @@
             <div class="trust-item"><span>📦</span> Doprava od 3,90€</div>
             <div class="trust-item"><span>🛡️</span> 12 mesiacov záruka</div>
             <div class="trust-item"><span>🔄</span> 14 dní na vrátenie</div>
+            <div class="trust-item"><span>♻️</span> Renovované kusy z TechSavers</div>
         </div>
     </div>
     <div class="hero-visual reveal">
@@ -914,7 +943,7 @@
         <div class="process-card">
             <span class="process-num">2</span>
             <strong>Skontrolujeme a pripravíme</strong>
-            <p>Pred odoslaním prebehne kontrola stavu, aktualizácie, čistenie a základné balenie na prepravu.</p>
+            <p>Repasované kusy z TechSavers pred odoslaním prejdú kontrolou stavu, aktualizáciami, čistením a základným balením na prepravu.</p>
         </div>
         <div class="process-card">
             <span class="process-num">3</span>
@@ -1021,6 +1050,14 @@
             <div class="filter-item">
                 <label class="filter-label">Úložisko</label>
                 <select class="filter-select" id="filter-storage" onchange="applyFilters()">
+                    <option value="">Všetky</option>
+                </select>
+            </div>
+
+            <!-- Renovation condition -->
+            <div class="filter-item">
+                <label class="filter-label">Stav PC</label>
+                <select class="filter-select" id="filter-condition" onchange="applyFilters()">
                     <option value="">Všetky</option>
                 </select>
             </div>
@@ -1197,14 +1234,14 @@
             <h3>Ochrana údajov (GDPR)</h3>
             <p>Prevádzkovateľom osobných údajov je predávajúci uvedený v časti Predávajúci. Údaje z objednávky používame na vybavenie nákupu, doručenie, komunikáciu so zákazníkom, správu účtu, reklamácie, bezpečnosť stránky a zákonné účtovné povinnosti.</p>
             <p>Spracúvané môžu byť najmä meno, e-mail, telefón, adresa, obsah objednávky, stav platby, stav doručenia a technické údaje potrebné pre fungovanie stránky. Právnym základom je najmä plnenie zmluvy, zákonná povinnosť a oprávnený záujem na bezpečnosti.</p>
-            <p>Údaje môžu spracúvať technickí poskytovatelia potrební pre fungovanie e-shopu, najmä Supabase pre databázu a zákaznícke účty, EmailJS pre e-mailové notifikácie, dopravca pre doručenie a prípadná platobná brána pre platby.</p>
+            <p>Údaje môžu spracúvať technickí poskytovatelia potrební pre fungovanie e-shopu, najmä Supabase pre databázu a zákaznícke účty, serverová e-mailová služba pre notifikácie, dopravca pre doručenie a prípadná platobná brána pre platby.</p>
             <p>Účtovné a objednávkové údaje uchovávame po dobu vyžadovanú právnymi predpismi. Účet a technické údaje uchovávame len primerane dlho podľa účelu. O prístup, opravu, výmaz, obmedzenie spracovania alebo prenos údajov môžete požiadať cez kontaktný e-mail.</p>
             <p>Ak si myslíte, že s údajmi nakladáme nesprávne, môžete podať sťažnosť dozornému orgánu na ochranu osobných údajov. Údaje nepredávame marketingovým tretím stranám.</p>
         </article>
         <article id="cookies" class="legal-card">
             <h3>Cookies a lokálne úložisko</h3>
             <p>Používame iba nevyhnutné cookies, localStorage a sessionStorage na fungovanie košíka, obľúbených položiek, zákazníckeho prihlásenia, skladových funkcií, bezpečnostných kontrol a zapamätanie voľby v cookie lište.</p>
-            <p>Stránka používa technické služby Supabase, EmailJS a Google Fonts. Nepoužívame reklamné ani analytické cookies. Ak ich v budúcnosti zapneme, stránka musí najprv zobraziť samostatný súhlas pre konkrétne účely.</p>
+            <p>Stránka používa technické služby Supabase, serverové e-mailové notifikácie a Google Fonts. Nepoužívame reklamné ani analytické cookies. Ak ich v budúcnosti zapneme, stránka musí najprv zobraziť samostatný súhlas pre konkrétne účely.</p>
         </article>
         <article id="alternativne-riesenie-sporov" class="legal-card">
             <h3>Alternatívne riešenie sporov</h3>
@@ -1218,7 +1255,7 @@
 <footer>
     <div class="footer-grid">
         <div class="footer-brand">
-            <a href="#" class="logo">Compu<span>trax</span></a>
+            <a href="#" class="logo"><img src="computrax-logo.png" alt="Computrax" width="150" height="75"></a>
             <p>Prémiové repasované počítače so zárukou a podporou. Výkon bez kompromisov za rozumnú cenu.</p>
         </div>
         <div class="footer-col">
@@ -1263,8 +1300,9 @@ document.documentElement.classList.add('js');
 //  DATA (bundled fallback, Supabase/local data can replace it)
 // ============================================================
 const products = {};
+const RUNTIME_CONFIG = Object.freeze(window.COMPUTRAX_CONFIG || {});
 const SB_URL = 'https://aryjaqexfgalxaiseqtp.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeWphcWV4ZmdhbHhhaXNlcXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNjk5NzUsImV4cCI6MjA5NTY0NTk3NX0.m6PTVqVvjGWeVGdvSIfbcBPs7OLg_P8MjVw9ziN-_BA';
+const SB_KEY = safeStartupPublicKey(RUNTIME_CONFIG.supabaseAnonKey || RUNTIME_CONFIG.SUPABASE_ANON_KEY || '');
 const LOCAL_PRODUCTS_KEY = 'ctrax_local_products';
 const CART_KEY = 'ctrax_cart';
 const CART_REMINDER_KEY = 'ctrax_cart_reminder_last';
@@ -1275,6 +1313,7 @@ const PASSWORD_RESET_COOLDOWN_KEY = 'ctrax_password_reset_last';
 const AUTH_EMAIL_COOLDOWN_MS = 10 * 60 * 1000;
 const CONTACT_COOLDOWN_KEY = 'ctrax_contact_last';
 const CONTACT_COOLDOWN_MS = 90 * 1000;
+const SECURITY_RATE_KEY = 'ctrax_rate_limits_v2';
 const PRODUCT_AUTO_REFRESH_MS = 60000;
 const DEFAULT_SITE_SETTINGS = {
     heroBadge: 'Skladom · Doručenie do 48h',
@@ -1297,6 +1336,8 @@ const DEFAULT_SITE_SETTINGS = {
     paymentReservationMinutes: 30,
     idokladMode: 'manual_export',
     idokladFunctionUrl: '',
+    emailFunctionUrl: '',
+    notificationFunctionUrl: '',
     legalUpdated: '06.06.2026',
     phone: '0949 835 923',
     email: 'computrax.sk@gmail.com',
@@ -1329,6 +1370,8 @@ function normalizeProduct(p) {
     const gpu = p.gpu || '–';
     const ram = p.ram || '–';
     const ssd = p.ssd || '–';
+    const pcCondition = p.pcCondition || p.pc_condition || 'Repasované - veľmi dobrý stav';
+    const pcConditionNote = p.pcConditionNote || p.pc_condition_note || 'Vyčistený, otestovaný a pripravený na používanie. Detailný stav konkrétneho kusu vieme potvrdiť pred odoslaním.';
     return {
         id: p.id,
         name,
@@ -1336,6 +1379,9 @@ function normalizeProduct(p) {
         cat: p.cat || 'office',
         stock,
         status: p.status || (stock > 0 ? 'active' : 'sold'),
+        pcCondition,
+        pcConditionNote,
+        pcConditionKey: productConditionKey(pcCondition),
         tag: p.tag || (p.cat === 'gaming' ? 'HERNÉ PC' : 'SKLADOM'),
         tagColor: p.tagColor || p.tag_color || '#60a5fa',
         cpu,
@@ -1355,6 +1401,25 @@ function normalizeProduct(p) {
         popular: Number(p.popular || 0),
         newest: Number(p.newest || p.id || 0)
     };
+}
+
+function productConditionKey(value = '') {
+    const text = String(value || '').toLowerCase();
+    if (/ako nove|ako nové|open|otvorene|otvorené|nove|nové/.test(text)) return 'excellent';
+    if (/velmi dobry|veľmi dobrý/.test(text)) return 'very-good';
+    if (/dobry|dobrý/.test(text)) return 'good';
+    if (/kozmet|pouziv|použiv|používan/.test(text)) return 'cosmetic';
+    return text.trim() ? 'other' : '';
+}
+
+function productConditionFilterLabel(key = '') {
+    return {
+        excellent: 'Ako nové',
+        'very-good': 'Veľmi dobrý stav',
+        good: 'Dobrý stav',
+        cosmetic: 'Kozmetické známky',
+        other: 'Iný stav'
+    }[key] || key;
 }
 
 function getCpuGeneration(cpu = '') {
@@ -1409,8 +1474,159 @@ function safeAttr(value) {
     }[ch]));
 }
 
+function jwtPayload(token) {
+    try {
+        const payload = String(token || '').split('.')[1] || '';
+        return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')) || '{}');
+    } catch(e) {
+        return {};
+    }
+}
+
+function safeStartupPublicKey(value) {
+    const key = String(value || '').trim();
+    if (!key) return '';
+    const payload = jwtPayload(key);
+    if (payload.role === 'service_role' || /secret|service_role/i.test(key)) {
+        console.error('Refusing unsafe Supabase key in public runtime config.');
+        return '';
+    }
+    return key.startsWith('eyJ') ? key : '';
+}
+
+function cleanText(value, max = 120) {
+    return String(value ?? '')
+        .replace(/[\u0000-\u001f\u007f]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, max);
+}
+
+function cleanMultiline(value, max = 1200) {
+    return String(value ?? '')
+        .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, ' ')
+        .replace(/[ \t]+/g, ' ')
+        .trim()
+        .slice(0, max);
+}
+
+function normalizeEmail(value) {
+    return cleanText(value, 254).toLowerCase();
+}
+
+function isValidEmail(value) {
+    return /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/i.test(String(value || ''));
+}
+
+function enumValue(value, allowed, fallback = '') {
+    const text = String(value ?? '');
+    return allowed.includes(text) ? text : fallback;
+}
+
+function rejectUnexpectedFields(input, allowedFields) {
+    return Object.keys(input || {}).filter(key => !allowedFields.includes(key));
+}
+
+function rateLimitKey(action, subject = '') {
+    return `${action}:${String(subject || customerEmail() || 'anonymous').toLowerCase().slice(0, 120)}`;
+}
+
+function checkClientRateLimit(action, subject, maxRequests, windowMs) {
+    const now = Date.now();
+    const key = rateLimitKey(action, subject);
+    let store = {};
+    try { store = JSON.parse(localStorage.getItem(SECURITY_RATE_KEY) || '{}') || {}; } catch(e) { store = {}; }
+    const events = Array.isArray(store[key]) ? store[key].filter(ts => now - Number(ts) < windowMs) : [];
+    if (events.length >= maxRequests) {
+        const waitMs = windowMs - (now - events[0]);
+        return { ok: false, status: 429, message: `Príliš veľa pokusov. Skúste znova o ${formatWaitTime(waitMs)}.` };
+    }
+    events.push(now);
+    store[key] = events;
+    localStorage.setItem(SECURITY_RATE_KEY, JSON.stringify(store));
+    return { ok: true };
+}
+
+function guardRateLimit(action, subject, maxRequests, windowMs) {
+    const result = checkClientRateLimit(action, subject, maxRequests, windowMs);
+    if (!result.ok) showToast('⚠️ ' + result.message);
+    return result.ok;
+}
+
+function safeRuntimeEndpoint(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    try {
+        const url = new URL(raw);
+        if (url.protocol !== 'https:') return '';
+        url.username = '';
+        url.password = '';
+        url.hash = '';
+        return url.href;
+    } catch(e) {
+        return '';
+    }
+}
+
+function notificationEndpoint() {
+    return safeRuntimeEndpoint(
+        RUNTIME_CONFIG.emailEndpoint ||
+        RUNTIME_CONFIG.EMAIL_ENDPOINT ||
+        currentSiteSettings.emailFunctionUrl ||
+        currentSiteSettings.notificationFunctionUrl ||
+        ''
+    );
+}
+
+async function sendSecureNotification(params) {
+    const endpoint = notificationEndpoint();
+    if (!endpoint) return false;
+    const payload = {
+        from_name: cleanText(params.from_name, 120),
+        from_email: normalizeEmail(params.from_email),
+        phone: cleanText(params.phone, 32),
+        message: cleanMultiline(params.message, 4000)
+    };
+    const unexpected = rejectUnexpectedFields(params, ['from_name', 'from_email', 'phone', 'message']);
+    if (unexpected.length || !payload.from_name || !isValidEmail(payload.from_email) || !payload.message) {
+        throw new Error('Notification payload validation failed');
+    }
+    const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    if (res.status === 429) throw new Error('rate limit');
+    if (!res.ok) throw new Error(await res.text() || 'Notification endpoint failed');
+    return true;
+}
+
 function jsArg(value) {
     return safeAttr(JSON.stringify(String(value ?? '')));
+}
+
+let lastDialogTrigger = null;
+
+function focusFirstDialogControl(dialog) {
+    const target = dialog.querySelector('button:not([disabled]), [href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    if (target) target.focus({ preventScroll: true });
+}
+
+function setDialogOpen(id, isOpen) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const isDialog = el.getAttribute('role') === 'dialog';
+    if (isOpen && isDialog && document.activeElement && !el.contains(document.activeElement)) {
+        lastDialogTrigger = document.activeElement;
+    }
+    el.classList.toggle('open', Boolean(isOpen));
+    el.setAttribute('aria-hidden', String(!isOpen));
+    if (isOpen && isDialog) {
+        setTimeout(() => focusFirstDialogControl(el), 60);
+    } else if (!isOpen && isDialog && lastDialogTrigger?.isConnected) {
+        lastDialogTrigger.focus({ preventScroll: true });
+        lastDialogTrigger = null;
+    }
 }
 
 function money(value) {
@@ -1587,16 +1803,16 @@ function updateAccountUI() {
 
 function openAccount() {
     updateAccountUI();
-    document.getElementById('account-modal').classList.add('open');
+    setDialogOpen('account-modal', true);
     if (customerSession?.access_token) loadCustomerOrders();
 }
 
 function closeAccount() {
-    document.getElementById('account-modal').classList.remove('open');
+    setDialogOpen('account-modal', false);
 }
 
 function closeOrderConfirmation() {
-    document.getElementById('order-confirm-modal')?.classList.remove('open');
+    setDialogOpen('order-confirm-modal', false);
 }
 
 function openOrderConfirmation(orderPayload = {}, payment = {}) {
@@ -1624,7 +1840,7 @@ function openOrderConfirmation(orderPayload = {}, payment = {}) {
             </div>
         </div>
     `;
-    modal.classList.add('open');
+    setDialogOpen('order-confirm-modal', true);
 }
 
 function authErrorMessage(error) {
@@ -1714,8 +1930,9 @@ function openConfirmResend() {
 }
 
 async function resendConfirmationEmail() {
-    const email = document.getElementById('confirm-email').value.trim().toLowerCase();
-    if (!email) { showToast('⚠️ Zadajte e-mail účtu'); return; }
+    const email = normalizeEmail(document.getElementById('confirm-email').value);
+    if (!isValidEmail(email)) { showToast('⚠️ Zadajte platný e-mail účtu'); return; }
+    if (!guardRateLimit('auth-confirm', email, 3, 10 * 60 * 1000)) return;
     const cooldownKey = authEmailCooldownKey('confirm', email);
     if (!guardAuthEmailCooldown(cooldownKey, 'Potvrdzovací email')) return;
     setButtonBusy('confirm-submit-btn', true, 'Odosielam...');
@@ -1763,8 +1980,9 @@ function openRecoveredPasswordForm() {
 }
 
 async function requestPasswordReset() {
-    const email = document.getElementById('reset-email').value.trim().toLowerCase();
-    if (!email) { showToast('⚠️ Zadajte e-mail účtu'); return; }
+    const email = normalizeEmail(document.getElementById('reset-email').value);
+    if (!isValidEmail(email)) { showToast('⚠️ Zadajte platný e-mail účtu'); return; }
+    if (!guardRateLimit('auth-reset', email, 3, 10 * 60 * 1000)) return;
     const cooldownKey = authEmailCooldownKey('reset', email);
     if (!guardAuthEmailCooldown(cooldownKey, 'Reset hesla')) return;
     setButtonBusy('reset-submit-btn', true, 'Odosielam reset...');
@@ -1784,6 +2002,7 @@ async function requestPasswordReset() {
 
 async function updateRecoveredPassword() {
     const password = document.getElementById('reset-new-password').value;
+    if (!guardRateLimit('auth-password-update', customerEmail() || 'recovery', 5, 10 * 60 * 1000)) return;
     const passwordProblem = passwordPolicyMessage(password);
     if (passwordProblem) { showToast('⚠️ ' + passwordProblem); return; }
     if (!customerSession?.access_token) { showToast('⚠️ Reset session vypršala. Otvorte reset link znova.'); return; }
@@ -1801,11 +2020,13 @@ async function updateRecoveredPassword() {
 }
 
 async function signupCustomer() {
-    const name = document.getElementById('signup-name').value.trim();
-    const email = document.getElementById('signup-email').value.trim().toLowerCase();
+    const name = cleanText(document.getElementById('signup-name').value, 120);
+    const email = normalizeEmail(document.getElementById('signup-email').value);
     const phone = normalizePhone(document.getElementById('signup-phone').value);
     const password = document.getElementById('signup-password').value;
-    if (!name || !email || !password) { showToast('⚠️ Vyplňte meno, e-mail a heslo'); return; }
+    if (!name || !isValidEmail(email) || !password) { showToast('⚠️ Vyplňte platné meno, e-mail a heslo'); return; }
+    if (phone && phone.replace(/[^\d]/g, '').length < 9) { showToast('⚠️ Zadajte platný telefón'); return; }
+    if (!guardRateLimit('auth-signup', email, 3, 10 * 60 * 1000)) return;
     const passwordProblem = passwordPolicyMessage(password);
     if (passwordProblem) { showToast('⚠️ ' + passwordProblem); return; }
     const cooldownKey = authEmailCooldownKey('signup', email);
@@ -1833,9 +2054,10 @@ async function signupCustomer() {
 }
 
 async function loginCustomer() {
-    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    const email = normalizeEmail(document.getElementById('login-email').value);
     const password = document.getElementById('login-password').value;
-    if (!email || !password) { showToast('⚠️ Vyplňte e-mail a heslo'); return; }
+    if (!isValidEmail(email) || !password) { showToast('⚠️ Vyplňte platný e-mail a heslo'); return; }
+    if (!guardRateLimit('auth-login', email, 5, 5 * 60 * 1000)) return;
     try {
         const data = await supabaseAuth('token?grant_type=password', { email, password });
         saveCustomerSession(data);
@@ -2132,21 +2354,21 @@ function openReturnRequest(orderNumber) {
             <button class="btn-ghost" type="button" onclick="copyReturnRequestText()">Kopírovať text</button>
         </div>
     `;
-    document.getElementById('return-modal').classList.add('open');
+    setDialogOpen('return-modal', true);
 }
 
 function closeReturnRequest() {
     currentReturnOrderNumber = '';
-    const modal = document.getElementById('return-modal');
-    if (modal) modal.classList.remove('open');
+    setDialogOpen('return-modal', false);
 }
 
 function returnRequestDraft() {
     const order = findCustomerOrder(currentReturnOrderNumber);
     if (!order) return null;
-    const type = document.getElementById('return-type')?.value || 'withdrawal';
-    const solution = document.getElementById('return-solution')?.value || 'advice';
-    const details = (document.getElementById('return-details')?.value || '').trim();
+    const type = enumValue(document.getElementById('return-type')?.value || 'withdrawal', ['withdrawal','claim','exchange'], 'withdrawal');
+    const solution = enumValue(document.getElementById('return-solution')?.value || 'advice', ['refund','repair','exchange','advice'], 'advice');
+    const details = cleanMultiline(document.getElementById('return-details')?.value || '', 1200);
+    if (!guardRateLimit('return-request', customerEmail() || order.customer_email || order.order_number || 'anonymous', 3, 10 * 60 * 1000)) return null;
     const orderNo = order.order_number || 'objednávke';
     const body = [
         'Dobrý deň,',
@@ -2629,6 +2851,15 @@ function rebuildFilterOptions(list) {
         storageSelect.innerHTML = '<option value="">Všetky</option>' + storageBuckets.map(gb => `<option value="${gb}">${gb >= 1000 ? (gb / 1024 >= 1.9 ? '2TB+' : '1TB+') : gb + 'GB+'}</option>`).join('');
         if (storageBuckets.includes(currentStorage)) storageSelect.value = String(currentStorage);
     }
+
+    const conditionSelect = document.getElementById('filter-condition');
+    if (conditionSelect) {
+        const currentCondition = conditionSelect.value;
+        const conditionKeys = Array.from(new Set(list.map(p => p.pcConditionKey || productConditionKey(p.pcCondition)).filter(Boolean)))
+            .sort((a, b) => productConditionFilterLabel(a).localeCompare(productConditionFilterLabel(b)));
+        conditionSelect.innerHTML = '<option value="">Všetky</option>' + conditionKeys.map(key => `<option value="${safeAttr(key)}">${safeAttr(productConditionFilterLabel(key))}</option>`).join('');
+        if (conditionKeys.includes(currentCondition)) conditionSelect.value = currentCondition;
+    }
 }
 
 function renderProducts() {
@@ -2657,6 +2888,7 @@ function renderProducts() {
         card.setAttribute('data-cpu-gen', p.cpuGen || '');
         card.setAttribute('data-ram', p.ramFilter);
         card.setAttribute('data-storage', p.storageGb || 0);
+        card.setAttribute('data-condition', p.pcConditionKey || productConditionKey(p.pcCondition));
         card.setAttribute('data-stock', stockData);
         card.setAttribute('data-popular', p.popular);
         card.setAttribute('data-newest', p.newest);
@@ -2676,6 +2908,7 @@ function renderProducts() {
             ${productImageMarkup(p)}
             <h3 class="pc-name">${safeName}</h3>
             <ul class="pc-specs">
+                <li>Stav PC <b>${safeAttr(p.pcCondition)}</b></li>
                 <li>Procesor <b>${safeAttr(p.cpu)}</b></li>
                 <li>Grafika <b>${safeAttr(p.gpu)}</b></li>
                 <li>RAM <b>${safeAttr(p.ram)}</b></li>
@@ -2916,6 +3149,7 @@ function applyFilters() {
     const cpu = document.getElementById('filter-cpu').value;
     const cpuGen = document.getElementById('filter-cpu-gen')?.value || '';
     const storageMin = Number(document.getElementById('filter-storage')?.value || 0);
+    const condition = document.getElementById('filter-condition')?.value || '';
     const sort = document.getElementById('sort-select').value;
 
     document.getElementById('price-min-label').textContent = priceMin + '€';
@@ -2934,6 +3168,7 @@ function applyFilters() {
         const cardCpuGen = card.getAttribute('data-cpu-gen') || '';
         const cardRam = card.getAttribute('data-ram') || '';
         const cardStorage = Number(card.getAttribute('data-storage') || 0);
+        const cardCondition = card.getAttribute('data-condition') || '';
         const cardStock = card.getAttribute('data-stock') || '';
 
         const catOk = filters.cat === 'vsetko' || cat === filters.cat;
@@ -2943,10 +3178,11 @@ function applyFilters() {
         const cpuGenOk = !cpuGen || cardCpuGen === cpuGen;
         const ramOk = !filters.ram || cardRam === filters.ram;
         const storageOk = !storageMin || cardStorage >= storageMin;
+        const conditionOk = !condition || cardCondition === condition;
         const stockOk = filters.stock === 'vsetko' || cardStock === filters.stock;
         const searchOk = !searchQuery || name.includes(searchQuery);
 
-        const show = catOk && priceOk && gpuOk && cpuOk && cpuGenOk && ramOk && storageOk && stockOk && searchOk;
+        const show = catOk && priceOk && gpuOk && cpuOk && cpuGenOk && ramOk && storageOk && conditionOk && stockOk && searchOk;
         card.style.display = show ? 'block' : 'none';
         if (show) visible++;
     });
@@ -2971,10 +3207,10 @@ function applyFilters() {
             : '<span class="stock-empty"><strong>Momentálne nie je zverejnený žiadny počítač</strong><p>Admin musí pridať produkt so skladom alebo prepnúť web na Supabase režim, aby ho videli všetci zákazníci.</p></span>';
     }
     if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
-    updateActiveTags(priceMin, priceMax, gpu, cpu, cpuGen, storageMin);
+    updateActiveTags(priceMin, priceMax, gpu, cpu, cpuGen, storageMin, condition);
 }
 
-function updateActiveTags(priceMin, priceMax, gpu, cpu, cpuGen, storageMin) {
+function updateActiveTags(priceMin, priceMax, gpu, cpu, cpuGen, storageMin, condition) {
     const wrap = document.getElementById('active-tags');
     const tags = [];
     if (filters.cat !== 'vsetko') tags.push({ label: filters.cat === 'gaming' ? '🎮 Herné' : '💼 Kancelárske', clear: () => { filters.cat = 'vsetko'; document.querySelector('.filter-group .filter-btn').click(); } });
@@ -2988,6 +3224,7 @@ function updateActiveTags(priceMin, priceMax, gpu, cpu, cpuGen, storageMin) {
     if (cpuGen) tags.push({ label: 'CPU gen: ' + cpuGen, clear: () => { document.getElementById('filter-cpu-gen').value = ''; applyFilters(); } });
     if (filters.ram) tags.push({ label: 'RAM: ' + filters.ram + 'GB', clear: () => setFilter('ram', '', document.querySelector('#ram-group .filter-btn')) });
     if (storageMin) tags.push({ label: 'Úložisko: ' + (storageMin >= 1000 ? Math.round(storageMin / 1024) + 'TB+' : storageMin + 'GB+'), clear: () => { document.getElementById('filter-storage').value = ''; applyFilters(); } });
+    if (condition) tags.push({ label: 'Stav: ' + productConditionFilterLabel(condition), clear: () => { document.getElementById('filter-condition').value = ''; applyFilters(); } });
     if (filters.stock !== 'vsetko') tags.push({ label: filters.stock === 'skladom' ? '🟢 Skladom' : '🔴 Posledné kusy', clear: () => { filters.stock = 'vsetko'; applyFilters(); } });
 
     if (tags.length === 0) { wrap.style.display = 'none'; return; }
@@ -3013,6 +3250,7 @@ function resetFilters() {
     document.getElementById('filter-cpu').value = '';
     if (document.getElementById('filter-cpu-gen')) document.getElementById('filter-cpu-gen').value = '';
     if (document.getElementById('filter-storage')) document.getElementById('filter-storage').value = '';
+    if (document.getElementById('filter-condition')) document.getElementById('filter-condition').value = '';
     document.getElementById('sort-select').value = 'default';
     document.getElementById('nav-search-input').value = '';
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -3056,15 +3294,15 @@ function toggleWish(btn, name) {
 }
 
 function openWishlist() {
-    document.getElementById('wish-panel').classList.add('open');
-    document.getElementById('wish-overlay').classList.add('open');
+    setDialogOpen('wish-panel', true);
+    setDialogOpen('wish-overlay', true);
     document.body.style.overflow = 'hidden';
     updateWishlistUI();
 }
 
 function closeWishlist() {
-    document.getElementById('wish-panel').classList.remove('open');
-    document.getElementById('wish-overlay').classList.remove('open');
+    setDialogOpen('wish-panel', false);
+    setDialogOpen('wish-overlay', false);
     document.body.style.overflow = '';
 }
 
@@ -3209,11 +3447,11 @@ function openCompare() {
 
     html += `</tbody></table>`;
     wrap.innerHTML = html;
-    document.getElementById('compare-modal').classList.add('open');
+    setDialogOpen('compare-modal', true);
 }
 
 function closeCompare() {
-    document.getElementById('compare-modal').classList.remove('open');
+    setDialogOpen('compare-modal', false);
 }
 
 function recentProductNames() {
@@ -3279,7 +3517,7 @@ function openProductDetail(name) {
             <div>
                 <div class="product-detail-tag" style="color:${safeAttr(p.tagColor)}">${safeAttr(p.tag)}</div>
                 <h3 style="margin:0 0 0.5rem;">${safeAttr(p.name)}</h3>
-                <p style="color:var(--muted);line-height:1.6;margin:0;">Otestovaný repasovaný počítač pripravený na odoslanie. Pred objednávkou si môžete pridať služby ako nastavenie PC alebo predĺženú záruku.</p>
+                <p style="color:var(--muted);line-height:1.6;margin:0;">Repasovaný počítač z TechSavers pripravený na odoslanie. Pred objednávkou si môžete pridať služby ako nastavenie PC alebo predĺženú záruku.</p>
             </div>
             <div>
                 <div class="product-detail-price">${money(p.price)}</div>
@@ -3288,11 +3526,16 @@ function openProductDetail(name) {
         </div>
         <div class="product-detail-grid">
             <div class="product-detail-spec"><span>Procesor</span><b>${safeAttr(p.cpu)}</b></div>
+            <div class="product-detail-spec"><span>Stav PC</span><b>${safeAttr(p.pcCondition)}</b></div>
             <div class="product-detail-spec"><span>Grafika</span><b>${safeAttr(p.gpu)}</b></div>
             <div class="product-detail-spec"><span>RAM</span><b>${safeAttr(p.ram)}</b></div>
             <div class="product-detail-spec"><span>Úložisko</span><b>${safeAttr(p.ssd)}</b></div>
             <div class="product-detail-spec"><span>Systém</span><b>${safeAttr(p.os)}</b></div>
             <div class="product-detail-spec"><span>Doručenie</span><b>${safeAttr(p.delivery)}</b></div>
+        </div>
+        <div class="product-detail-services">
+            <strong>Stav konkrétneho kusu</strong>
+            ${safeAttr(p.pcConditionNote)}
         </div>
         <div class="product-detail-services">
             <strong>Dostupné doplnkové služby</strong>
@@ -3310,11 +3553,11 @@ function openProductDetail(name) {
             ${buyAction}
         </div>
     `;
-    document.getElementById('product-modal').classList.add('open');
+    setDialogOpen('product-modal', true);
 }
 
 function closeProductDetail() {
-    document.getElementById('product-modal').classList.remove('open');
+    setDialogOpen('product-modal', false);
 }
 
 function addToCartFromDetail(name, price) {
@@ -3464,27 +3707,33 @@ function normalizePhone(value) {
 function getCheckoutDetails() {
     const phone = normalizePhone(document.getElementById('d-phone').value);
     document.getElementById('d-phone').value = phone;
+    const deliveryEl = document.getElementById('d-delivery');
+    const deliveryKey = enumValue(deliveryEl.value, ['kurier', 'packeta', 'osobne'], 'kurier');
     return {
-        name: document.getElementById('d-name').value.trim(),
-        email: document.getElementById('d-email').value.trim(),
+        name: cleanText(document.getElementById('d-name').value, 120),
+        email: normalizeEmail(document.getElementById('d-email').value),
         phone,
-        street: document.getElementById('d-street').value.trim(),
-        zip: document.getElementById('d-zip').value.trim(),
-        city: document.getElementById('d-city').value.trim(),
-        billingCompany: document.getElementById('d-billing-company')?.value.trim() || '',
-        billingId: document.getElementById('d-billing-id')?.value.trim() || '',
-        billingTax: document.getElementById('d-billing-tax')?.value.trim() || '',
-        billingVat: document.getElementById('d-billing-vat')?.value.trim() || '',
-        deliveryKey: document.getElementById('d-delivery').value,
-        delivery: document.getElementById('d-delivery').options[document.getElementById('d-delivery').selectedIndex].text
+        street: cleanText(document.getElementById('d-street').value, 160),
+        zip: cleanText(document.getElementById('d-zip').value, 16),
+        city: cleanText(document.getElementById('d-city').value, 80),
+        billingCompany: cleanText(document.getElementById('d-billing-company')?.value || '', 160),
+        billingId: cleanText(document.getElementById('d-billing-id')?.value || '', 32),
+        billingTax: cleanText(document.getElementById('d-billing-tax')?.value || '', 32),
+        billingVat: cleanText(document.getElementById('d-billing-vat')?.value || '', 32),
+        deliveryKey,
+        delivery: deliveryEl.options[deliveryEl.selectedIndex]?.text || deliveryKey
     };
 }
 
 function validateCheckoutDetails(details = getCheckoutDetails(), includeTerms = false) {
-    if (!details.name || !details.email) return 'Vyplňte meno a e-mail';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email)) return 'Zadajte platný e-mail';
+    const unexpected = rejectUnexpectedFields(details, ['name','email','phone','street','zip','city','billingCompany','billingId','billingTax','billingVat','deliveryKey','delivery']);
+    if (unexpected.length) return 'Objednávka obsahuje nepovolené polia';
+    if (!details.name || details.name.length < 2 || !details.email) return 'Vyplňte meno a e-mail';
+    if (!isValidEmail(details.email)) return 'Zadajte platný e-mail';
     if (details.phone && details.phone.replace(/[^\d]/g, '').length < 9) return 'Zadajte platné telefónne číslo';
+    if (!['kurier','packeta','osobne'].includes(details.deliveryKey)) return 'Zvoľte platné doručenie';
     if (details.deliveryKey !== 'osobne' && (!details.street || !details.zip || !details.city)) return 'Vyplňte adresu doručenia';
+    if (details.zip && !/^[0-9A-Za-z\s-]{3,16}$/.test(details.zip)) return 'Zadajte platné PSČ';
     if ((details.billingId || details.billingTax || details.billingVat) && !details.billingCompany) return 'Pri firemných údajoch vyplňte názov firmy';
     if (includeTerms && !document.getElementById('terms-accepted')?.checked) return 'Potvrďte obchodné podmienky';
     return '';
@@ -3500,14 +3749,14 @@ function openCart() {
         if (phone && !phone.value) phone.value = customerPhone();
         saveCheckoutDraft();
     }
-    document.getElementById('cart-panel').classList.add('open');
-    document.getElementById('cart-overlay').classList.add('open');
+    setDialogOpen('cart-panel', true);
+    setDialogOpen('cart-overlay', true);
     document.body.style.overflow = 'hidden';
 }
 
 function closeCart() {
-    document.getElementById('cart-panel').classList.remove('open');
-    document.getElementById('cart-overlay').classList.remove('open');
+    setDialogOpen('cart-panel', false);
+    setDialogOpen('cart-overlay', false);
     document.body.style.overflow = '';
 }
 
@@ -3707,6 +3956,7 @@ function orderNumber() {
 }
 
 async function createSupabaseOrder(orderPayload) {
+    if (!SB_KEY) throw new Error('Missing Supabase public key');
     const res = await fetch(`${SB_URL}/rest/v1/rpc/create_order_and_purchase`, {
         method: 'POST',
         headers: {
@@ -3753,6 +4003,8 @@ async function startGoPayPayment(orderPayload, createdOrder = {}) {
 
 function friendlyOrderError(error) {
     const message = String(error?.message || error || '').toLowerCase();
+    if (message.includes('missing supabase public key')) return 'Web nemá nastavený verejný Supabase kľúč v config.js. Objednávku zatiaľ pošlite cez kontakt.';
+    if (message.includes('rate limit')) return 'Príliš veľa pokusov za krátky čas. Skúste to prosím znova o pár minút.';
     if (message.includes('too many recent orders')) return 'Poslali ste viac objednávok za krátky čas. Skúste to prosím znova o pár minút.';
     if (message.includes('not enough stock')) return 'Niektorý produkt už nemá dostatočný sklad. Obnovte sklad a skúste to znova.';
     if (message.includes('product not found') || message.includes('product is not available')) return 'Niektorý produkt už nie je dostupný. Obnovte ponuku a skúste to znova.';
@@ -3778,6 +4030,7 @@ async function submitOrder() {
     saveCheckoutDraft();
     const problem = validateCheckoutDetails(details, true);
     if (problem) { showToast('⚠️ ' + problem); return; }
+    if (!guardRateLimit('order-submit', details.email, 3, 10 * 60 * 1000)) return;
 
     const btn = document.getElementById('submit-order-btn');
     orderSubmitting = true;
@@ -3796,13 +4049,22 @@ async function submitOrder() {
 
     const deliveryPriceMap = { 'kurier': 5.90, 'packeta': 3.90, 'osobne': 0 };
     const deliveryPrice = deliveryPriceMap[details.deliveryKey] || 0;
-    const productsTotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const safeCartItems = cart.map(item => ({
+        name: cleanText(item.name, 180),
+        qty: Math.max(1, Math.min(20, Number(item.qty || 1))),
+        price: Math.max(0, Math.min(100000, Number(item.price || 0)))
+    })).filter(item => item.name && item.qty > 0 && item.price >= 0);
+    if (!safeCartItems.length || safeCartItems.length !== cart.length) {
+        showToast('⚠️ Košík obsahuje neplatnú položku. Obnovte stránku a skúste znova.');
+        return;
+    }
+    const productsTotal = safeCartItems.reduce((s, i) => s + i.price * i.qty, 0);
     const services = selectedServices();
     const servicesTotal = selectedServicesTotal();
     const total = (productsTotal + deliveryPrice + servicesTotal).toFixed(2);
     const payment = checkoutPaymentConfig();
 
-    const itemsList = cart.map(i => `${i.qty}× ${i.name} – ${(i.price * i.qty)}€`).join('\n');
+    const itemsList = safeCartItems.map(i => `${i.qty}× ${i.name} – ${(i.price * i.qty)}€`).join('\n');
     const servicesList = services.length
         ? services.map(service => `- ${service.name} – ${service.price}€`).join('\n')
         : '- Bez doplnkových služieb';
@@ -3847,7 +4109,7 @@ async function submitOrder() {
         customer_phone: details.phone || '',
         address: [details.street, details.zip, details.city].filter(Boolean).join(', '),
         delivery: details.delivery,
-        items: cart.map(item => ({ name: item.name, qty: item.qty, price: item.price })),
+        items: safeCartItems,
         total: Number(total),
         note: orderNoteParts.join('\n\n'),
         terms_accepted: true,
@@ -3881,10 +4143,9 @@ async function submitOrder() {
         }
         try {
             btn.textContent = 'Odosielam potvrdenie...';
-            await emailjs.send('service_46n3hin', 'template_f6qevxr', params);
-            await emailjs.send('service_46n3hin', 'template_r11q3r5', params);
+            await sendSecureNotification(params);
         } catch(emailError) {
-            console.warn('EmailJS notification failed:', emailError);
+            console.warn('Order notification endpoint failed:', emailError);
         }
         closeCart();
         goStep(1);
@@ -3935,15 +4196,16 @@ function submitContact(e) {
         showToast(`⚠️ Ďalšiu správu môžete poslať o ${formatWaitTime(cooldownLeft)}`);
         return;
     }
-    const name = document.getElementById('c-name').value.trim();
-    const email = document.getElementById('c-email').value.trim();
-    const model = document.getElementById('model-select').value;
-    const msg = document.getElementById('c-msg').value.trim();
+    const name = cleanText(document.getElementById('c-name').value, 120);
+    const email = normalizeEmail(document.getElementById('c-email').value);
+    const model = cleanText(document.getElementById('model-select').value, 180);
+    const msg = cleanMultiline(document.getElementById('c-msg').value, 1200);
 
     if (name.length < 2) { showToast('⚠️ Zadajte meno'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('⚠️ Zadajte platný e-mail'); return; }
+    if (!isValidEmail(email)) { showToast('⚠️ Zadajte platný e-mail'); return; }
     if (msg.length < 5) { showToast('⚠️ Napíšte krátku správu'); return; }
     if (msg.length > 1200) { showToast('⚠️ Správa je príliš dlhá'); return; }
+    if (!guardRateLimit('contact-submit', email, 2, 5 * 60 * 1000)) return;
 
     const message =
         `--- KONTAKTNÝ FORMULÁR ---\n\n` +
@@ -3965,19 +4227,18 @@ function submitContact(e) {
         message: message,
     };
 
-    if (!window.emailjs?.send) {
+    if (!notificationEndpoint()) {
         const fallbackLink = document.getElementById('contact-fallback-link');
         if (fallbackLink) fallbackLink.href = fallbackHref;
         if (fallbackBox) fallbackBox.classList.add('visible');
-        showToast('⚠️ E-mail služba nie je dostupná. Použite pripravený e-mail pod formulárom.');
+        showToast('⚠️ Serverový e-mail endpoint nie je nastavený. Použite pripravený e-mail pod formulárom.');
         contactSubmitting = false;
         btn.textContent = 'Odoslať dopyt ✉️';
         btn.disabled = false;
         return;
     }
 
-    emailjs.send('service_46n3hin', 'template_f6qevxr', params)
-        .then(() => emailjs.send('service_46n3hin', 'template_r11q3r5', params))
+    sendSecureNotification(params)
         .then(() => {
             rememberContactAttempt();
             if (fallbackBox) fallbackBox.classList.remove('visible');
@@ -3987,7 +4248,7 @@ function submitContact(e) {
             btn.textContent = 'Odoslať dopyt ✉️';
             btn.disabled = false;
         }).catch(err => {
-            console.error('EmailJS error:', err);
+            console.error('Notification endpoint error:', err);
             const fallbackLink = document.getElementById('contact-fallback-link');
             if (fallbackLink) fallbackLink.href = fallbackHref;
             if (fallbackBox) fallbackBox.classList.add('visible');
