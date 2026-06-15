@@ -12,7 +12,7 @@
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
 <title>Admin Panel | Computrax.sk</title>
-<link rel="preload" href="computrax-logo.png" as="image" type="image/png">
+<link rel="preload" href="computrax-logo.png?v=20260614b" as="image" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
@@ -34,7 +34,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
 .gate-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:3rem;width:100%;max-width:380px;text-align:center}
 .gate-logo{font-family:'Outfit';font-size:2rem;font-weight:900;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:center;line-height:1}
-.gate-logo img{width:190px;height:auto;object-fit:contain;display:block}
+.gate-logo img{width:190px;height:auto;object-fit:contain;display:block;background:transparent;border-radius:0}
 .gate-logo span{color:var(--accent)}
 .gate-sub{color:var(--muted);font-size:0.9rem;margin-bottom:2rem}
 .gate-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);padding:1rem;border-radius:12px;font-size:1rem;outline:none;margin-bottom:1rem;transition:0.2s;font-family:'Inter'}
@@ -45,7 +45,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .h-logo{font-family:'Outfit';font-size:1.5rem;font-weight:900;display:flex;align-items:center;gap:0.55rem;line-height:1}
-.h-logo img{width:145px;height:auto;object-fit:contain;display:block}
+.h-logo img{width:145px;height:auto;object-fit:contain;display:block;background:transparent;border-radius:0}
 .h-logo span{color:var(--accent)}
 .h-right{display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap}
 .btn{padding:0.65rem 1.2rem;border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;transition:0.2s;border:none}
@@ -184,7 +184,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
 <!-- GATE -->
 <div class="gate" id="gate">
   <div class="gate-box">
-    <div class="gate-logo"><img src="computrax-logo.png" alt="Computrax" width="190" height="95"></div>
+    <div class="gate-logo"><img src="computrax-logo.png?v=20260614b" alt="Computrax" width="190" height="95"></div>
     <div class="gate-sub">Admin Panel — zadaj heslo</div>
     <input class="gate-input" id="pw-input" type="password" placeholder="Heslo" autocomplete="current-password" spellcheck="false" maxlength="128" onkeydown="if(event.key==='Enter')login()">
     <button class="gate-btn" id="login-btn" onclick="login()">Prihlásiť sa</button>
@@ -195,7 +195,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
 <!-- ADMIN -->
 <div id="admin" style="display:none">
   <header>
-    <div class="h-logo"><img src="computrax-logo.png" alt="Computrax" width="145" height="72"> <span style="font-size:0.85rem;color:var(--muted);font-family:'Inter';font-weight:400">Admin</span></div>
+    <div class="h-logo"><img src="computrax-logo.png?v=20260614b" alt="Computrax" width="145" height="72"> <span style="font-size:0.85rem;color:var(--muted);font-family:'Inter';font-weight:400">Admin</span></div>
     <div class="h-right">
       <button class="btn btn-success" onclick="openModal()">+ Pridať PC</button>
       <button class="btn btn-ghost btn-sm" onclick="migrateProducts()" id="migrate-btn">⬆️ Nahrať vzorové produkty</button>
@@ -220,9 +220,9 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
     <span style="font-size:1.2rem">🔑</span>
     <div style="flex:1;min-width:200px">
       <strong style="font-size:0.9rem">Zadaj Supabase anon key</strong>
-      <p style="font-size:0.8rem;color:var(--muted);margin:0">Supabase → Settings → API → anon/public key (začína na eyJ...)</p>
+      <p style="font-size:0.8rem;color:var(--muted);margin:0">Supabase → Settings → API → anon alebo publishable key. Nikdy sem nedávaj service_role ani secret key.</p>
     </div>
-    <input id="sb-key-input" class="gate-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." style="width:380px;margin:0;font-size:0.8rem;padding:0.6rem 0.8rem">
+    <input id="sb-key-input" class="gate-input" placeholder="sb_publishable_... alebo eyJ..." style="width:380px;margin:0;font-size:0.8rem;padding:0.6rem 0.8rem">
     <button class="btn btn-primary btn-sm" onclick="saveSupabaseKey()">Uložiť kľúč</button>
     <button class="btn btn-primary btn-sm" onclick="useSupabaseMode()">☁️ Supabase režim</button>
     <button class="btn btn-ghost btn-sm" onclick="useLocalMode()">💾 Lokálny režim</button>
@@ -1095,6 +1095,22 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
     </div>
   </div>
 
+  <div class="orders-wrap admin-section" data-admin-section="automation">
+    <div class="orders-head">
+      <div>
+        <strong style="font-family:'Outfit';font-size:1.15rem">Ostrý e-shop checklist</strong>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0.2rem 0 0">Prehľad vecí, ktoré musia byť hotové pred reálnym predajom zákazníkom.</p>
+      </div>
+      <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="renderLaunchReadinessPanel()">Prepočítať</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyLaunchChecklist()">Kopírovať checklist</button>
+      </div>
+    </div>
+    <div class="orders-grid" id="launch-ready-grid">
+      <div style="color:var(--muted);font-size:0.9rem">Checklist sa zobrazí po otvorení Automatizácie.</div>
+    </div>
+  </div>
+
   <div class="orders-wrap admin-section" data-admin-section="orders">
     <div class="orders-head">
       <div>
@@ -1466,7 +1482,7 @@ const ADMIN_LOGIN_MAX_ATTEMPTS = 5;
 const ADMIN_LOGIN_LOCK_MS = 5 * 60 * 1000;
 const SITE_SETTINGS_KEY = 'ctrax_site_settings';
 const DEFAULT_SB_KEY = safeStartupSupabaseKey(RUNTIME_CONFIG.supabaseAnonKey || RUNTIME_CONFIG.SUPABASE_ANON_KEY || '');
-let SB_KEY = safeStartupSupabaseKey(localStorage.getItem('ctrax_sb_key'));
+let SB_KEY = safeStartupSupabaseKey(localStorage.getItem('ctrax_sb_key')) || DEFAULT_SB_KEY;
 
 const DEFAULT_SITE_SETTINGS = {
     heroBadge: 'Skladom · Doručenie do 48h',
@@ -1558,6 +1574,7 @@ function showAdminSection(section = 'products') {
     }
     if (currentAdminSection === 'automation') {
         renderInsights();
+        renderLaunchReadinessPanel();
         updateAutomationSummary();
     }
 }
@@ -2201,7 +2218,6 @@ function deploymentChecklistItems() {
     add(result.enabledServices.length > 0 && result.brokenServices.length === 0, 'Doplnkové služby sú použiteľné', `${result.enabledServices.length} zapnutých`);
     add(settings.paymentGateway !== 'manual' && settings.gopayMode !== 'disabled', 'Platobná brána je pripojená', 'Manuálny režim je OK len pred ostrým predajom.');
     add(settings.idokladMode !== 'manual_export', 'Faktúry sú automatizované', 'Manuálny export znamená ručnú kontrolu objednávok.');
-    add(Boolean(cleanSupabaseFunctionUrl(settings.emailFunctionUrl || settings.notificationFunctionUrl || '')), 'Serverový email endpoint je nastavený', 'Bez neho kontakt/objednávky použijú fallback bez browser secretov.');
     return items;
 }
 
@@ -2215,7 +2231,8 @@ function copyDeploymentChecklist() {
         '',
         'Poznámka:',
         '- IP rate limiting musí byť v Supabase Edge Function alebo Cloudflare, nie iba v statickom HTML.',
-        '- Secret kľúče patria do Supabase Secrets / provider dashboardu, nikdy do GitHub Pages.'
+        '- Secret kľúče patria do Supabase Secrets / provider dashboardu, nikdy do GitHub Pages.',
+        '- E-mail endpoint je odporúčaná automatizácia, nie blocker. Bez neho web použije pripravený mailto fallback.'
     ].join('\n');
     copyText(text, '📋 Deploy checklist skopírovaný');
 }
@@ -2573,6 +2590,12 @@ function jwtPayload(token) {
 function safeStartupSupabaseKey(storedKey) {
     const key = String(storedKey || '').trim();
     if (!key) return '';
+    if (/^(sb_secret_|sb_service_|service_role)/i.test(key) || /secret|service_role/i.test(key)) {
+        localStorage.removeItem('ctrax_sb_key');
+        localStorage.setItem(DATA_MODE_KEY, 'supabase');
+        return '';
+    }
+    if (/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)) return key;
     const payload = jwtPayload(key);
     if (payload.role === 'service_role') {
         localStorage.removeItem('ctrax_sb_key');
@@ -2900,8 +2923,14 @@ function showSetupBanner() {
 
 function saveSupabaseKey() {
     const key = document.getElementById('sb-key-input').value.trim();
-    if (!key.startsWith('eyJ')) {
-        showToast('⚠️ Nesprávny kľúč — musí začínať na eyJ...', true);
+    const isPublishable = /^sb_publishable_[A-Za-z0-9_-]+$/.test(key);
+    const isLegacyAnon = key.startsWith('eyJ');
+    if (!isPublishable && !isLegacyAnon) {
+        showToast('⚠️ Použi iba Supabase anon alebo publishable key.', true);
+        return;
+    }
+    if (/^(sb_secret_|sb_service_|service_role)/i.test(key) || /secret|service_role/i.test(key)) {
+        showToast('⛔ Tajný/service key nikdy nedávaj do HTML. Použi iba anon/public key.', true);
         return;
     }
     if (jwtPayload(key).role === 'service_role') {
@@ -3245,7 +3274,7 @@ function renderInsights() {
         cards.push(insightCard('bad', 'iDoklad URL neplatná', 'iDoklad Edge Function URL musí byť https://PROJECT.supabase.co/functions/v1/idoklad-create-invoice.', `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-idoklad-function-url')?.focus()">Doplniť URL</button>`));
     }
     if (!emailEndpoint) {
-        cards.push(insightCard('warn', 'E-mail endpoint chýba', 'Kontakt a objednávkové notifikácie fungujú bez tajných browser kľúčov, ale bez serverového endpointu použijú fallback.', `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-email-function-url')?.focus()">Doplniť URL</button>`));
+        cards.push(insightCard('info', 'E-mail automatizácia nie je pripojená', 'Web bude fungovať. Kontakt a objednávkové notifikácie použijú bezpečný fallback, kým nepridáš serverový endpoint.', `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-email-function-url')?.focus()">Doplniť URL</button>`));
     }
     if (legalMissing.length) {
         cards.push(insightCard('warn', 'Doplň právne údaje', `Chýba alebo je predvolená hodnota v ${legalMissing.length} firemných poliach.`, `<button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-company-address')?.focus()">Upraviť údaje</button>`));
@@ -3254,6 +3283,95 @@ function renderInsights() {
         cards.push(insightCard('ok', 'Všetko vyzerá dobre', 'Žiadne urgentné odporúčania. Sklad, filtre a objednávky sú v poriadku.'));
     }
     grid.innerHTML = cards.join('');
+}
+
+function isDefaultLegalValue(value = '') {
+    const text = String(value || '').trim();
+    return !text || /^Doplň/i.test(text) || /predávajúceho/i.test(text);
+}
+
+function eShopReadinessItems() {
+    const settings = getSiteSettings();
+    const result = publicReadyIssues();
+    const activeProducts = result.activeProducts.length;
+    const stockTotal = allProducts.reduce((sum, product) => sum + Number(product.stock || 0), 0);
+    const emailEndpoint = cleanSupabaseFunctionUrl(settings.emailFunctionUrl || settings.notificationFunctionUrl || '');
+    const publicUrl = cleanPublicHttpsUrl(settings.publicSiteUrl);
+    const isGithubPreview = /github\.io/i.test(publicUrl);
+    const hasRealLegal = !['companyName','companyAddress','companyId','taxId'].some(key => isDefaultLegalValue(settings[key]));
+    const hasPaymentAutomation = settings.paymentGateway !== 'manual' && settings.gopayMode !== 'disabled' && (
+        settings.gopayMode !== 'edge_function' || Boolean(cleanSupabaseFunctionUrl(settings.gopayFunctionUrl))
+    );
+    const hasInvoiceAutomation = settings.idokladMode === 'edge_function'
+        ? Boolean(cleanSupabaseFunctionUrl(settings.idokladFunctionUrl))
+        : settings.idokladMode !== 'disabled' && settings.idokladMode !== 'manual_export';
+
+    return [
+        { group: 'Základ', level: useLocalStorage ? 'blocker' : 'ok', label: 'Supabase režim', detail: useLocalStorage ? 'Lokálny režim vidí iba tento prehliadač.' : 'Produkty a objednávky sú pripravené pre verejný web.' },
+        { group: 'Základ', level: SB_KEY && jwtPayload(SB_KEY).role !== 'service_role' ? 'ok' : 'blocker', label: 'Verejný Supabase key', detail: SB_KEY ? 'Používa sa public/publishable key.' : 'Chýba public/publishable key v config.js.' },
+        { group: 'Základ', level: !useLocalStorage && hasSupabaseWriteAuth() ? 'ok' : 'warn', label: 'Admin zápis', detail: hasSupabaseWriteAuth() ? 'Admin je prihlásený cez Supabase Auth.' : 'Na úpravy v Supabase sa treba prihlásiť admin účtom.' },
+        { group: 'Doména', level: publicUrl ? (isGithubPreview ? 'warn' : 'ok') : 'blocker', label: 'Verejná URL', detail: publicUrl ? (isGithubPreview ? 'GitHub Pages funguje na test, pre značku je lepšia vlastná doména.' : publicUrl) : 'Nastav https:// URL stránky.' },
+        { group: 'Produkty', level: activeProducts > 0 ? 'ok' : 'blocker', label: 'Aktívne produkty', detail: `${activeProducts} aktívnych produktov, ${stockTotal} ks skladom.` },
+        { group: 'Produkty', level: result.missingImages.length ? 'warn' : 'ok', label: 'Fotky produktov', detail: result.missingImages.length ? `${result.missingImages.length} aktívnych produktov je bez fotky.` : 'Aktívne produkty majú fotky.' },
+        { group: 'Produkty', level: result.missingFilters.length || result.missingSku.length ? 'warn' : 'ok', label: 'Filtre a SKU', detail: `${result.missingFilters.length} chýbajúcich filtrov, ${result.missingSku.length} chýbajúcich SKU.` },
+        { group: 'Produkty', level: result.invalidActivePrices.length || result.invalidStock.length || result.duplicateNames.length || result.duplicateSku.length ? 'blocker' : 'ok', label: 'Ceny, sklad a duplicity', detail: `${result.invalidActivePrices.length} zlé ceny, ${result.invalidStock.length} zlý sklad, ${result.duplicateNames.length + result.duplicateSku.length} duplicít.` },
+        { group: 'Právo', level: hasRealLegal ? 'ok' : 'blocker', label: 'Firemné údaje', detail: hasRealLegal ? 'Firma, adresa, IČO a DIČ sú doplnené.' : 'Doplň reálnu firmu/adresu/IČO/DIČ pred predajom.' },
+        { group: 'Právo', level: settings.legalUpdated ? 'ok' : 'warn', label: 'Dátum právnych textov', detail: settings.legalUpdated || 'Doplň dátum aktualizácie právnych textov.' },
+        { group: 'Kontakt', level: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(settings.email || '').trim()) ? 'ok' : 'blocker', label: 'Kontaktný e-mail', detail: settings.email || 'Chýba platný e-mail.' },
+        { group: 'Kontakt', level: String(settings.phone || settings.whatsappPhone || '').replace(/\D/g, '').length >= 9 ? 'ok' : 'warn', label: 'Telefón / WhatsApp', detail: settings.phone || settings.whatsappPhone || 'Doplň telefón.' },
+        { group: 'Automatizácia', level: emailEndpoint ? 'ok' : 'warn', label: 'E-mail endpoint', detail: emailEndpoint || 'Bez serverového endpointu funguje fallback, ale nie profesionálne notifikácie.' },
+        { group: 'Platby', level: hasPaymentAutomation ? 'ok' : 'warn', label: 'Platobná brána', detail: hasPaymentAutomation ? 'Online platby sú pripravené cez endpoint.' : 'Manuálny režim je OK na štart, ale nie plne automatický e-shop.' },
+        { group: 'Faktúry', level: hasInvoiceAutomation ? 'ok' : 'warn', label: 'Faktúry', detail: hasInvoiceAutomation ? 'Fakturačný endpoint je pripravený.' : 'Zatiaľ treba ručný export alebo napojiť iDoklad/SuperFaktúru.' },
+        { group: 'Služby', level: result.enabledServices.length && !result.brokenServices.length ? 'ok' : 'warn', label: 'Doplnkové služby', detail: `${result.enabledServices.length} zapnutých služieb, ${result.brokenServices.length} chybných.` },
+        { group: 'Objednávky', level: result.unsafeOrderLinks.length ? 'blocker' : 'ok', label: 'Bezpečné odkazy v objednávkach', detail: result.unsafeOrderLinks.length ? `${result.unsafeOrderLinks.length} objednávok má neplatný platobný/fakturačný link.` : 'Objednávkové odkazy sú bezpečné.' }
+    ];
+}
+
+function renderLaunchReadinessPanel() {
+    const grid = document.getElementById('launch-ready-grid');
+    if (!grid) return;
+    const items = eShopReadinessItems();
+    const blockerCount = items.filter(item => item.level === 'blocker').length;
+    const warnCount = items.filter(item => item.level === 'warn').length;
+    const status = blockerCount
+        ? ['bad', 'Nie je pripravené na ostrý predaj', `${blockerCount} blokérov treba vyriešiť pred reálnym predajom.`]
+        : warnCount
+            ? ['warn', 'Môžeš testovať, ale ešte to nie je profesionálne hotové', `${warnCount} odporúčaní zostáva.`]
+            : ['ok', 'Vyzerá pripravené na ostrý e-shop', 'Pred spustením ešte sprav testovaciu objednávku.'];
+    grid.innerHTML = [
+        insightCard(status[0], status[1], status[2], '<button class="btn btn-ghost btn-sm" onclick="copyLaunchChecklist()">Kopírovať checklist</button>'),
+        ...items.map(item => {
+            const icon = item.level === 'ok' ? '✅' : item.level === 'warn' ? '⚠️' : '⛔';
+            return insightCard(item.level === 'blocker' ? 'bad' : item.level, `${icon} ${item.group}: ${item.label}`, item.detail);
+        })
+    ].join('');
+}
+
+function buildLaunchChecklistText() {
+    const items = eShopReadinessItems();
+    const blockers = items.filter(item => item.level === 'blocker');
+    const warnings = items.filter(item => item.level === 'warn');
+    return [
+        'COMPUTRAX OSTRÝ E-SHOP CHECKLIST',
+        `Dátum: ${new Date().toLocaleString('sk-SK')}`,
+        '',
+        `Blokéry pred predajom: ${blockers.length}`,
+        `Odporúčania pred profesionálnym spustením: ${warnings.length}`,
+        '',
+        ...items.map(item => `${item.level === 'ok' ? '[OK]' : item.level === 'warn' ? '[WARN]' : '[BLOCKER]'} ${item.group} - ${item.label}: ${item.detail}`),
+        '',
+        'Čo musí doplniť majiteľ:',
+        '- reálne firemné údaje a spätnú adresu',
+        '- vlastnú doménu a Supabase Auth redirect URL',
+        '- GoPay/platobnú bránu alebo potvrdený manuálny spôsob platby',
+        '- fakturačný systém alebo ručný fakturačný proces',
+        '- e-mail provider endpoint pre potvrdenia a notifikácie',
+        '- testovaciu objednávku na mobile aj desktope pred verejným predajom'
+    ].join('\n');
+}
+
+function copyLaunchChecklist() {
+    copyText(buildLaunchChecklistText(), '📋 Ostrý e-shop checklist skopírovaný');
 }
 
 // ---- ORDERS ----
@@ -4565,7 +4683,6 @@ function publicReadyIssues() {
     if (settings.paymentGateway === 'manual' || settings.gopayMode === 'disabled') issues.push('Platobná brána je zatiaľ v manuálnom režime, online platby nebudú automatické.');
     if (settings.idokladMode === 'edge_function' && !cleanSupabaseFunctionUrl(settings.idokladFunctionUrl)) issues.push('iDoklad Edge Function URL musí byť v tvare https://PROJECT.supabase.co/functions/v1/idoklad-create-invoice.');
     if (settings.idokladMode === 'manual_export') issues.push('Faktúry sú v manuálnom/export režime, iDoklad automatizácia ešte nie je pripojená.');
-    if (!cleanSupabaseFunctionUrl(settings.emailFunctionUrl || settings.notificationFunctionUrl || '')) issues.push('Serverový e-mail endpoint nie je nastavený; kontakt a objednávkové notifikácie použijú fallback bez automatického odoslania.');
     if (!SB_KEY) issues.push('Chýba Supabase anon/public key.');
     if (jwtPayload(SB_KEY).role === 'service_role') issues.push('V HTML je service_role key. Nahraď ho anon/public key.');
     if (!useLocalStorage && !hasSupabaseWriteAuth()) issues.push('Admin zápis do Supabase nie je prihlásený cez Supabase Auth.');
@@ -4583,6 +4700,7 @@ async function runPublicReadyCheck() {
         await loadAdminEvents();
         await runSupabaseHealthCheck(false);
         renderInsights();
+        renderLaunchReadinessPanel();
         updateAutomationSummary();
         const result = publicReadyIssues();
         if (summary) {
@@ -4997,10 +5115,14 @@ async function handleImageSelect(input) {
         reader.onload = e => setPreview(e.target.result, `${prepared.message} Výstup: ${PRODUCT_IMAGE_WIDTH}×${PRODUCT_IMAGE_HEIGHT}px (${Math.round(pendingImageFile.size / 1024)} KB). Pri uložení sa nahrá do Supabase Storage.`);
         reader.readAsDataURL(pendingImageFile);
     } catch(e) {
-        pendingImageFile = null;
-        input.value = '';
-        setImageStatus('Fotku sa nepodarilo upraviť. Skúste iný JPG, PNG alebo WebP súbor.', true);
-        showToast('❌ Fotku sa nepodarilo spracovať', true);
+        pendingImageFile = file;
+        const reader = new FileReader();
+        reader.onload = event => setPreview(
+            event.target.result,
+            `Automatický výrez sa nepodaril, ale fotku uložíme v pôvodnej podobe (${Math.round(file.size / 1024)} KB).`
+        );
+        reader.readAsDataURL(file);
+        showToast('⚠️ Automatický výrez zlyhal, použijem pôvodnú fotku');
     }
 }
 
@@ -5035,6 +5157,7 @@ async function prepareProductImage(file) {
     canvas.width = PRODUCT_IMAGE_WIDTH;
     canvas.height = PRODUCT_IMAGE_HEIGHT;
     const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) throw new Error('Canvas nie je dostupný');
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.imageSmoothingEnabled = true;

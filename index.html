@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="theme-color" content="#0b0f1a">
+    <meta name="robots" content="index,follow,max-image-preview:large">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
     <title>Computrax | Prémiové repasované počítače</title>
 
     <!-- Open Graph / SEO -->
@@ -32,7 +33,7 @@
     <link rel="icon" href="og-image.svg" type="image/svg+xml">
     <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="preload" href="computrax-logo.png" as="image" type="image/png">
+    <link rel="preload" href="computrax-logo.png?v=20260614b" as="image" type="image/png">
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -115,18 +116,15 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(180deg, #0b0f1a 0%, #0e1422 46%, #0b0f1a 100%); color: var(--text); line-height: 1.6; overflow-x: hidden; }
         a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(96,165,250,0.85); outline-offset: 3px; }
         .skip-link { position: fixed; left: 1rem; top: 1rem; z-index: 5000; transform: translateY(-150%); background: var(--accent); color: white; padding: 0.75rem 1rem; border-radius: 10px; font-weight: 800; text-decoration: none; transition: transform 0.2s; }
         .skip-link:focus { transform: translateY(0); }
 
-        /* BLOBS */
-        .blob { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); filter: blur(80px); z-index: -1; opacity: 0.4; pointer-events: none; }
-
         /* NAV */
         nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 1.2rem 6%; display: flex; justify-content: space-between; align-items: center; background: rgba(11,15,26,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); gap: 1rem; }
         .logo { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.8rem; color: white; text-decoration: none; flex-shrink: 0; display: inline-flex; align-items: center; line-height: 1; }
-        .logo img { width: 150px; height: auto; object-fit: contain; display: block; }
+        .logo img { width: 150px; height: auto; object-fit: contain; display: block; background: transparent; border-radius: 0; }
         .logo span { color: var(--accent); }
         nav ul { display: flex; gap: 1.5rem; list-style: none; }
         nav ul a { text-decoration: none; color: var(--muted); font-weight: 500; transition: 0.3s; font-size: 0.95rem; }
@@ -155,6 +153,21 @@
         /* HERO */
         .hero { min-height: 82vh; display: flex; align-items: center; justify-content: space-between; padding: 7rem 8% 3rem; gap: 4rem; }
         .hero-content { flex: 1; }
+        .hero-visual { flex: 0 1 430px; width: 100%; }
+        .hero-showcase { position: relative; border: 1px solid rgba(148,163,184,0.22); border-radius: 28px; background: linear-gradient(145deg, rgba(15,23,42,0.96), rgba(30,41,59,0.72)); padding: 1.2rem; box-shadow: 0 28px 80px rgba(0,0,0,0.38); overflow: hidden; }
+        .hero-showcase::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(59,130,246,0.18), transparent 36%, rgba(34,197,94,0.08)); pointer-events: none; }
+        .hero-showcase-inner { position: relative; display: grid; gap: 1rem; }
+        .hero-monitor { aspect-ratio: 16 / 10; border: 1px solid rgba(148,163,184,0.18); border-radius: 20px; background: linear-gradient(135deg, #111827, #1e293b); padding: 1rem; display: grid; align-content: space-between; }
+        .hero-monitor-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: var(--muted); font-size: 0.82rem; }
+        .hero-monitor-logo { width: 132px; max-width: 45%; height: auto; }
+        .hero-spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin-top: 1rem; }
+        .hero-spec { border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; background: rgba(255,255,255,0.045); padding: 0.85rem; }
+        .hero-spec span { display: block; color: var(--muted); font-size: 0.74rem; margin-bottom: 0.18rem; }
+        .hero-spec b { display: block; font-family: 'Outfit'; font-size: 1rem; line-height: 1.2; }
+        .hero-stock-card { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border: 1px solid rgba(34,197,94,0.24); border-radius: 18px; background: rgba(34,197,94,0.07); padding: 1rem; }
+        .hero-stock-card strong { display: block; font-family: 'Outfit'; font-size: 1.1rem; }
+        .hero-stock-card span { display: block; color: var(--muted); font-size: 0.84rem; }
+        .hero-stock-pill { flex: 0 0 auto; color: #bbf7d0; font-weight: 900; border: 1px solid rgba(34,197,94,0.34); border-radius: 999px; padding: 0.45rem 0.75rem; background: rgba(34,197,94,0.12); }
         .badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; background: rgba(59,130,246,0.1); border: 1px solid var(--accent); border-radius: 50px; color: var(--accent); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; }
         .badge-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 2s infinite; }
         .site-announcement { display: none; width: fit-content; max-width: 100%; align-items: center; gap: 0.6rem; margin: -0.4rem 0 1.3rem; padding: 0.8rem 1rem; border-radius: 14px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.28); color: #bbf7d0; font-weight: 700; font-size: 0.92rem; }
@@ -268,6 +281,9 @@
         .pc-specs { list-style: none; margin-bottom: 2rem; }
         .pc-specs li { display: flex; justify-content: space-between; padding: 0.55rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--muted); font-size: 0.92rem; }
         .pc-specs b { color: white; font-weight: 500; }
+        .condition-strip { display: flex; align-items: flex-start; gap: 0.55rem; margin: -0.25rem 0 1rem; padding: 0.75rem 0.85rem; border: 1px solid rgba(34,197,94,0.22); border-radius: 12px; background: rgba(34,197,94,0.055); color: var(--muted); font-size: 0.82rem; line-height: 1.4; }
+        .condition-strip strong { display: block; color: #bbf7d0; font-size: 0.83rem; margin-bottom: 0.1rem; }
+        .condition-strip span:first-child { flex: 0 0 auto; }
 
         /* GUARANTEE MINI */
         .card-guarantee { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
@@ -303,6 +319,21 @@
         .compare-table tr:last-child td { border-bottom: none; }
         .compare-table .row-label { color: var(--muted); font-weight: 500; }
         .compare-table .highlight { color: #22c55e; font-weight: 700; }
+        .advisor-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 1.5rem; align-items: stretch; }
+        .advisor-panel { border: 1px solid var(--border); border-radius: 18px; background: rgba(255,255,255,0.035); padding: 1.5rem; }
+        .advisor-panel h3 { font-family: 'Outfit'; font-size: 1.45rem; margin-bottom: 0.7rem; }
+        .advisor-panel p { color: var(--muted); font-size: 0.93rem; line-height: 1.6; margin-bottom: 1rem; }
+        .condition-grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+        .condition-grade { border: 1px solid rgba(59,130,246,0.24); border-radius: 14px; padding: 1rem; background: rgba(59,130,246,0.055); }
+        .condition-grade strong { display: block; color: var(--text); margin-bottom: 0.35rem; }
+        .condition-grade span { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
+        .usecase-list { display: grid; gap: 0.7rem; }
+        .usecase-item { display: grid; grid-template-columns: auto 1fr auto; gap: 0.7rem; align-items: center; padding: 0.85rem; border: 1px solid var(--border); border-radius: 14px; background: rgba(15,22,35,0.72); }
+        .usecase-item b { display: block; font-size: 0.94rem; }
+        .usecase-item small { color: var(--muted); line-height: 1.35; }
+        .usecase-item a { color: var(--accent); text-decoration: none; font-weight: 800; font-size: 0.82rem; white-space: nowrap; }
+        .test-checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.65rem; margin-top: 1rem; }
+        .test-check { border: 1px solid rgba(34,197,94,0.22); border-radius: 12px; padding: 0.75rem; color: #bbf7d0; background: rgba(34,197,94,0.055); font-size: 0.84rem; }
         .recent-strip { display: none; margin-top: 1.25rem; padding: 1rem; border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,0.035); }
         .recent-strip.visible { display: block; }
         .recent-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 0.75rem; }
@@ -439,6 +470,7 @@
         .faq-container { max-width: 800px; margin: 0 auto; }
         .faq-item { background: var(--glass); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 1rem; overflow: hidden; }
         .faq-q { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; font-weight: 600; }
+        .faq-q:focus-visible { outline: 3px solid rgba(96,165,250,0.85); outline-offset: -3px; }
         .faq-a { padding: 0 1.5rem 1.5rem; color: var(--muted); display: none; }
         .legal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
         .legal-card { background: var(--glass); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
@@ -453,6 +485,11 @@
         .process-num { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 10px; background: rgba(59,130,246,0.16); color: #93c5fd; font-weight: 900; margin-bottom: 0.8rem; }
         .included-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
         .included-strip span { border: 1px solid var(--border); background: rgba(255,255,255,0.04); border-radius: 12px; padding: 0.85rem; color: var(--muted); font-size: 0.88rem; }
+        .trust-section { padding-top: 0; }
+        .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .trust-card { border: 1px solid var(--border); border-radius: 16px; background: rgba(255,255,255,0.035); padding: 1.2rem; }
+        .trust-card strong { display: block; font-family: 'Outfit'; font-size: 1.08rem; margin-bottom: 0.35rem; }
+        .trust-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
 
         /* CONTACT */
         .contact-wrapper { display: grid; grid-template-columns: 1fr 1.5fr; background: var(--glass); border-radius: 30px; border: 1px solid var(--border); overflow: hidden; }
@@ -514,6 +551,8 @@
         /* FOOTER */
         footer { padding: 4rem 8%; border-top: 1px solid var(--border); }
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+        .footer-brand .logo { width: fit-content; }
+        .footer-brand .logo img { width: 170px; filter: drop-shadow(0 0 18px rgba(59,130,246,0.14)); }
         .footer-brand p { color: var(--muted); font-size: 0.9rem; margin-top: 1rem; max-width: 280px; }
         .footer-col h4 { font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 1rem; }
         .footer-col a { display: block; color: var(--muted); text-decoration: none; font-size: 0.9rem; margin-bottom: 0.5rem; transition: 0.2s; }
@@ -522,6 +561,7 @@
 
         @media (max-width: 900px) {
             .hero { flex-direction: column; text-align: center; padding: 7rem 6% 2.5rem; min-height: auto; gap: 2.5rem; }
+            .hero-visual { max-width: 560px; }
             h1 { font-size: 3rem; }
             section { padding: 3.5rem 6%; }
             .stats-section { padding: 3.5rem 6%; }
@@ -549,7 +589,9 @@
             nav { position: sticky; top: 0; align-items: flex-start; padding: 0.8rem 4%; flex-wrap: wrap; }
             .logo { font-size: 1.45rem; line-height: 1; padding-top: 0.25rem; }
             .logo img { width: 128px; }
-            .nav-right { width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
+            .nav-menu-btn { order: 2; }
+            nav ul { order: 4; grid-template-columns: 1fr; }
+            .nav-right { order: 3; width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
             .nav-search { grid-column: 1 / -1; }
             .nav-search input, .nav-search input:focus { width: 100%; min-height: 44px; }
             .cart-btn { justify-content: center; min-height: 44px; padding: 0.58rem 0.65rem; border-radius: 10px; font-size: 0.82rem; }
@@ -557,6 +599,10 @@
             .hero { padding-top: 2.5rem; }
             h1 { font-size: 2.35rem; }
             .hero p { font-size: 1rem; }
+            .hero-showcase { padding: 0.85rem; border-radius: 20px; }
+            .hero-monitor { border-radius: 16px; }
+            .hero-monitor-logo { width: 112px; }
+            .hero-spec-grid { grid-template-columns: 1fr; }
             .hero-btns .btn-primary, .hero-btns .btn-ghost { width: 100%; text-align: center; }
             .filter-panel { padding: 1rem; border-radius: 16px; }
             .filter-row { display: grid; grid-template-columns: 1fr; align-items: stretch; }
@@ -568,20 +614,37 @@
             .compare-content { width: 100%; max-height: 92vh; border-radius: 18px 18px 0 0; padding: 1.25rem; }
             .compare-content h3 { font-size: 1.45rem; padding-right: 2.8rem; }
             .compare-close { top: 1rem; right: 1rem; }
+            .advisor-grid { grid-template-columns: 1fr; }
+            .condition-grade-grid, .test-checklist { grid-template-columns: 1fr; }
+            .usecase-item { grid-template-columns: auto 1fr; }
+            .usecase-item a { grid-column: 2; }
             .auth-tabs { gap: 0.45rem; }
             .auth-tab, .wizard-btn, .auth-field input { min-height: 46px; }
             .auth-link { display: block; width: 100%; text-align: left; padding: 0.25rem 0; }
             .toast { left: 1rem; right: 1rem; top: auto; bottom: 1rem; max-width: none; }
+            .pc-footer { display: grid; grid-template-columns: 1fr 1fr; }
+            .pc-price { grid-column: 1 / -1; }
+            .pc-footer .detail-btn, .pc-footer .add-cart-btn { width: 100%; text-align: center; }
         }
         @media (max-width: 500px) {
             .cart-panel { width: 100%; right: -100%; }
+            .cart-header { padding: 1.35rem 1.2rem 1rem; }
+            .cart-items, .cart-footer { padding-left: 1rem; padding-right: 1rem; }
+            .cart-item { display: grid; grid-template-columns: auto 1fr; align-items: start; padding: 1rem; }
+            .cart-item-controls { grid-column: 1 / -1; justify-content: flex-end; }
+            .wizard-steps { margin-bottom: 0.8rem; }
+            .wizard-step { font-size: 0.72rem; padding: 0.48rem 0.25rem; }
             .whatsapp-fab span.wa-label { display: none; }
+            .whatsapp-fab { right: 1rem; bottom: 1rem; padding: 0.85rem; }
             .compare-bar { flex-direction: column; bottom: -200px; width: 90%; }
             .compare-bar.visible { bottom: 1rem; }
             .compare-modal { padding: 0.75rem; }
             .compare-content { padding: 1.4rem; border-radius: 18px; }
             .product-detail-actions .add-cart-btn, .product-detail-actions .detail-btn { width: 100%; }
             .account-summary { grid-template-columns: 1fr; }
+            .cookie-banner { display: grid; gap: 0.9rem; padding: 1rem; }
+            .cookie-banner p { min-width: 0; }
+            .cookie-btns { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
         }
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
@@ -590,7 +653,6 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-            .blob { display: none; }
             .js .reveal, .reveal { opacity: 1 !important; transform: none !important; }
             .pc-card:hover, .btn-primary:hover, .add-cart-btn:hover, .detail-btn:hover, .whatsapp-fab:hover, .stat-card:hover, .remove-btn:hover {
                 transform: none !important;
@@ -605,20 +667,18 @@
 
 <a class="skip-link" href="#ponuka">Preskočiť na ponuku</a>
 
-<div class="blob" style="top: -100px; right: -100px;"></div>
-<div class="blob" style="bottom: -100px; left: -100px;"></div>
-
 <!-- TOAST -->
 <div class="toast" id="toast">🛒 <span id="toast-msg">Produkt pridaný</span></div>
 
 <!-- NAV -->
 <nav>
-    <a href="#" class="logo"><img src="computrax-logo.png" alt="Computrax" width="150" height="75"></a>
+    <a href="#" class="logo"><img src="computrax-logo.png?v=20260614b" alt="Computrax" width="150" height="75"></a>
     <button class="nav-menu-btn" type="button" aria-label="Menu" aria-expanded="false" onclick="toggleMobileMenu()">☰</button>
     <ul id="main-nav-links">
         <li><a href="#ponuka">Ponuka</a></li>
         <li><a href="#preco-my">O nás</a></li>
         <li><a href="#ako-to-funguje">Ako to funguje</a></li>
+        <li><a href="#poradca">Poradca</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
     </ul>
@@ -894,7 +954,31 @@
         </div>
     </div>
     <div class="hero-visual reveal">
-        <div style="width: 400px; height: 400px; background: linear-gradient(45deg, var(--accent), #8b5cf6); border-radius: 40px; transform: rotate(5deg); display: flex; align-items: center; justify-content: center; font-size: 6rem; box-shadow: 0 40px 80px rgba(59,130,246,0.3);">🖥️</div>
+        <div class="hero-showcase" aria-label="Ukážka skladu Computrax">
+            <div class="hero-showcase-inner">
+                <div class="hero-monitor">
+                    <div class="hero-monitor-top">
+                        <img class="hero-monitor-logo" src="computrax-logo.png?v=20260614b" alt="Computrax" width="132" height="66">
+                        <span>Live sklad</span>
+                    </div>
+                    <div>
+                        <div class="hero-spec-grid">
+                            <div class="hero-spec"><span>Najžiadanejšie</span><b>RTX herné PC</b></div>
+                            <div class="hero-spec"><span>Od</span><b>349€</b></div>
+                            <div class="hero-spec"><span>Kontrola</span><b>24h test</b></div>
+                            <div class="hero-spec"><span>Záruka</span><b>12 mesiacov</b></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-stock-card">
+                    <div>
+                        <strong>Konkrétne skladové kusy</strong>
+                        <span>Po objednávke sa zásoba automaticky rezervuje a odpočíta.</span>
+                    </div>
+                    <div class="hero-stock-pill">Skladom</div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -918,7 +1002,7 @@
         <div class="stat-card">
             <div style="font-size:2.5rem;margin-bottom:0.8rem;">🔄</div>
             <div style="font-family:'Outfit';font-size:1.3rem;font-weight:700;margin-bottom:0.4rem;">14 dní vrátenie</div>
-            <div class="stat-label">Nie ste spokojní? Vrátite do 14 dní bez udania dôvodu, odvoz na naše náklady</div>
+            <div class="stat-label">Pri nákupe na diaľku môžete spravidla odstúpiť do 14 dní podľa obchodných podmienok</div>
         </div>
         <div class="stat-card">
             <div style="font-size:2.5rem;margin-bottom:0.8rem;">📦</div>
@@ -961,6 +1045,92 @@
         <span>✓ Windows 11 Pro pripravený na používanie</span>
         <span>✓ Základná kontrola komponentov</span>
         <span>✓ Možnosť doplnkových služieb v košíku</span>
+    </div>
+</section>
+
+<!-- TRUST / E-SHOP ASSURANCE -->
+<section class="trust-section" id="bezpecny-nakup">
+    <div class="section-header reveal">
+        <div class="section-label">Bezpečný nákup</div>
+        <div class="section-title">To, čo zákazník potrebuje vedieť pred platbou</div>
+    </div>
+    <div class="trust-grid reveal">
+        <div class="trust-card">
+            <strong>Reálny sklad a rezervácia</strong>
+            <p>Objednávka pracuje so skladovou zásobou. Ak je kus posledný, košík aj objednávka kontrolujú maximálny dostupný počet.</p>
+        </div>
+        <div class="trust-card">
+            <strong>Transparentný stav PC</strong>
+            <p>Pri každom produkte je stav repasovania, poznámka ku kusu, záruka, parametre a dostupné služby pred odoslaním.</p>
+        </div>
+        <div class="trust-card">
+            <strong>Účet a história objednávok</strong>
+            <p>Zákazník sa vie prihlásiť, pozrieť objednávky, stav platby, faktúru a pripraviť vrátenie alebo reklamáciu.</p>
+        </div>
+        <div class="trust-card">
+            <strong>Pripravené na GoPay a iDoklad</strong>
+            <p>Admin má miesto pre platobnú bránu, fakturačné údaje, stav dokladu a exporty, aby sa web dal posúvať k reálnemu e-shopu.</p>
+        </div>
+    </div>
+</section>
+
+<!-- BUYING ADVISOR -->
+<section id="poradca">
+    <div class="section-header reveal">
+        <div class="section-label">Poradca výberom</div>
+        <div class="section-title">Vyberte repasovaný PC bez hádania</div>
+    </div>
+    <div class="advisor-grid reveal">
+        <div class="advisor-panel">
+            <h3>Triedy stavu, ktoré dávajú zmysel</h3>
+            <p>Pri repasovaných zariadeniach zákazníci najviac riešia funkčnosť, kozmetický stav a záruku. Preto pri každom PC zobrazujeme stav kusu a poznámku priamo na karte aj v detaile.</p>
+            <div class="condition-grade-grid">
+                <div class="condition-grade">
+                    <strong>Výborný</strong>
+                    <span>Minimálne známky používania, vhodné aj na viditeľné pracovisko.</span>
+                </div>
+                <div class="condition-grade">
+                    <strong>Veľmi dobrý</strong>
+                    <span>Bežné jemné známky používania, plne funkčný a pripravený na prácu.</span>
+                </div>
+                <div class="condition-grade">
+                    <strong>Dobrý</strong>
+                    <span>Viditeľnejšie kozmetické stopy, výhodnejšia cena, rovnaká funkčná kontrola.</span>
+                </div>
+            </div>
+            <div class="test-checklist">
+                <div class="test-check">✓ kontrola CPU, RAM, disku a grafiky</div>
+                <div class="test-check">✓ čistenie a príprava systému</div>
+                <div class="test-check">✓ skladový kus sa rezervuje pri objednávke</div>
+                <div class="test-check">✓ záruka a doklad k nákupu</div>
+            </div>
+        </div>
+        <div class="advisor-panel">
+            <h3>Rýchly výber podľa použitia</h3>
+            <p>Ak neviete, čo kúpiť, začnite účelom. Filtre nižšie potom zúžia sklad podľa výkonu, ceny, RAM, grafiky a stavu PC.</p>
+            <div class="usecase-list">
+                <div class="usecase-item">
+                    <span>💼</span>
+                    <div><b>Kancelária a škola</b><small>i5/Ryzen 5, 16GB RAM, SSD, nízka spotreba.</small></div>
+                    <a href="#ponuka" onclick="quickFilter('cat','office')">Filtrovať</a>
+                </div>
+                <div class="usecase-item">
+                    <span>🎮</span>
+                    <div><b>Hranie hier</b><small>dedikovaná RTX grafika, 16-32GB RAM, rýchle NVMe.</small></div>
+                    <a href="#ponuka" onclick="quickFilter('cat','gaming')">Filtrovať</a>
+                </div>
+                <div class="usecase-item">
+                    <span>🧰</span>
+                    <div><b>Práca a tvorba</b><small>silnejší i7/Ryzen 7+, viac RAM a väčšie úložisko.</small></div>
+                    <a href="#kontakt">Poradiť sa</a>
+                </div>
+                <div class="usecase-item">
+                    <span>📦</span>
+                    <div><b>Potrebujem to rýchlo</b><small>vyberajte skladom kusy a posledné kusy s rýchlym doručením.</small></div>
+                    <a href="#ponuka" onclick="quickFilter('stock','skladom')">Skladom</a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -1144,6 +1314,14 @@
             <div class="faq-q">Dostanem presne ten počítač, ktorý objednám? <span>+</span></div>
             <div class="faq-a">Áno, objednávka sa viaže na konkrétny skladový kus alebo model s uvedenými parametrami. Pri každom produkte kontrolujeme sklad, stav a dostupnosť pred potvrdením.</div>
         </div>
+        <div class="faq-item">
+            <div class="faq-q">Ako mám čítať stav repasovaného PC? <span>+</span></div>
+            <div class="faq-a">Stav opisuje najmä kozmetiku konkrétneho kusu. Funkčnosť kontrolujeme pri každom PC. Výborný stav znamená minimálne známky používania, veľmi dobrý bežné jemné známky a dobrý stav viditeľnejšie kozmetické stopy pri nižšej cene.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Čo kontrolujete pred odoslaním? <span>+</span></div>
+            <div class="faq-a">Kontrolujeme CPU, RAM, disk, grafiku, teploty, stabilitu, základnú čistotu, systém a fyzický stav. Pri produkte vidíte aj poznámku ku konkrétnemu kusu.</div>
+        </div>
     </div>
 </section>
 
@@ -1224,6 +1402,17 @@
             <p>Tovar je potrebné vrátiť kompletný, primerane zabalený a bez poškodenia nad rámec bežného vyskúšania. Peniaze vraciame najneskôr v zákonnej lehote rovnakým alebo dohodnutým spôsobom platby.</p>
             <p>Náklady na spätné doručenie pri odstúpení znáša zákazník, ak sa individuálne nedohodneme inak. Pri chybne dodanom alebo poškodenom tovare nás kontaktujte pred odoslaním balíka.</p>
         </article>
+        <article id="doprava-platba" class="legal-card">
+            <h3>Doprava a platba</h3>
+            <p>Dostupné spôsoby doručenia a ceny sa zobrazujú v košíku pred odoslaním objednávky. Doručenie zabezpečuje vybraný dopravca alebo osobný odber, ak je dostupný.</p>
+            <p>Platba môže byť spracovaná manuálne, pri prevzatí alebo cez pripojenú platobnú bránu. Pri online platbe sa objednávka môže dočasne rezervovať len počas času uvedeného v košíku alebo potvrdení.</p>
+            <p>Ak platba neprebehne alebo je zrušená, predávajúci môže zákazníka kontaktovať, poslať nový platobný odkaz alebo objednávku zrušiť podľa skladovej dostupnosti.</p>
+        </article>
+        <article id="formular-odstupenia" class="legal-card">
+            <h3>Formulár vrátenia</h3>
+            <p>Najrýchlejší spôsob je prihlásiť sa do zákazníckeho účtu, otvoriť objednávku a kliknúť na „Vrátenie / reklamácia“. Stránka pripraví text e-mailu s číslom objednávky a položkami.</p>
+            <p>Ak účet nepoužívate, napíšte na kontaktný e-mail: číslo objednávky, meno, e-mail, produkty, či ide o odstúpenie alebo reklamáciu, preferované riešenie a stručný popis.</p>
+        </article>
         <article id="reklamacny-poriadok" class="legal-card">
             <h3>Reklamačný poriadok</h3>
             <p>Na počítače poskytujeme záruku uvedenú pri konkrétnom produkte. Uvedená záruka neobmedzuje zákonné práva spotrebiteľa pri vadnom tovare.</p>
@@ -1255,7 +1444,7 @@
 <footer>
     <div class="footer-grid">
         <div class="footer-brand">
-            <a href="#" class="logo"><img src="computrax-logo.png" alt="Computrax" width="150" height="75"></a>
+            <a href="#" class="logo"><img src="computrax-logo.png?v=20260614b" alt="Computrax" width="150" height="75"></a>
             <p>Prémiové repasované počítače so zárukou a podporou. Výkon bez kompromisov za rozumnú cenu.</p>
         </div>
         <div class="footer-col">
@@ -1269,7 +1458,9 @@
             <h4>Právne info</h4>
             <a href="#obchodne-podmienky">Obchodné podmienky</a>
             <a href="#ochrana-udajov">Ochrana údajov (GDPR)</a>
+            <a href="#doprava-platba">Doprava a platba</a>
             <a href="#reklamacny-poriadok">Reklamačný poriadok</a>
+            <a href="#formular-odstupenia">Formulár vrátenia</a>
             <a href="#alternativne-riesenie-sporov">Riešenie sporov</a>
             <a href="#cookies">Cookies</a>
         </div>
@@ -1486,8 +1677,13 @@ function jwtPayload(token) {
 function safeStartupPublicKey(value) {
     const key = String(value || '').trim();
     if (!key) return '';
+    if (/^(sb_secret_|sb_service_|service_role)/i.test(key) || /secret|service_role/i.test(key)) {
+        console.error('Refusing unsafe Supabase key in public runtime config.');
+        return '';
+    }
+    if (/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)) return key;
     const payload = jwtPayload(key);
-    if (payload.role === 'service_role' || /secret|service_role/i.test(key)) {
+    if (payload.role === 'service_role') {
         console.error('Refusing unsafe Supabase key in public runtime config.');
         return '';
     }
@@ -2876,7 +3072,9 @@ function renderProducts() {
         const cartBtn = isSold
             ? `<button class="add-cart-btn" disabled style="background:rgba(255,255,255,0.1);cursor:not-allowed;">Vypredané</button>`
             : `<button class="add-cart-btn" onclick="addToCart(${nameArg}, ${p.price}, this)">Do košíka 🛒</button>`;
-        const detailBtn = `<button class="detail-btn" onclick="openProductDetail(${nameArg})">Detail</button>`;
+        const conditionNote = String(p.pcConditionNote || '').replace(/\s+/g, ' ').trim();
+        const shortConditionNote = conditionNote.length > 112 ? conditionNote.slice(0, 109).trim() + '...' : conditionNote;
+        const detailBtn = `<button class="detail-btn" onclick="openProductDetail(${nameArg})" aria-label="Zobraziť detail produktu ${safeName}">Detail</button>`;
 
         const card = document.createElement('div');
         card.className = 'pc-card reveal';
@@ -2907,8 +3105,11 @@ function renderProducts() {
             <div class="stock-badge ${stockClass}"><span class="stock-dot"></span> ${stockLabel}</div>
             ${productImageMarkup(p)}
             <h3 class="pc-name">${safeName}</h3>
+            <div class="condition-strip">
+                <span>🔧</span>
+                <span><strong>${safeAttr(p.pcCondition)}</strong>${safeAttr(shortConditionNote || 'Vyčistený, otestovaný a pripravený na používanie.')}</span>
+            </div>
             <ul class="pc-specs">
-                <li>Stav PC <b>${safeAttr(p.pcCondition)}</b></li>
                 <li>Procesor <b>${safeAttr(p.cpu)}</b></li>
                 <li>Grafika <b>${safeAttr(p.gpu)}</b></li>
                 <li>RAM <b>${safeAttr(p.ram)}</b></li>
@@ -2981,6 +3182,13 @@ function openProductFromUrlOnce() {
     setTimeout(() => openProductDetail(found.name), 120);
 }
 
+function productSchemaShippingRate(product = {}) {
+    const text = String(product.delivery || '').toLowerCase();
+    if (/zdarma|free/.test(text)) return 0;
+    const amount = text.match(/(\d+(?:[,.]\d+)?)\s*€/);
+    return amount ? Number(amount[1].replace(',', '.')) : 3.90;
+}
+
 function updateProductStructuredData(list = activeProducts) {
     const existing = document.getElementById('product-structured-data');
     if (existing) existing.remove();
@@ -3011,7 +3219,42 @@ function updateProductStructuredData(list = activeProducts) {
                     price: Number(p.price || 0).toFixed(2),
                     availability: (p.stock > 0 && p.status !== 'sold') ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
                     url: `${(currentSiteSettings.publicSiteUrl || DEFAULT_SITE_SETTINGS.publicSiteUrl).replace(/\/$/, '')}/index.html?pc=${encodeURIComponent(p.name)}#ponuka`,
-                    itemCondition: 'https://schema.org/RefurbishedCondition'
+                    itemCondition: 'https://schema.org/RefurbishedCondition',
+                    shippingDetails: {
+                        '@type': 'OfferShippingDetails',
+                        shippingDestination: {
+                            '@type': 'DefinedRegion',
+                            addressCountry: 'SK'
+                        },
+                        shippingRate: {
+                            '@type': 'MonetaryAmount',
+                            value: productSchemaShippingRate(p).toFixed(2),
+                            currency: 'EUR'
+                        },
+                        deliveryTime: {
+                            '@type': 'ShippingDeliveryTime',
+                            handlingTime: {
+                                '@type': 'QuantitativeValue',
+                                minValue: 0,
+                                maxValue: 1,
+                                unitCode: 'DAY'
+                            },
+                            transitTime: {
+                                '@type': 'QuantitativeValue',
+                                minValue: 1,
+                                maxValue: 3,
+                                unitCode: 'DAY'
+                            }
+                        }
+                    },
+                    hasMerchantReturnPolicy: {
+                        '@type': 'MerchantReturnPolicy',
+                        applicableCountry: 'SK',
+                        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+                        merchantReturnDays: 14,
+                        returnMethod: 'https://schema.org/ReturnByMail',
+                        returnFees: 'https://schema.org/ReturnShippingFees'
+                    }
                 }
             }
         }));
@@ -3085,13 +3328,30 @@ document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe
 //  FAQ
 // ============================================================
 document.querySelectorAll('#faq .faq-q').forEach(item => {
-    item.addEventListener('click', () => {
+    const answer = item.nextElementSibling;
+    if (answer && !answer.id) answer.id = `faq-answer-${Math.random().toString(36).slice(2, 8)}`;
+    item.setAttribute('role', 'button');
+    item.setAttribute('tabindex', '0');
+    item.setAttribute('aria-expanded', 'false');
+    if (answer) item.setAttribute('aria-controls', answer.id);
+    const toggleFaq = () => {
         const answer = item.nextElementSibling;
         const span = item.querySelector('span');
         const isOpen = answer.style.display === 'block';
         document.querySelectorAll('#faq .faq-a').forEach(a => a.style.display = 'none');
+        document.querySelectorAll('#faq .faq-q').forEach(q => q.setAttribute('aria-expanded', 'false'));
         document.querySelectorAll('#faq .faq-q span').forEach(s => s.innerText = '+');
-        if (!isOpen) { answer.style.display = 'block'; span.innerText = '−'; }
+        if (!isOpen) {
+            answer.style.display = 'block';
+            item.setAttribute('aria-expanded', 'true');
+            span.innerText = '−';
+        }
+    };
+    item.addEventListener('click', toggleFaq);
+    item.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        toggleFaq();
     });
 });
 
@@ -3141,6 +3401,13 @@ function setFilter(type, val, btn) {
     if (btn) btn.classList.add('active');
     applyFilters();
 }
+
+function quickFilter(type, val) {
+    const btn = Array.from(document.querySelectorAll('.filter-row .filter-btn'))
+        .find(item => String(item.getAttribute('onclick') || '').includes(`setFilter('${type}','${val}'`));
+    setFilter(type, val, btn || null);
+}
+window.quickFilter = quickFilter;
 
 function applyFilters() {
     const priceMin = +document.getElementById('price-min').value;
@@ -4231,7 +4498,7 @@ function submitContact(e) {
         const fallbackLink = document.getElementById('contact-fallback-link');
         if (fallbackLink) fallbackLink.href = fallbackHref;
         if (fallbackBox) fallbackBox.classList.add('visible');
-        showToast('⚠️ Serverový e-mail endpoint nie je nastavený. Použite pripravený e-mail pod formulárom.');
+        showToast('✉️ Otvorte pripravený e-mail pod formulárom.');
         contactSubmitting = false;
         btn.textContent = 'Odoslať dopyt ✉️';
         btn.disabled = false;
