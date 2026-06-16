@@ -2,7 +2,12 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=yes,email=yes,address=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Computrax">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="theme-color" content="#0b0f1a">
     <meta name="robots" content="index,follow,max-image-preview:large">
@@ -115,8 +120,11 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(180deg, #0b0f1a 0%, #0e1422 46%, #0b0f1a 100%); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: linear-gradient(180deg, #0b0f1a 0%, #0e1422 46%, #0b0f1a 100%); color: var(--text); line-height: 1.6; overflow-x: hidden; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+        button, input, select, textarea { font: inherit; }
+        input, select, textarea { font-size: 16px; }
+        button, a, input, select, textarea { -webkit-tap-highlight-color: rgba(59,130,246,0.25); touch-action: manipulation; }
         a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(96,165,250,0.85); outline-offset: 3px; }
         .skip-link { position: fixed; left: 1rem; top: 1rem; z-index: 5000; transform: translateY(-150%); background: var(--accent); color: white; padding: 0.75rem 1rem; border-radius: 10px; font-weight: 800; text-decoration: none; transition: transform 0.2s; }
         .skip-link:focus { transform: translateY(0); }
@@ -457,7 +465,7 @@
         .cart-overlay.open { opacity: 1; pointer-events: all; }
 
         /* CART PANEL */
-        .cart-panel { position: fixed; top: 0; right: -480px; width: 460px; height: 100vh; background: #0d1422; border-left: 1px solid var(--border); z-index: 2000; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+        .cart-panel { position: fixed; top: 0; right: -480px; width: 460px; height: 100vh; height: 100dvh; background: #0d1422; border-left: 1px solid var(--border); z-index: 2000; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
         .cart-panel.open { right: 0; }
         .cart-header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 2rem 1.5rem; border-bottom: 1px solid var(--border); }
         .cart-header h2 { font-family: 'Outfit'; font-size: 1.8rem; font-weight: 700; }
@@ -557,6 +565,8 @@
         .contact-fallback.visible { display: block; }
         .contact-fallback a { color: #fde68a; font-weight: 800; text-decoration: none; }
         .contact-fallback a:hover { text-decoration: underline; }
+        .contact-link { color: var(--text); text-decoration: none; }
+        .contact-link:hover { color: var(--accent); }
 
         /* WHATSAPP BUTTON */
         .whatsapp-fab {
@@ -637,6 +647,7 @@
             .nav-search input:focus { width: 160px; }
         }
         @media (max-width: 720px) {
+            input, select, textarea { font-size: 16px !important; }
             nav { position: sticky; top: 0; align-items: flex-start; padding: 0.8rem 4%; flex-wrap: wrap; }
             .logo { font-size: 1.45rem; line-height: 1; padding-top: 0.25rem; }
             .logo img { width: 128px; }
@@ -693,7 +704,7 @@
             .wizard-steps { margin-bottom: 0.8rem; }
             .wizard-step { font-size: 0.72rem; padding: 0.48rem 0.25rem; }
             .whatsapp-fab span.wa-label { display: none; }
-            .whatsapp-fab { right: 1rem; bottom: 1rem; padding: 0.85rem; }
+            .whatsapp-fab { right: calc(1rem + env(safe-area-inset-right)); bottom: calc(1rem + env(safe-area-inset-bottom)); padding: 0.85rem; }
             .compare-bar { flex-direction: column; bottom: -200px; width: 90%; }
             .compare-bar.visible { bottom: 1rem; }
             .compare-modal { padding: 0.75rem; }
@@ -746,7 +757,7 @@
     <div class="nav-right">
         <div class="nav-search">
             <span class="search-icon">🔍</span>
-            <input type="text" id="nav-search-input" placeholder="Hľadať PC..." oninput="searchProducts(this.value)">
+            <input type="search" id="nav-search-input" placeholder="Hľadať PC..." autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" oninput="searchProducts(this.value)">
         </div>
         <button class="cart-btn" style="background:rgba(251,113,133,0.1);border-color:#fb7185;" onclick="openWishlist()">
             ♥ Obľúbené
@@ -805,7 +816,7 @@
         <label class="wizard-label">E-mail</label>
         <input class="wizard-input" id="d-email" type="email" inputmode="email" autocomplete="email" maxlength="254" spellcheck="false" placeholder="jan@priklad.sk">
         <label class="wizard-label">Telefón</label>
-        <input class="wizard-input" id="d-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="+421 9XX XXX XXX">
+        <input class="wizard-input" id="d-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09XX XXX XXX alebo +421">
         <div class="wizard-row">
             <div>
                 <label class="wizard-label">Ulica a číslo</label>
@@ -942,7 +953,7 @@
             <div class="auth-panel" id="auth-signup-panel">
                 <div class="auth-field"><label>Meno</label><input id="signup-name" type="text" autocomplete="name" placeholder="Ján Novák"></div>
                 <div class="auth-field"><label>E-mail</label><input id="signup-email" type="email" autocomplete="username" placeholder="email@priklad.sk"></div>
-                <div class="auth-field"><label>Telefón</label><input id="signup-phone" type="tel" autocomplete="tel" placeholder="09XX XXX XXX alebo +421"></div>
+                <div class="auth-field"><label>Telefón</label><input id="signup-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09XX XXX XXX alebo +421"></div>
                 <div class="auth-field"><label>Heslo</label><input id="signup-password" type="password" autocomplete="new-password" placeholder="10+ znakov, A-z a číslo"></div>
                 <button class="wizard-btn" onclick="signupCustomer()">Vytvoriť účet</button>
             </div>
@@ -1320,10 +1331,10 @@
     <div class="order-track-box reveal">
         <div class="order-track-form">
             <label>Číslo objednávky
-                <input id="track-order-number" autocomplete="off" placeholder="Napr. CTX-20260616-1234" maxlength="40">
+                <input id="track-order-number" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Napr. CTX-20260616-1234" maxlength="40">
             </label>
             <label>E-mail z objednávky
-                <input id="track-order-email" type="email" autocomplete="email" placeholder="email@priklad.sk" maxlength="160">
+                <input id="track-order-email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" enterkeyhint="done" placeholder="email@priklad.sk" maxlength="160">
             </label>
             <button class="add-cart-btn" type="button" onclick="trackOrderStatus()">Skontrolovať</button>
         </div>
@@ -1558,11 +1569,11 @@
             <p style="margin-bottom: 3rem; opacity: 0.9;">Máte otázku k vybranému modelu? Ozvite sa nám a my vám radi poradíme.</p>
             <div style="margin-bottom: 2rem;">
                 <small style="text-transform: uppercase; opacity: 0.6; font-size: 0.75rem;">Telefón</small>
-                <p id="contact-phone-text" style="font-size: 1.5rem; font-weight: 700;">0949 835 923</p>
+                <p style="font-size: 1.5rem; font-weight: 700;"><a class="contact-link" id="contact-phone-text" href="tel:+421949835923">0949 835 923</a></p>
             </div>
             <div style="margin-bottom: 2rem;">
                 <small style="text-transform: uppercase; opacity: 0.6; font-size: 0.75rem;">E-mail</small>
-                <p id="contact-email-text" style="font-size: 1.1rem; font-weight: 600;">computerax.sk@gmail.com</p>
+                <p style="font-size: 1.1rem; font-weight: 600;"><a class="contact-link" id="contact-email-text" href="mailto:computerax.sk@gmail.com">computerax.sk@gmail.com</a></p>
             </div>
             <div>
                 <small style="text-transform: uppercase; opacity: 0.6; font-size: 0.75rem;">Pracovné hodiny</small>
@@ -1571,8 +1582,8 @@
         </div>
         <div class="contact-form">
             <form onsubmit="submitContact(event)">
-                <div class="form-group"><label>Vaše meno</label><input type="text" id="c-name" autocomplete="name" maxlength="80" placeholder="Jozef Mrkvička" required></div>
-                <div class="form-group"><label>Váš E-mail</label><input type="email" id="c-email" inputmode="email" autocomplete="email" maxlength="254" spellcheck="false" placeholder="email@priklad.sk" required></div>
+                <div class="form-group"><label>Vaše meno</label><input type="text" id="c-name" autocomplete="name" maxlength="80" enterkeyhint="next" placeholder="Jozef Mrkvička" required></div>
+                <div class="form-group"><label>Váš E-mail</label><input type="email" id="c-email" inputmode="email" autocomplete="email" maxlength="254" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="email@priklad.sk" required></div>
                 <input id="c-company" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0;">
                 <div class="form-group">
                     <label>Model PC</label>
@@ -1583,7 +1594,7 @@
                         <option value="Dell OptiPlex 7090">Dell OptiPlex 7090</option>
                     </select>
                 </div>
-                <div class="form-group"><label>Správa</label><textarea id="c-msg" rows="4" maxlength="1200" placeholder="Dobrý deň, mal by som záujem o..."></textarea></div>
+                <div class="form-group"><label>Správa</label><textarea id="c-msg" rows="4" maxlength="1200" enterkeyhint="send" placeholder="Dobrý deň, mal by som záujem o..."></textarea></div>
                 <button type="submit" class="send-btn">Odoslať dopyt ✉️</button>
                 <div class="contact-fallback" id="contact-fallback">
                     Automatické odoslanie zlyhalo. Správu môžete odoslať priamo cez e-mail:
@@ -3060,13 +3071,23 @@ function legalValue(value, fallback) {
 
 function safeLegalEmail(value, fallback = DEFAULT_CONTACT_EMAIL) {
     const email = legalValue(value, fallback).replace(/\s+/g, '');
+    if (email.toLowerCase() === 'computrax.sk@gmail.com') return DEFAULT_CONTACT_EMAIL;
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : fallback;
+}
+
+function normalizeSlovakPhoneHref(value, fallback = '+421949835923') {
+    const compact = String(value || '').trim().replace(/[\s().-]/g, '');
+    if (/^\+4219\d{8}$/.test(compact)) return compact;
+    if (/^4219\d{8}$/.test(compact)) return `+${compact}`;
+    if (/^09\d{8}$/.test(compact)) return `+421${compact.slice(1)}`;
+    const digits = compact.replace(/\D/g, '');
+    return digits.length >= 9 ? `+${digits}` : fallback;
 }
 
 function safeLegalPhone(value, fallback = '0949 835 923') {
     const phone = legalValue(value, fallback);
-    const dial = phone.replace(/[^\d+]/g, '');
-    return dial.length >= 9 ? { label: phone, href: dial } : { label: fallback, href: '+421949835923' };
+    const dial = normalizeSlovakPhoneHref(phone);
+    return dial.replace(/\D/g, '').length >= 9 ? { label: phone, href: dial } : { label: fallback, href: '+421949835923' };
 }
 
 function supportMailtoHref(subject, body) {
@@ -3089,7 +3110,7 @@ function productInquiryMailHref(product) {
 }
 
 function productInquiryWhatsappHref(product) {
-    const digits = String(currentSiteSettings.whatsappPhone || DEFAULT_SITE_SETTINGS.whatsappPhone).replace(/\D/g, '');
+    const digits = normalizeSlovakPhoneHref(currentSiteSettings.whatsappPhone || DEFAULT_SITE_SETTINGS.whatsappPhone).replace(/\D/g, '');
     if (digits.length < 9) return '';
     return `https://wa.me/${digits}?text=${encodeURIComponent(productInquiryText(product))}`;
 }
@@ -3122,11 +3143,17 @@ function applyLegalSettings(s) {
         phoneEl.href = `tel:${phone.href}`;
     }
     const contactEmail = document.getElementById('contact-email-text');
-    if (contactEmail) contactEmail.textContent = email;
+    if (contactEmail) {
+        contactEmail.textContent = email;
+        contactEmail.href = `mailto:${email}`;
+    }
     const fallbackEmail = document.getElementById('contact-fallback-link');
     if (fallbackEmail) fallbackEmail.href = `mailto:${email}`;
     const contactPhone = document.getElementById('contact-phone-text');
-    if (contactPhone) contactPhone.textContent = phone.label;
+    if (contactPhone) {
+        contactPhone.textContent = phone.label;
+        contactPhone.href = `tel:${phone.href}`;
+    }
     const contactHours = document.getElementById('contact-hours-text');
     if (contactHours) contactHours.textContent = hours;
 }
@@ -3194,7 +3221,7 @@ function applyCommerceControls(s) {
         if (Number(maxEl.value) > max || Number(maxEl.value) < min) maxEl.value = String(max);
     }
     const whatsapp = document.querySelector('.whatsapp-fab');
-    const digits = String(s.whatsappPhone || DEFAULT_SITE_SETTINGS.whatsappPhone).replace(/\D/g, '');
+    const digits = normalizeSlovakPhoneHref(s.whatsappPhone || DEFAULT_SITE_SETTINGS.whatsappPhone).replace(/\D/g, '');
     const text = String(s.whatsappText || DEFAULT_SITE_SETTINGS.whatsappText).trim();
     if (whatsapp && digits.length >= 9) {
         whatsapp.href = `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;

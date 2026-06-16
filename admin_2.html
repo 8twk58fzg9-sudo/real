@@ -2,7 +2,12 @@
 <html lang="sk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=yes,email=yes,address=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Computrax Admin">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="theme-color" content="#0b0f1a">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -28,10 +33,13 @@ window.PRODUCTS_DATA = PRODUCTS_DATA;
 <style>
 :root{--bg:#0b0f1a;--card:#111827;--accent:#3b82f6;--text:#f1f5f9;--muted:#94a3b8;--border:rgba(255,255,255,0.08);--danger:#ef4444;--success:#22c55e;--radius:16px}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;color-scheme:dark}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+button,input,select,textarea{font:inherit;-webkit-tap-highlight-color:rgba(59,130,246,.25);touch-action:manipulation}
+input,select,textarea{font-size:16px}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(96,165,250,0.85);outline-offset:3px}
 /* GATE */
-.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+.gate{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:2rem}
 .gate-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:3rem;width:100%;max-width:380px;text-align:center}
 .gate-logo{font-family:'Outfit';font-size:2rem;font-weight:900;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:center;line-height:1}
 .gate-logo img{width:190px;height:auto;object-fit:contain;display:block;background:transparent;border-radius:0}
@@ -167,7 +175,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
 .stats-bar.active-admin-section{display:grid!important}
 .filter-bar.active-admin-section{display:flex!important}
 .admin-section-kicker{padding:.6rem 2rem;border-bottom:1px solid rgba(59,130,246,.14);background:rgba(59,130,246,.05);color:var(--muted);font-size:.82rem}
-@media(max-width:760px){.admin-nav{top:0;padding:.75rem 1rem}.admin-nav-btn{flex:1;min-width:120px}.search-box{width:100%;margin-left:0}}
+@media(max-width:760px){.admin-nav{top:0;padding:.75rem 1rem}.admin-nav-btn{flex:1;min-width:120px}.search-box{width:100%;margin-left:0}header{padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right))}}
 @media(prefers-reduced-motion:reduce){
 *,
 *::before,
