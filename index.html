@@ -152,6 +152,8 @@
 
         /* CART BTN */
         .cart-btn { position: relative; background: rgba(59,130,246,0.12); border: 1px solid var(--accent); color: var(--text); padding: 0.6rem 1.1rem; border-radius: 12px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; transition: 0.3s; font-weight: 600; white-space: nowrap; }
+        .cart-btn .btn-icon { flex: 0 0 auto; }
+        .cart-btn .btn-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
         .cart-btn:hover { background: var(--accent); }
         .cart-count { background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.68rem; font-weight: 800; display: none; align-items: center; justify-content: center; }
         .cart-count.visible { display: flex; }
@@ -176,7 +178,7 @@
         .hero-stock-card strong { display: block; font-family: 'Outfit'; font-size: 1.1rem; }
         .hero-stock-card span { display: block; color: var(--muted); font-size: 0.84rem; }
         .hero-stock-pill { flex: 0 0 auto; color: #bbf7d0; font-weight: 900; border: 1px solid rgba(34,197,94,0.34); border-radius: 999px; padding: 0.45rem 0.75rem; background: rgba(34,197,94,0.12); }
-        .badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; background: rgba(59,130,246,0.1); border: 1px solid var(--accent); border-radius: 50px; color: var(--accent); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .badge { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.6rem 1.2rem; background: rgba(59,130,246,0.1); border: 1px solid var(--accent); border-radius: 50px; color: var(--accent); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; max-width: 100%; white-space: normal; text-align: center; line-height: 1.25; }
         .badge-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 2s infinite; }
         .site-announcement { display: none; width: fit-content; max-width: 100%; align-items: center; gap: 0.6rem; margin: -0.4rem 0 1.3rem; padding: 0.8rem 1rem; border-radius: 14px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.28); color: #bbf7d0; font-weight: 700; font-size: 0.92rem; }
         .site-announcement.visible { display: inline-flex; }
@@ -653,14 +655,15 @@
             .logo img { width: 128px; }
             .nav-menu-btn { order: 2; }
             nav ul { order: 4; grid-template-columns: 1fr; }
-            .nav-right { order: 3; width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
+            .nav-right { order: 3; width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.55rem; }
             .nav-search { grid-column: 1 / -1; }
             .nav-search input, .nav-search input:focus { width: 100%; min-height: 44px; }
-            .cart-btn { justify-content: center; min-height: 44px; padding: 0.58rem 0.65rem; border-radius: 10px; font-size: 0.82rem; }
+            .cart-btn { justify-content: center; min-width: 0; width: 100%; min-height: 44px; padding: 0.58rem 0.45rem; border-radius: 10px; font-size: 0.78rem; line-height: 1.15; white-space: normal; text-align: center; gap: 0.28rem; overflow-wrap: anywhere; }
             .cart-count { position: absolute; top: -0.35rem; right: -0.35rem; }
             .hero { padding-top: 2.5rem; }
             h1 { font-size: 2.35rem; }
             .hero p { font-size: 1rem; }
+            .badge { width: fit-content; max-width: min(100%, 22rem); padding: 0.65rem 0.9rem; margin-left: auto; margin-right: auto; font-size: 0.82rem; }
             .hero-showcase { padding: 0.85rem; border-radius: 20px; }
             .hero-monitor { border-radius: 16px; }
             .hero-monitor-logo { width: 112px; }
@@ -696,6 +699,12 @@
             .buy-confidence-strip, .seo-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 500px) {
+            .nav-right { gap: 0.42rem; }
+            .cart-btn { font-size: 0.72rem; padding-left: 0.32rem; padding-right: 0.32rem; }
+            .account-btn { font-size: 0.74rem; }
+            .cart-btn .btn-label { font-size: 0; }
+            .cart-btn .btn-label::after { content: attr(data-short); font-size: 0.72rem; }
+            .badge { max-width: calc(100vw - 2rem); border-radius: 18px; }
             .cart-panel { width: 100%; right: -100%; }
             .cart-header { padding: 1.35rem 1.2rem 1rem; }
             .cart-items, .cart-footer { padding-left: 1rem; padding-right: 1rem; }
@@ -760,14 +769,14 @@
             <input type="search" id="nav-search-input" placeholder="Hľadať PC..." autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" oninput="searchProducts(this.value)">
         </div>
         <button class="cart-btn" style="background:rgba(251,113,133,0.1);border-color:#fb7185;" onclick="openWishlist()">
-            ♥ Obľúbené
+            <span class="btn-icon">♥</span><span class="btn-label" data-short="Obľúb.">Obľúbené</span>
             <span class="cart-count" id="wish-count" style="background:#fb7185;">0</span>
         </button>
         <button class="cart-btn account-btn" id="account-btn" onclick="openAccount()">
-            👤 Prihlásiť
+            <span class="btn-icon">👤</span><span class="btn-label" data-short="Login">Prihlásiť</span>
         </button>
         <button class="cart-btn" onclick="openCart()">
-            🛒 Košík
+            <span class="btn-icon">🛒</span><span class="btn-label" data-short="Košík">Košík</span>
             <span class="cart-count" id="cart-count">0</span>
         </button>
     </div>
@@ -2236,7 +2245,9 @@ function updateAccountUI() {
     const loggedIn = Boolean(customerSession?.access_token);
     const btn = document.getElementById('account-btn');
     if (btn) {
-        btn.textContent = loggedIn ? '👤 Môj účet' : '👤 Prihlásiť';
+        btn.innerHTML = loggedIn
+            ? '<span class="btn-icon">👤</span><span class="btn-label" data-short="Účet">Môj účet</span>'
+            : '<span class="btn-icon">👤</span><span class="btn-label" data-short="Login">Prihlásiť</span>';
         btn.classList.toggle('logged-in', loggedIn);
     }
     const authView = document.getElementById('auth-view');
