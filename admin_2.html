@@ -10,7 +10,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
 <title>Admin Panel | Computrax.sk</title>
 <link rel="preload" href="computrax-logo.png?v=20260614b" as="image" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -207,13 +207,15 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
   </header>
 
   <div class="admin-nav" id="admin-nav">
-    <button class="admin-nav-btn active" data-admin-target="products" onclick="showAdminSection('products')">📦 Produkty</button>
-    <button class="admin-nav-btn" data-admin-target="settings" onclick="showAdminSection('settings')">⚙️ Nastavenia webu</button>
-    <button class="admin-nav-btn" data-admin-target="orders" onclick="showAdminSection('orders')">🧾 Objednávky</button>
-    <button class="admin-nav-btn" data-admin-target="automation" onclick="showAdminSection('automation')">🤖 Automatizácie</button>
-    <button class="admin-nav-btn" data-admin-target="audit" onclick="showAdminSection('audit')">🛡️ Audit</button>
+    <button class="admin-nav-btn active" data-admin-target="dashboard" onclick="showAdminSection('dashboard')">Dashboard</button>
+    <button class="admin-nav-btn" data-admin-target="products" onclick="showAdminSection('products')">Produkty</button>
+    <button class="admin-nav-btn" data-admin-target="settings" onclick="showAdminSection('settings')">Nastavenia webu</button>
+    <button class="admin-nav-btn" data-admin-target="orders" onclick="showAdminSection('orders')">Objednávky</button>
+    <button class="admin-nav-btn" data-admin-target="analytics" onclick="showAdminSection('analytics')">Analytika</button>
+    <button class="admin-nav-btn" data-admin-target="automation" onclick="showAdminSection('automation')">Automatizácie</button>
+    <button class="admin-nav-btn" data-admin-target="audit" onclick="showAdminSection('audit')">Audit</button>
   </div>
-  <div class="admin-section-kicker" id="admin-section-kicker">Produkty: pridávanie PC, sklad, filtre, fotky a rýchle úpravy.</div>
+  <div class="admin-section-kicker" id="admin-section-kicker">Dashboard: najdôležitejší stav e-shopu na jednom mieste.</div>
 
   <!-- SETUP BANNER -->
   <div id="setup-banner" style="display:none;background:rgba(251,191,36,0.08);border-bottom:1px solid rgba(251,191,36,0.3);padding:1rem 2rem;align-items:center;gap:1rem;flex-wrap:wrap;">
@@ -509,7 +511,7 @@ INSERT INTO site_settings(key, settings) VALUES ('main', jsonb_build_object(
   'bankAccount','',
   'legalUpdated','06.06.2026',
   'phone','0949 835 923',
-  'email','computrax.sk@gmail.com',
+  'email','computerax.sk@gmail.com',
   'hours','Po–Pi: 12:00 – 18:00',
   'whatsappPhone','421949835923',
   'whatsappText','Dobrý deň, zaujímal by ma jeden z vašich počítačov.',
@@ -1067,7 +1069,7 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
     </div>
   </div>
 
-  <div class="stats-bar admin-section active-admin-section" data-admin-section="products" id="stats-bar">
+  <div class="stats-bar admin-section active-admin-section" data-admin-section="dashboard products analytics" id="stats-bar">
     <div class="stat-box"><div class="stat-val" id="s-total">—</div><div class="stat-label">Produkty celkom</div></div>
     <div class="stat-box"><div class="stat-val" id="s-active">—</div><div class="stat-label">Aktívne</div></div>
     <div class="stat-box"><div class="stat-val" id="s-stock">—</div><div class="stat-label">Kusov skladom</div></div>
@@ -1075,6 +1077,24 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
     <div class="stat-box"><div class="stat-val" id="s-orders" style="color:var(--success)">—</div><div class="stat-label">Nové objednávky</div></div>
     <div class="stat-box"><div class="stat-val" id="s-revenue" style="color:var(--success)">—</div><div class="stat-label">Tržby objednávok</div></div>
     <div class="stat-box"><div class="stat-val" id="s-lowstock" style="color:#fbbf24">—</div><div class="stat-label">Nízky sklad</div></div>
+  </div>
+
+  <div class="orders-wrap admin-section active-admin-section" data-admin-section="dashboard">
+    <div class="orders-head">
+      <div>
+        <strong style="font-family:'Outfit';font-size:1.15rem">Dashboard</strong>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0.2rem 0 0">Rýchle rozhodnutia: čo treba opraviť, čo sa predáva a či je web pripravený.</p>
+      </div>
+      <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+        <button class="btn btn-success btn-sm" onclick="openModal()">Pridať PC</button>
+        <button class="btn btn-primary btn-sm" onclick="showAdminSection('orders')">Objednávky</button>
+        <button class="btn btn-ghost btn-sm" onclick="showAdminSection('analytics')">Analytika</button>
+        <button class="btn btn-ghost btn-sm" onclick="runPublicReadyCheck();showAdminSection('automation')">Public-ready</button>
+      </div>
+    </div>
+    <div class="orders-grid" id="dashboard-grid">
+      <div style="color:var(--muted);font-size:0.9rem">Dashboard sa prepočíta po načítaní dát.</div>
+    </div>
   </div>
 
   <div class="orders-wrap admin-section" data-admin-section="automation">
@@ -1139,6 +1159,23 @@ USING (bucket_id = 'product-images' AND is_admin());</pre>
     </div>
     <div class="orders-grid" id="orders-grid">
       <div style="color:var(--muted);font-size:0.9rem">Objednávky sa načítajú po otvorení adminu.</div>
+    </div>
+  </div>
+
+  <div class="orders-wrap admin-section" data-admin-section="analytics">
+    <div class="orders-head">
+      <div>
+        <strong style="font-family:'Outfit';font-size:1.15rem">Analytika e-shopu</strong>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0.2rem 0 0">Rýchly prehľad skladu, objednávok, tržieb a problémových miest.</p>
+      </div>
+      <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="renderAnalytics()">Prepočítať</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyAnalyticsReport()">Kopírovať report</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadOrders();loadProducts()">Obnoviť dáta</button>
+      </div>
+    </div>
+    <div class="orders-grid" id="analytics-grid">
+      <div style="color:var(--muted);font-size:0.9rem">Analytika sa zobrazí po načítaní produktov a objednávok.</div>
     </div>
   </div>
 
@@ -1513,7 +1550,7 @@ const DEFAULT_SITE_SETTINGS = {
     notificationFunctionUrl: '',
     warehouseProvider: 'manual',
     phone: '0949 835 923',
-    email: 'computrax.sk@gmail.com',
+    email: 'computerax.sk@gmail.com',
     hours: 'Po–Pi: 12:00 – 18:00',
     whatsappPhone: '421949835923',
     whatsappText: 'Dobrý deň, zaujímal by ma jeden z vašich počítačov.',
@@ -1544,18 +1581,20 @@ let currentOrderFilter = 'all';
 let useLocalStorage = localStorage.getItem(DATA_MODE_KEY) === 'local';
 let authSession = getStoredAuthSession();
 let pendingAdminSql = '';
-let currentAdminSection = localStorage.getItem('ctrax_admin_section') || 'products';
+let currentAdminSection = localStorage.getItem('ctrax_admin_section') || 'dashboard';
 
 const ADMIN_SECTION_LABELS = {
+    dashboard: 'Dashboard: najdôležitejší stav e-shopu na jednom mieste.',
     products: 'Produkty: pridávanie PC, sklad, filtre, fotky a rýchle úpravy.',
     settings: 'Nastavenia webu: texty, kontakty, právne/firemné údaje, služby, platby a skladové režimy.',
     orders: 'Objednávky: spracovanie, stavy, exporty, baliace listy a zákaznícke správy.',
+    analytics: 'Analytika: tržby, sklad, top produkty, slabé miesta a rýchle rozhodnutia.',
     automation: 'Automatizácie: public-ready kontrola, auto-fix filtrov, zálohy a hromadná údržba.',
     audit: 'Audit: Supabase diagnostika, pohyby skladu a admin udalosti schované na jednom mieste.'
 };
 
 function showAdminSection(section = 'products') {
-    currentAdminSection = ADMIN_SECTION_LABELS[section] ? section : 'products';
+    currentAdminSection = ADMIN_SECTION_LABELS[section] ? section : 'dashboard';
     localStorage.setItem('ctrax_admin_section', currentAdminSection);
     document.querySelectorAll('[data-admin-section]').forEach(el => {
         const sections = String(el.dataset.adminSection || '').split(/\s+/);
@@ -1566,7 +1605,15 @@ function showAdminSection(section = 'products') {
     });
     const kicker = document.getElementById('admin-section-kicker');
     if (kicker) kicker.textContent = ADMIN_SECTION_LABELS[currentAdminSection];
+    if (currentAdminSection === 'dashboard') {
+        renderDashboard();
+        renderInsights();
+    }
     if (currentAdminSection === 'orders') loadOrders();
+    if (currentAdminSection === 'analytics') {
+        renderAnalytics();
+        if (!allOrders.length) loadOrders();
+    }
     if (currentAdminSection === 'audit') {
         runSupabaseHealthCheck(false);
         loadActivity();
@@ -2990,7 +3037,16 @@ function useSupabaseMode() {
     showToast(hasSupabaseWriteAuth() ? '☁️ Supabase režim — verejné produkty' : '☁️ Supabase režim — čítanie, zápis po Auth prihlásení');
 }
 
+function isPublicHostedAdmin() {
+    const host = location.hostname;
+    return location.protocol === 'https:' && host !== 'localhost' && host !== '127.0.0.1';
+}
+
 function useLocalMode() {
+    if (isPublicHostedAdmin()) {
+        const ok = confirm('Lokálny režim je iba testovací. Produkty uložené lokálne neuvidia návštevníci na index stránke. Pokračovať?');
+        if (!ok) return;
+    }
     useLocalStorage = true;
     localStorage.setItem(DATA_MODE_KEY, 'local');
     document.getElementById('setup-banner').style.display = 'none';
@@ -3148,7 +3204,7 @@ async function loadProducts() {
         renderList();
     } catch(e) {
         const fallbackProducts = getBundledProducts();
-        if (fallbackProducts.length > 0) {
+        if (!isPublicHostedAdmin() && fallbackProducts.length > 0) {
             useLocalStorage = true;
             allProducts = JSON.parse(localStorage.getItem(LOCAL_PRODUCTS_KEY) || '[]');
             if (allProducts.length === 0) {
@@ -3176,6 +3232,7 @@ async function loadProducts() {
                     <div style="font-size:2rem;margin-bottom:1rem">❌</div>
                     <strong>Chyba pripojenia</strong>
                     <p style="margin:0.5rem 0 1.5rem;color:var(--muted);font-size:0.9rem">${msg}</p>
+                    <p style="margin:0 0 1rem;color:var(--muted);font-size:0.85rem">Na verejnom webe používaj Supabase režim, aby produkty videli všetci návštevníci.</p>
                     <button class="btn btn-ghost" onclick="useLocalMode()">💾 Pokračovať lokálne</button>
                 </div>`;
         }
@@ -3199,6 +3256,126 @@ function updateStats() {
     const lowStockStat = document.getElementById('s-lowstock');
     if (lowStockStat) lowStockStat.textContent = lowStock;
     renderInsights();
+    if (currentAdminSection === 'analytics') renderAnalytics();
+    if (currentAdminSection === 'dashboard') renderDashboard();
+}
+
+function renderDashboard() {
+    const grid = document.getElementById('dashboard-grid');
+    if (!grid) return;
+    const snap = analyticsSnapshot();
+    const missingImages = snap.missingImages.length;
+    const lowStock = snap.lowStock.length;
+    const pending = snap.pendingPayments.length;
+    const blockers = publicReadyIssues();
+    const active = blockers.activeProducts.length;
+    const cards = [
+        analyticsCard('Nové objednávky', allOrders.filter(o => o.status === 'new').length, `${pending} objednávok čaká na platbu`, pending ? 'warn' : 'ok'),
+        analyticsCard('Aktívne produkty', active, `${snap.activeProducts.reduce((s, p) => s + Number(p.stock || 0), 0)} ks skladom`, active ? 'ok' : 'bad'),
+        analyticsCard('Nízky sklad', lowStock, lowStock ? 'Doplň alebo skontroluj posledné kusy.' : 'Sklad vyzerá dobre.', lowStock ? 'warn' : 'ok'),
+        analyticsCard('Fotky produktov', missingImages ? `${missingImages} chýba` : 'OK', missingImages ? 'Fotky sú najväčší predajný faktor.' : 'Aktívne produkty majú fotky.', missingImages ? 'warn' : 'ok'),
+        `<div class="order-card" style="grid-column:1/-1">
+            <div class="order-num">Ďalší najlepší krok</div>
+            <div class="order-meta" style="margin-top:0.5rem">${escapeHTML(active ? (missingImages ? 'Doplň fotky k produktom bez obrázka.' : pending ? 'Skontroluj objednávky čakajúce na platbu.' : 'Spusti public-ready check a priprav GoPay/iDoklad.') : 'Pridaj aspoň jeden aktívny produkt skladom.')}</div>
+            <div class="order-actions" style="margin-top:0.9rem">
+                <button class="btn btn-primary btn-sm" onclick="showAdminSection('products')">Produkty</button>
+                <button class="btn btn-primary btn-sm" onclick="showAdminSection('orders')">Objednávky</button>
+                <button class="btn btn-ghost btn-sm" onclick="showAdminSection('automation')">Automatizácie</button>
+            </div>
+        </div>`
+    ];
+    grid.innerHTML = cards.join('');
+}
+
+function adminMoney(value) {
+    return `${Number(value || 0).toLocaleString('sk-SK', { maximumFractionDigits: 2 })}€`;
+}
+
+function orderItems(order) {
+    if (Array.isArray(order.items)) return order.items;
+    try {
+        const parsed = JSON.parse(order.items || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+    } catch(e) {
+        return [];
+    }
+}
+
+function analyticsSnapshot() {
+    const validOrders = allOrders.filter(order => order.status !== 'cancelled');
+    const paidOrders = validOrders.filter(order => order.payment_status === 'paid');
+    const pendingPayments = validOrders.filter(order => (order.payment_status || 'pending') === 'pending');
+    const revenue = validOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+    const paidRevenue = paidOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+    const activeProducts = allProducts.filter(product => product.status === 'active');
+    const lowStock = activeProducts.filter(product => Number(product.stock || 0) > 0 && Number(product.stock || 0) <= 2);
+    const missingImages = activeProducts.filter(product => !String(product.image_url || product.imageUrl || '').trim());
+    const soldOut = allProducts.filter(product => Number(product.stock || 0) <= 0 || product.status === 'sold');
+    const topMap = new Map();
+    validOrders.forEach(order => {
+        orderItems(order).forEach(item => {
+            const name = String(item.name || 'Produkt').trim();
+            const prev = topMap.get(name) || { qty: 0, revenue: 0 };
+            const qty = Number(item.qty || 1);
+            const price = Number(item.price || 0);
+            topMap.set(name, { qty: prev.qty + qty, revenue: prev.revenue + qty * price });
+        });
+    });
+    const topProducts = [...topMap.entries()]
+        .map(([name, data]) => ({ name, ...data }))
+        .sort((a, b) => b.revenue - a.revenue || b.qty - a.qty)
+        .slice(0, 5);
+    return { validOrders, paidOrders, pendingPayments, revenue, paidRevenue, activeProducts, lowStock, missingImages, soldOut, topProducts };
+}
+
+function analyticsCard(title, value, detail, level = 'ok') {
+    const border = level === 'bad' ? 'rgba(239,68,68,0.35)' : level === 'warn' ? 'rgba(251,191,36,0.35)' : 'rgba(59,130,246,0.28)';
+    const color = level === 'bad' ? '#fca5a5' : level === 'warn' ? '#fde68a' : 'var(--accent)';
+    return `<div class="order-card" style="border-color:${border}">
+        <div class="order-num" style="color:${color}">${escapeHTML(title)}</div>
+        <div style="font-family:'Outfit';font-size:2rem;font-weight:900;margin:0.4rem 0">${escapeHTML(String(value))}</div>
+        <div class="order-meta">${escapeHTML(detail)}</div>
+    </div>`;
+}
+
+function renderAnalytics() {
+    const grid = document.getElementById('analytics-grid');
+    if (!grid) return;
+    const snap = analyticsSnapshot();
+    const conversionRisk = snap.pendingPayments.length > snap.paidOrders.length && snap.pendingPayments.length > 0;
+    const topHtml = snap.topProducts.length
+        ? snap.topProducts.map(item => `<div class="order-meta">${escapeHTML(item.name)} · ${item.qty} ks · ${escapeHTML(adminMoney(item.revenue))}</div>`).join('')
+        : '<div class="order-meta">Zatiaľ nie sú dáta z objednávok.</div>';
+    grid.innerHTML = [
+        analyticsCard('Objednávky', snap.validOrders.length, `${snap.pendingPayments.length} čaká na platbu`, conversionRisk ? 'warn' : 'ok'),
+        analyticsCard('Tržby spolu', adminMoney(snap.revenue), `Zaplatené: ${adminMoney(snap.paidRevenue)}`, 'ok'),
+        analyticsCard('Aktívny sklad', snap.activeProducts.length, `${snap.lowStock.length} produktov má nízky sklad`, snap.lowStock.length ? 'warn' : 'ok'),
+        analyticsCard('Chýbajúce fotky', snap.missingImages.length, 'Produkty bez fotky predávajú slabšie', snap.missingImages.length ? 'warn' : 'ok'),
+        analyticsCard('Vypredané', snap.soldOut.length, 'Kusy, ktoré treba doplniť alebo skryť', snap.soldOut.length ? 'warn' : 'ok'),
+        `<div class="order-card" style="grid-column:1/-1">
+            <div class="order-num">Top produkty podľa objednávok</div>
+            ${topHtml}
+        </div>`
+    ].join('');
+}
+
+function copyAnalyticsReport() {
+    const snap = analyticsSnapshot();
+    const lines = [
+        'ANALYTIKA COMPUTRAX',
+        `Objednávky: ${snap.validOrders.length}`,
+        `Čaká na platbu: ${snap.pendingPayments.length}`,
+        `Tržby spolu: ${adminMoney(snap.revenue)}`,
+        `Zaplatené: ${adminMoney(snap.paidRevenue)}`,
+        `Aktívne produkty: ${snap.activeProducts.length}`,
+        `Nízky sklad: ${snap.lowStock.length}`,
+        `Chýbajúce fotky: ${snap.missingImages.length}`,
+        `Vypredané: ${snap.soldOut.length}`,
+        '',
+        'Top produkty:',
+        ...(snap.topProducts.length ? snap.topProducts.map(item => `- ${item.name}: ${item.qty} ks / ${adminMoney(item.revenue)}`) : ['- zatiaľ bez dát'])
+    ];
+    copyText(lines.join('\n'), '📊 Analytika skopírovaná');
 }
 
 function insightCard(kind, title, detail, action = '') {
@@ -3437,9 +3614,41 @@ function adminRepairSql(uid) {
         'DROP POLICY IF EXISTS "Admin order insert" ON orders;',
         'CREATE POLICY "Admin order insert" ON orders FOR INSERT TO authenticated WITH CHECK ((select is_admin()));',
         `CREATE POLICY "Authenticated order read" ON orders FOR SELECT TO authenticated USING ((select is_admin()) OR lower(customer_email) = lower((select auth.email())));`,
+        `CREATE OR REPLACE FUNCTION get_customer_order_status(submitted_order_number TEXT, submitted_email TEXT)
+RETURNS TABLE (
+  order_number TEXT,
+  items JSONB,
+  total NUMERIC,
+  status TEXT,
+  payment_method TEXT,
+  payment_status TEXT,
+  payment_url TEXT,
+  invoice_status TEXT,
+  invoice_reference TEXT,
+  invoice_url TEXT,
+  delivery TEXT,
+  address TEXT,
+  note TEXT,
+  created_at TIMESTAMPTZ
+)
+LANGUAGE SQL
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT
+    o.order_number, o.items, o.total, o.status, o.payment_method, o.payment_status,
+    o.payment_url, o.invoice_status, o.invoice_reference, o.invoice_url,
+    o.delivery, o.address, o.note, o.created_at
+  FROM orders o
+  WHERE lower(o.customer_email) = lower(btrim(submitted_email))
+    AND upper(o.order_number) = upper(btrim(submitted_order_number))
+  ORDER BY o.created_at DESC
+  LIMIT 1;
+$$;`,
         'REVOKE EXECUTE ON FUNCTION purchase_products(JSONB) FROM anon, authenticated;',
         'REVOKE EXECUTE ON FUNCTION admin_autopilot() FROM anon, authenticated;',
         'REVOKE EXECUTE ON FUNCTION get_customer_orders(TEXT, TEXT, TEXT) FROM anon, authenticated;',
+        'GRANT EXECUTE ON FUNCTION get_customer_order_status(TEXT, TEXT) TO anon, authenticated;',
         'REVOKE EXECUTE ON FUNCTION is_admin() FROM anon;',
         'GRANT EXECUTE ON FUNCTION is_admin() TO authenticated;',
         uid

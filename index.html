@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#0b0f1a">
     <meta name="robots" content="index,follow,max-image-preview:large">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
     <title>Computrax | Prémiové repasované počítače</title>
 
     <!-- Open Graph / SEO -->
@@ -55,7 +55,7 @@
       "name": "Computrax.sk",
       "url": "https://8twk58fzg9-sudo.github.io/real/",
       "description": "Repasované herné a kancelárske počítače, komponenty a servisné doplnkové služby.",
-      "email": "computrax.sk@gmail.com",
+      "email": "computerax.sk@gmail.com",
       "telephone": "+421949835923",
       "areaServed": "SK",
       "sameAs": []
@@ -188,6 +188,10 @@
         .trust-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
         .trust-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--muted); }
         .trust-item span:first-child { font-size: 1.1rem; }
+        .buy-confidence-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+        .buy-confidence-item { border: 1px solid rgba(148,163,184,0.16); border-radius: 14px; background: rgba(255,255,255,0.035); padding: 0.95rem; }
+        .buy-confidence-item strong { display: block; color: var(--text); font-family: 'Outfit'; font-size: 1rem; margin-bottom: 0.22rem; }
+        .buy-confidence-item span { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
 
         /* STATS SECTION */
         .stats-section { padding: 4rem 8%; }
@@ -249,17 +253,20 @@
         .compare-clear { background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; font-size: 0.85rem; }
 
         /* PRODUCTS GRID */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-        .pc-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; backdrop-filter: blur(10px); transition: 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; cursor: pointer; }
-        .pc-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: stretch; }
+        .pc-card { background: linear-gradient(180deg, rgba(22,30,45,0.9), rgba(13,20,34,0.96)); border: 1px solid rgba(148,163,184,0.16); border-radius: 20px; padding: 1.15rem; backdrop-filter: blur(10px); transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; position: relative; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; min-height: 100%; box-shadow: 0 18px 50px rgba(0,0,0,0.22); }
+        .pc-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 0%, rgba(59,130,246,0.16), transparent 32%); opacity: 0; transition: opacity 0.25s ease; pointer-events: none; }
+        .pc-card:hover { transform: translateY(-6px); border-color: rgba(59,130,246,0.75); box-shadow: 0 24px 60px rgba(0,0,0,0.38); }
+        .pc-card:hover::before { opacity: 1; }
         .pc-card:focus-visible { outline: 3px solid rgba(59,130,246,0.85); outline-offset: 4px; border-color: var(--accent); }
         .pc-card.wishlisted { border-color: rgba(251,113,133,0.5); }
-        .pc-image { width: 100%; aspect-ratio: 16 / 10; border-radius: 14px; border: 1px solid var(--border); background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(255,255,255,0.04)); overflow: hidden; display: flex; align-items: center; justify-content: center; margin: 0.9rem 0 1.2rem; }
-        .pc-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .pc-image { width: 100%; aspect-ratio: 16 / 10; border-radius: 16px; border: 1px solid rgba(148,163,184,0.16); background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(59,130,246,0.13)); overflow: hidden; display: flex; align-items: center; justify-content: center; margin: 0.8rem 0 1rem; position: relative; }
+        .pc-image::after { content: "Reálny skladový kus"; position: absolute; left: 0.75rem; bottom: 0.75rem; background: rgba(11,15,26,0.78); border: 1px solid rgba(255,255,255,0.12); color: #dbeafe; border-radius: 999px; padding: 0.32rem 0.6rem; font-size: 0.68rem; font-weight: 800; backdrop-filter: blur(8px); }
+        .pc-image img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 0.35rem; }
         .pc-image-fallback { color: var(--muted); font-size: 0.82rem; text-align: center; padding: 1rem; }
 
-        .pc-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
-        .pc-tag { font-size: 0.7rem; font-weight: 800; padding: 0.4rem 0.8rem; border-radius: 6px; background: rgba(255,255,255,0.1); }
+        .pc-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.45rem; position: relative; z-index: 1; }
+        .pc-tag { font-size: 0.66rem; font-weight: 900; padding: 0.42rem 0.65rem; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.045em; text-transform: uppercase; }
         .card-actions { display: flex; gap: 0.5rem; align-items: center; }
 
         /* WISHLIST HEART */
@@ -272,31 +279,75 @@
         .compare-check-wrap input { accent-color: var(--accent); cursor: pointer; width: 15px; height: 15px; }
 
         /* STOCK */
-        .stock-badge { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 6px; margin-bottom: 0.8rem; }
+        .stock-badge { display: inline-flex; width: fit-content; align-items: center; gap: 0.4rem; font-size: 0.76rem; font-weight: 850; padding: 0.36rem 0.7rem; border-radius: 999px; margin-bottom: 0.35rem; position: relative; z-index: 1; }
         .stock-low { background: rgba(251,113,133,0.12); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
         .stock-ok { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
         .stock-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 1.5s infinite; }
 
-        .pc-name { font-family: 'Outfit'; font-size: 1.8rem; margin-bottom: 1.2rem; margin-top: 0.3rem; }
-        .pc-specs { list-style: none; margin-bottom: 2rem; }
-        .pc-specs li { display: flex; justify-content: space-between; padding: 0.55rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--muted); font-size: 0.92rem; }
-        .pc-specs b { color: white; font-weight: 500; }
-        .condition-strip { display: flex; align-items: flex-start; gap: 0.55rem; margin: -0.25rem 0 1rem; padding: 0.75rem 0.85rem; border: 1px solid rgba(34,197,94,0.22); border-radius: 12px; background: rgba(34,197,94,0.055); color: var(--muted); font-size: 0.82rem; line-height: 1.4; }
+        .pc-name { font-family: 'Outfit'; font-size: 1.55rem; line-height: 1.08; margin-bottom: 0.85rem; margin-top: 0.15rem; letter-spacing: 0; position: relative; z-index: 1; }
+        .spec-chip-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; margin-bottom: 0.9rem; }
+        .spec-chip { min-width: 0; border: 1px solid rgba(148,163,184,0.14); border-radius: 12px; background: rgba(255,255,255,0.035); padding: 0.65rem 0.7rem; }
+        .spec-chip span { display: block; color: var(--muted); font-size: 0.68rem; margin-bottom: 0.2rem; }
+        .spec-chip b { display: block; color: var(--text); font-size: 0.82rem; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pc-specs { list-style: none; margin-bottom: 1rem; }
+        .pc-specs li { display: flex; justify-content: space-between; gap: 0.9rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.055); color: var(--muted); font-size: 0.86rem; }
+        .pc-specs b { color: white; font-weight: 600; text-align: right; }
+        .condition-strip { display: flex; align-items: flex-start; gap: 0.55rem; margin: 0 0 0.9rem; padding: 0.75rem 0.85rem; border: 1px solid rgba(34,197,94,0.22); border-radius: 12px; background: rgba(34,197,94,0.055); color: var(--muted); font-size: 0.8rem; line-height: 1.42; }
         .condition-strip strong { display: block; color: #bbf7d0; font-size: 0.83rem; margin-bottom: 0.1rem; }
         .condition-strip span:first-child { flex: 0 0 auto; }
+        .service-teaser { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; border: 1px solid rgba(59,130,246,0.18); border-radius: 12px; background: rgba(59,130,246,0.055); padding: 0.72rem 0.85rem; color: var(--muted); font-size: 0.78rem; margin: auto 0 1rem; }
+        .service-teaser strong { color: #dbeafe; font-size: 0.82rem; }
+        .service-teaser span:last-child { color: var(--accent); font-weight: 900; white-space: nowrap; }
 
         /* GUARANTEE MINI */
-        .card-guarantee { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .g-item { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 0.3rem; }
+        .card-guarantee { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .g-item { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 0.3rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; padding: 0.28rem 0.55rem; background: rgba(255,255,255,0.035); }
 
-        .pc-footer { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-        .pc-price { font-family: 'Outfit'; font-size: 2.2rem; font-weight: 800; }
+        .pc-footer { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 0.55rem; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1rem; }
+        .pc-price { font-family: 'Outfit'; font-size: 2rem; font-weight: 900; line-height: 1; }
+        .pc-price-note { display: block; color: var(--muted); font-family: 'Inter'; font-size: 0.68rem; font-weight: 600; margin-top: 0.2rem; }
         .add-cart-btn { background: var(--accent); color: white; border: none; padding: 1rem 1.3rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; white-space: nowrap; }
         .add-cart-btn:hover { background: #2563eb; transform: translateY(-2px); }
         .add-cart-btn.added { background: #22c55e; }
         .detail-btn { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); padding: 1rem 1.1rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; white-space: nowrap; }
         a.detail-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
         .detail-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+        .quality-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 1.2rem; align-items: stretch; }
+        .quality-panel { border: 1px solid var(--border); border-radius: 18px; background: rgba(255,255,255,0.035); padding: 1.4rem; }
+        .quality-panel h3 { font-family: 'Outfit'; font-size: 1.35rem; margin-bottom: 0.7rem; }
+        .quality-panel p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+        .quality-checks { display: grid; gap: 0.65rem; margin-top: 1rem; }
+        .quality-check { display: flex; gap: 0.65rem; align-items: flex-start; color: var(--muted); font-size: 0.9rem; }
+        .quality-check b { color: var(--text); }
+        .quality-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+        .quality-metric { border: 1px solid rgba(59,130,246,0.2); border-radius: 14px; background: rgba(59,130,246,0.055); padding: 1rem; }
+        .quality-metric strong { display: block; font-family: 'Outfit'; font-size: 1.35rem; color: var(--text); }
+        .quality-metric span { color: var(--muted); font-size: 0.82rem; }
+        .advisor-tool { margin-top: 1rem; border: 1px solid rgba(59,130,246,0.22); border-radius: 16px; background: rgba(59,130,246,0.055); padding: 1rem; }
+        .advisor-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+        .advisor-controls label { display: grid; gap: 0.35rem; color: var(--muted); font-size: 0.78rem; font-weight: 700; }
+        .advisor-controls select { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 0.7rem; font-family: 'Inter'; }
+        .advisor-result { margin-top: 0.9rem; color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
+        .advisor-result strong { color: var(--text); }
+        .services-market { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; align-items: stretch; }
+        .service-market-card { border: 1px solid var(--border); border-radius: 18px; background: rgba(255,255,255,0.035); padding: 1.3rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        .service-market-card h3 { font-family: 'Outfit'; font-size: 1.25rem; margin: 0; }
+        .service-market-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.55; margin: 0; }
+        .service-market-price { font-family: 'Outfit'; font-size: 1.9rem; font-weight: 900; color: var(--accent); margin-top: auto; }
+        .service-market-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+        .order-track-box { border: 1px solid rgba(59,130,246,0.22); border-radius: 18px; background: rgba(255,255,255,0.035); padding: 1.4rem; max-width: 780px; margin: 0 auto; }
+        .order-track-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.8rem; align-items: end; }
+        .order-track-form label { display: grid; gap: 0.35rem; color: var(--muted); font-size: 0.78rem; font-weight: 800; }
+        .order-track-form input { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text); border-radius: 12px; padding: 0.85rem; font-family: 'Inter'; min-height: 46px; }
+        .order-track-result { margin-top: 1rem; color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
+        .order-track-card { border: 1px solid rgba(34,197,94,0.22); background: rgba(34,197,94,0.055); border-radius: 14px; padding: 1rem; }
+        .integration-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 1rem; }
+        .integration-pill { border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; background: rgba(255,255,255,0.035); padding: 0.85rem; color: var(--muted); font-size: 0.84rem; }
+        .integration-pill strong { display: block; color: var(--text); margin-bottom: 0.25rem; }
+        .seo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .seo-card { border: 1px solid var(--border); border-radius: 18px; background: rgba(255,255,255,0.03); padding: 1.25rem; }
+        .seo-card h3 { font-family: 'Outfit'; font-size: 1.25rem; margin-bottom: 0.55rem; }
+        .seo-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.62; }
 
         /* SKELETON */
         .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
@@ -615,6 +666,10 @@
             .compare-content h3 { font-size: 1.45rem; padding-right: 2.8rem; }
             .compare-close { top: 1rem; right: 1rem; }
             .advisor-grid { grid-template-columns: 1fr; }
+            .quality-grid { grid-template-columns: 1fr; }
+            .services-market { grid-template-columns: 1fr; }
+            .buy-confidence-strip, .seo-grid { grid-template-columns: 1fr 1fr; }
+            .advisor-controls, .order-track-form, .integration-strip { grid-template-columns: 1fr; }
             .condition-grade-grid, .test-checklist { grid-template-columns: 1fr; }
             .usecase-item { grid-template-columns: auto 1fr; }
             .usecase-item a { grid-column: 2; }
@@ -625,6 +680,9 @@
             .pc-footer { display: grid; grid-template-columns: 1fr 1fr; }
             .pc-price { grid-column: 1 / -1; }
             .pc-footer .detail-btn, .pc-footer .add-cart-btn { width: 100%; text-align: center; }
+            .spec-chip-grid, .quality-metrics { grid-template-columns: 1fr; }
+            .service-teaser { align-items: flex-start; flex-direction: column; }
+            .buy-confidence-strip, .seo-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 500px) {
             .cart-panel { width: 100%; right: -100%; }
@@ -678,7 +736,10 @@
         <li><a href="#ponuka">Ponuka</a></li>
         <li><a href="#preco-my">O nás</a></li>
         <li><a href="#ako-to-funguje">Ako to funguje</a></li>
+        <li><a href="#kontrola-kvality">Kontrola</a></li>
         <li><a href="#poradca">Poradca</a></li>
+        <li><a href="#servisne-sluzby">Služby</a></li>
+        <li><a href="#sledovanie-objednavky">Sledovanie</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
     </ul>
@@ -937,20 +998,20 @@
 <!-- HERO -->
 <section class="hero">
     <div class="hero-content">
-        <div class="badge"><span class="badge-dot"></span> <span id="hero-badge-text">Skladom · Doručenie do 48h</span></div>
+        <div class="badge"><span class="badge-dot"></span> <span id="hero-badge-text">Repasované PC skladom · 12M záruka</span></div>
         <div class="site-announcement" id="site-announcement"></div>
-        <h1 id="hero-title">Získajte <span>výkon</span> bez kompromisov.</h1>
-        <p id="hero-text">Sme špecialisti na prémiové repasované stanice. Ponúkame stroje s výkonom nových PC, ale za zlomok ich ceny. Každý kus prešiel 24-hodinovým záťažovým testom.</p>
+        <h1 id="hero-title">Repasované PC <span>skladom</span> pripravené na výkon.</h1>
+        <p id="hero-text">Herné a kancelárske počítače s jasnými parametrami, zárukou, kontrolou skladu a prípravou pred odoslaním.</p>
         <div class="hero-btns">
             <a href="#ponuka" class="btn-primary">Prezrieť sklad</a>
             <a href="#kontakt" class="btn-ghost">Poradiť sa</a>
         </div>
         <div class="trust-row">
-            <div class="trust-item"><span>🔒</span> Bezpečná platba</div>
-            <div class="trust-item"><span>📦</span> Doprava od 3,90€</div>
-            <div class="trust-item"><span>🛡️</span> 12 mesiacov záruka</div>
-            <div class="trust-item"><span>🔄</span> 14 dní na vrátenie</div>
-            <div class="trust-item"><span>♻️</span> Renovované kusy z TechSavers</div>
+            <div class="trust-item"><span></span> Bezpečná objednávka</div>
+            <div class="trust-item"><span></span> Doprava od 3,90€</div>
+            <div class="trust-item"><span></span> 12 mesiacov záruka</div>
+            <div class="trust-item"><span></span> 14 dní na vrátenie</div>
+            <div class="trust-item"><span></span> Konkrétne skladové kusy</div>
         </div>
     </div>
     <div class="hero-visual reveal">
@@ -1074,6 +1135,35 @@
     </div>
 </section>
 
+<!-- QUALITY CHECK -->
+<section id="kontrola-kvality">
+    <div class="section-header reveal">
+        <div class="section-label">Kontrola kvality</div>
+        <div class="section-title">Repasovaný PC má byť pripravený, nie len predaný</div>
+    </div>
+    <div class="quality-grid reveal">
+        <div class="quality-panel">
+            <h3>Čo prejde kontrolou pred odoslaním</h3>
+            <p>Pri použitých počítačoch zákazník potrebuje jasný dôkaz, že nejde o náhodný kus zo skladu. Preto stránka ukazuje stav, dostupnosť, záruku a prípravu kusu ešte pred objednávkou.</p>
+            <div class="quality-checks">
+                <div class="quality-check"><span>✓</span><span><b>Komponenty:</b> CPU, RAM, disk, grafika, porty a stabilita systému.</span></div>
+                <div class="quality-check"><span>✓</span><span><b>Softvér:</b> Windows, ovládače, aktualizácie a základná pripravenosť.</span></div>
+                <div class="quality-check"><span>✓</span><span><b>Transparentnosť:</b> stav PC, poznámka ku kusu, záruka a dostupné služby.</span></div>
+                <div class="quality-check"><span>✓</span><span><b>Sklad:</b> objednávka rezervuje kus, aby sa nepredal dvakrát.</span></div>
+            </div>
+        </div>
+        <div class="quality-panel">
+            <h3>Signály dôvery na stránke</h3>
+            <div class="quality-metrics">
+                <div class="quality-metric"><strong>24h</strong><span>záťažový test podľa typu PC</span></div>
+                <div class="quality-metric"><strong>12M</strong><span>záruka na predané kusy</span></div>
+                <div class="quality-metric"><strong>14 dní</strong><span>vrátenie pri nákupe na diaľku</span></div>
+                <div class="quality-metric"><strong>1 kus</strong><span>konkrétna skladová zásoba</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- BUYING ADVISOR -->
 <section id="poradca">
     <div class="section-header reveal">
@@ -1108,6 +1198,34 @@
         <div class="advisor-panel">
             <h3>Rýchly výber podľa použitia</h3>
             <p>Ak neviete, čo kúpiť, začnite účelom. Filtre nižšie potom zúžia sklad podľa výkonu, ceny, RAM, grafiky a stavu PC.</p>
+            <div class="advisor-tool">
+                <div class="advisor-controls">
+                    <label>Využitie
+                        <select id="advisor-use" onchange="runAdvisorRecommendation()">
+                            <option value="gaming">Hranie hier</option>
+                            <option value="office">Kancelária / škola</option>
+                            <option value="work">Práca / tvorba</option>
+                        </select>
+                    </label>
+                    <label>Rozpočet
+                        <select id="advisor-budget" onchange="runAdvisorRecommendation()">
+                            <option value="500">do 500€</option>
+                            <option value="900" selected>do 900€</option>
+                            <option value="1500">do 1500€</option>
+                            <option value="10000">bez limitu</option>
+                        </select>
+                    </label>
+                    <label>Priorita
+                        <select id="advisor-priority" onchange="runAdvisorRecommendation()">
+                            <option value="value">Cena/výkon</option>
+                            <option value="gpu">Grafika</option>
+                            <option value="ram">RAM</option>
+                            <option value="stock">Rýchle doručenie</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="advisor-result" id="advisor-result">Vyberte použitie a poradca odporučí najbližší skladový kus.</div>
+            </div>
             <div class="usecase-list">
                 <div class="usecase-item">
                     <span>💼</span>
@@ -1134,11 +1252,118 @@
     </div>
 </section>
 
+<!-- SERVICES -->
+<section id="servisne-sluzby">
+    <div class="section-header reveal">
+        <div class="section-label">Doplnkové a servisné služby</div>
+        <div class="section-title">Nie len kúpa PC, ale pripravený počítač na používanie</div>
+    </div>
+    <div class="services-market reveal" id="services-market">
+        <div class="service-market-card">
+            <h3>Expresné nastavenie PC</h3>
+            <p>Windows konto, aktualizácie, ovládače, základné programy a kontrola pred odoslaním.</p>
+            <div class="service-market-price">od 29€</div>
+            <div class="service-market-actions">
+                <a class="detail-btn" href="#ponuka">Vybrať PC</a>
+                <a class="add-cart-btn" href="#kontakt" style="text-decoration:none;">Opýtať sa</a>
+            </div>
+        </div>
+        <div class="service-market-card">
+            <h3>Upgrade RAM / SSD</h3>
+            <p>Pri kompatibilných kusoch vieme pripraviť väčšiu RAM alebo úložisko ešte pred doručením.</p>
+            <div class="service-market-price">individuálne</div>
+            <div class="service-market-actions">
+                <a class="detail-btn" href="#kontakt">Poslať dopyt</a>
+            </div>
+        </div>
+        <div class="service-market-card">
+            <h3>Predĺžená záruka</h3>
+            <p>Pre zákazníkov, ktorí chcú dlhší pokoj po kúpe repasovaného počítača.</p>
+            <div class="service-market-price">od 49€</div>
+            <div class="service-market-actions">
+                <a class="detail-btn" href="#ponuka">Pridať v košíku</a>
+            </div>
+        </div>
+        <div class="service-market-card">
+            <h3>Diagnostika a príprava</h3>
+            <p>Kontrola stability, teplôt, disku, RAM a základná príprava systému pred predajom.</p>
+            <div class="service-market-price">v cene PC</div>
+            <div class="service-market-actions">
+                <a class="detail-btn" href="#kontrola-kvality">Ako kontrolujeme</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PAYMENTS / INVOICES -->
+<section id="platby-faktury">
+    <div class="section-header reveal">
+        <div class="section-label">Platby a faktúry</div>
+        <div class="section-title">Pripravené na ostrý e-shop režim</div>
+    </div>
+    <div class="order-track-box reveal">
+        <p style="color:var(--muted);margin:0;">Stránka už počíta s manuálnou platbou, GoPay Edge Function, rezerváciou online platby, fakturačnými údajmi a iDoklad/SuperFaktúra priestorom cez admin nastavenia.</p>
+        <div class="integration-strip">
+            <div class="integration-pill"><strong>GoPay</strong>Platobný link sa vytvorí cez serverovú funkciu, nie cez tajný kľúč v prehliadači.</div>
+            <div class="integration-pill"><strong>Faktúry</strong>Objednávka nesie firemné údaje, variabilný symbol a stav dokladu.</div>
+            <div class="integration-pill"><strong>Sklad</strong>Po objednávke sa kus rezervuje a zásoba sa odpočíta.</div>
+        </div>
+    </div>
+</section>
+
+<!-- ORDER TRACKING -->
+<section id="sledovanie-objednavky">
+    <div class="section-header reveal">
+        <div class="section-label">Sledovanie objednávky</div>
+        <div class="section-title">Zákazník vie skontrolovať stav aj bez písania správy</div>
+    </div>
+    <div class="order-track-box reveal">
+        <div class="order-track-form">
+            <label>Číslo objednávky
+                <input id="track-order-number" autocomplete="off" placeholder="Napr. CTX-20260616-1234" maxlength="40">
+            </label>
+            <label>E-mail z objednávky
+                <input id="track-order-email" type="email" autocomplete="email" placeholder="email@priklad.sk" maxlength="160">
+            </label>
+            <button class="add-cart-btn" type="button" onclick="trackOrderStatus()">Skontrolovať</button>
+        </div>
+        <div class="order-track-result" id="track-order-result">Ak máte zákaznícky účet, najpresnejší stav nájdete aj v časti Môj účet.</div>
+    </div>
+</section>
+
+<!-- SEO / EDUCATION -->
+<section id="repasovane-pc-info">
+    <div class="section-header reveal">
+        <div class="section-label">Sprievodca nákupom</div>
+        <div class="section-title">Ako rozmýšľať pri výbere repasovaného PC</div>
+    </div>
+    <div class="seo-grid reveal">
+        <article class="seo-card">
+            <h3>Repasovaný PC vs nový PC</h3>
+            <p>Repasovaný počítač dáva zmysel, keď chcete vyššiu triedu výkonu za rozumnejšiu cenu. Dôležité je pozerať na stav konkrétneho kusu, záruku, dostupnosť a jasné parametre.</p>
+        </article>
+        <article class="seo-card">
+            <h3>Herný repasovaný počítač</h3>
+            <p>Pri hrách rozhoduje hlavne grafická karta, procesor, RAM a rýchle SSD. Preto majú produkty filtre pre GPU, CPU generáciu, RAM, úložisko a dostupnosť.</p>
+        </article>
+        <article class="seo-card">
+            <h3>PC pre firmu alebo školu</h3>
+            <p>Do kancelárie alebo školy je často lepšia stabilita, tichá prevádzka a záruka než najvyšší herný výkon. Kancelárske modely sú vhodné na prácu, štúdium a bežné používanie.</p>
+        </article>
+    </div>
+</section>
+
 <!-- PRODUCTS -->
 <section id="ponuka">
     <div class="section-header reveal">
         <div class="section-label">Aktuálny stav skladu</div>
         <div class="section-title">Vyberte si svoj nový stroj</div>
+    </div>
+    <div class="buy-confidence-strip reveal" aria-label="Výhody nákupu">
+        <div class="buy-confidence-item"><strong>12M záruka</strong><span>Jasná záruka na predané repasované kusy.</span></div>
+        <div class="buy-confidence-item"><strong>24h test</strong><span>Kontrola stability a príprava pred odoslaním.</span></div>
+        <div class="buy-confidence-item"><strong>Skladové kusy</strong><span>Objednávka pracuje s reálnou zásobou.</span></div>
+        <div class="buy-confidence-item"><strong>14 dní vrátenie</strong><span>Pri nákupe na diaľku podľa podmienok.</span></div>
     </div>
 
     <div class="filter-panel reveal">
@@ -1337,7 +1562,7 @@
             </div>
             <div style="margin-bottom: 2rem;">
                 <small style="text-transform: uppercase; opacity: 0.6; font-size: 0.75rem;">E-mail</small>
-                <p id="contact-email-text" style="font-size: 1.1rem; font-weight: 600;">computrax.sk@gmail.com</p>
+                <p id="contact-email-text" style="font-size: 1.1rem; font-weight: 600;">computerax.sk@gmail.com</p>
             </div>
             <div>
                 <small style="text-transform: uppercase; opacity: 0.6; font-size: 0.75rem;">Pracovné hodiny</small>
@@ -1362,7 +1587,7 @@
                 <button type="submit" class="send-btn">Odoslať dopyt ✉️</button>
                 <div class="contact-fallback" id="contact-fallback">
                     Automatické odoslanie zlyhalo. Správu môžete odoslať priamo cez e-mail:
-                    <a id="contact-fallback-link" href="mailto:computrax.sk@gmail.com">Otvoriť e-mail</a>
+                    <a id="contact-fallback-link" href="mailto:computerax.sk@gmail.com">Otvoriť e-mail</a>
                 </div>
             </form>
         </div>
@@ -1384,7 +1609,7 @@
             <p>IČO: <span id="legal-company-id">Doplň IČO</span></p>
             <p>DIČ: <span id="legal-tax-id">Doplň DIČ</span></p>
             <p id="legal-vat-row">IČ DPH: <span id="legal-vat-id">-</span></p>
-            <p>E-mail: <a id="legal-email" href="mailto:computrax.sk@gmail.com">computrax.sk@gmail.com</a></p>
+            <p>E-mail: <a id="legal-email" href="mailto:computerax.sk@gmail.com">computerax.sk@gmail.com</a></p>
             <p>Telefón: <a id="legal-phone" href="tel:+421949835923">0949 835 923</a></p>
             <p class="legal-muted">Posledná aktualizácia: <span id="legal-updated">06.06.2026</span></p>
             <p class="legal-muted">Ak sú vyššie uvedené údaje označené ako „Doplň“, pred spustením verejného predaja ich treba nahradiť reálnymi údajmi predávajúceho.</p>
@@ -1451,6 +1676,10 @@
             <h4>Navigácia</h4>
             <a href="#ponuka">Ponuka</a>
             <a href="#preco-my">O nás</a>
+            <a href="#kontrola-kvality">Kontrola kvality</a>
+            <a href="#poradca">Poradca výberom</a>
+            <a href="#servisne-sluzby">Služby</a>
+            <a href="#sledovanie-objednavky">Sledovanie objednávky</a>
             <a href="#faq">FAQ</a>
             <a href="#kontakt">Kontakt</a>
         </div>
@@ -1494,6 +1723,7 @@ const products = {};
 const RUNTIME_CONFIG = Object.freeze(window.COMPUTRAX_CONFIG || {});
 const SB_URL = 'https://aryjaqexfgalxaiseqtp.supabase.co';
 const SB_KEY = safeStartupPublicKey(RUNTIME_CONFIG.supabaseAnonKey || RUNTIME_CONFIG.SUPABASE_ANON_KEY || '');
+const DEFAULT_CONTACT_EMAIL = 'computerax.sk@gmail.com';
 const LOCAL_PRODUCTS_KEY = 'ctrax_local_products';
 const CART_KEY = 'ctrax_cart';
 const CART_REMINDER_KEY = 'ctrax_cart_reminder_last';
@@ -1531,7 +1761,7 @@ const DEFAULT_SITE_SETTINGS = {
     notificationFunctionUrl: '',
     legalUpdated: '06.06.2026',
     phone: '0949 835 923',
-    email: 'computrax.sk@gmail.com',
+    email: DEFAULT_CONTACT_EMAIL,
     hours: 'Po–Pi: 12:00 – 18:00',
     whatsappPhone: '421949835923',
     whatsappText: 'Dobrý deň, zaujímal by ma jeden z vašich počítačov.',
@@ -1774,10 +2004,23 @@ function notificationEndpoint() {
     );
 }
 
+function notificationRecipientEmail() {
+    return safeLegalEmail(
+        RUNTIME_CONFIG.SUPPORT_EMAIL ||
+        RUNTIME_CONFIG.TO_EMAIL ||
+        RUNTIME_CONFIG.CONTACT_EMAIL ||
+        currentSiteSettings.email ||
+        DEFAULT_SITE_SETTINGS.email ||
+        DEFAULT_CONTACT_EMAIL,
+        DEFAULT_CONTACT_EMAIL
+    );
+}
+
 async function sendSecureNotification(params) {
     const endpoint = notificationEndpoint();
     if (!endpoint) return false;
     const payload = {
+        to_email: notificationRecipientEmail(),
         from_name: cleanText(params.from_name, 120),
         from_email: normalizeEmail(params.from_email),
         phone: cleanText(params.phone, 32),
@@ -2009,6 +2252,66 @@ function closeAccount() {
 
 function closeOrderConfirmation() {
     setDialogOpen('order-confirm-modal', false);
+}
+
+function orderTrackingHtml(order = {}) {
+    const items = Array.isArray(order.items) ? order.items.map(item => `${Number(item.qty || 1)}× ${safeAttr(item.name || 'Produkt')}`).join(', ') : 'Položky objednávky';
+    const status = orderStatusLabel(order.status);
+    const payment = paymentStatusLabel(order.payment_status, order.payment_method);
+    const invoice = invoiceStatusLabel(order.invoice_status);
+    const paymentUrl = order.payment_status === 'pending' ? safeExternalUrl(order.payment_url) : '';
+    const invoiceUrl = safeExternalUrl(order.invoice_url);
+    return `
+        <div class="order-track-card">
+            <strong>${safeAttr(order.order_number || 'Objednávka')}</strong>
+            <div style="margin-top:0.45rem">${safeAttr(items)}</div>
+            <div style="margin-top:0.45rem">Stav: <strong>${safeAttr(status)}</strong> · Platba: <strong>${safeAttr(payment)}</strong></div>
+            <div>Faktúra: ${safeAttr(invoice)}${order.invoice_reference ? ' · ' + safeAttr(order.invoice_reference) : ''}</div>
+            <div style="margin-top:0.45rem">${safeAttr(orderNextStep(order))}</div>
+            ${paymentUrl ? `<div style="margin-top:0.7rem"><a class="order-support" href="${safeAttr(paymentUrl)}" target="_blank" rel="noopener noreferrer">Dokončiť platbu</a></div>` : ''}
+            ${invoiceUrl ? `<div style="margin-top:0.45rem"><a class="order-support" href="${safeAttr(invoiceUrl)}" target="_blank" rel="noopener noreferrer">Otvoriť doklad</a></div>` : ''}
+        </div>`;
+}
+
+async function trackOrderStatus() {
+    const result = document.getElementById('track-order-result');
+    const orderNo = cleanText(document.getElementById('track-order-number')?.value || '', 40).toUpperCase();
+    const email = normalizeEmail(document.getElementById('track-order-email')?.value || '');
+    if (!result) return;
+    if (!orderNo || !isValidEmail(email)) {
+        result.innerHTML = 'Zadajte číslo objednávky a platný e-mail z objednávky.';
+        return;
+    }
+    if (!guardRateLimit('order-track', email, 8, 10 * 60 * 1000)) return;
+    result.innerHTML = 'Načítavam stav objednávky...';
+    try {
+        let order = null;
+        if (customerSession?.access_token && customerEmail().toLowerCase() === email) {
+            const query = `orders?select=order_number,items,total,status,payment_method,payment_status,payment_url,invoice_status,invoice_reference,invoice_url,delivery,address,note,created_at&order_number=eq.${encodeURIComponent(orderNo)}&customer_email=eq.${encodeURIComponent(email)}&limit=1`;
+            const res = await fetch(`${SB_URL}/rest/v1/${query}`, { cache: 'no-store', headers: authHeaders(customerSession.access_token) });
+            const text = await res.text();
+            const rows = text ? JSON.parse(text) : [];
+            if (!res.ok) throw new Error(rows.message || text || 'Objednávku sa nepodarilo načítať');
+            order = Array.isArray(rows) ? rows[0] : null;
+        } else {
+            const res = await fetch(`${SB_URL}/rest/v1/rpc/get_customer_order_status`, {
+                method: 'POST',
+                headers: authHeaders(SB_KEY),
+                body: JSON.stringify({ submitted_order_number: orderNo, submitted_email: email })
+            });
+            const text = await res.text();
+            const data = text ? JSON.parse(text) : null;
+            if (!res.ok) throw new Error(data?.message || text || 'Verejné sledovanie ešte nie je zapnuté');
+            order = Array.isArray(data) ? data[0] : data;
+        }
+        if (!order) {
+            result.innerHTML = 'Objednávka sa nenašla. Skontrolujte číslo objednávky a e-mail.';
+            return;
+        }
+        result.innerHTML = orderTrackingHtml(order);
+    } catch(e) {
+        result.innerHTML = `Sledovanie bez účtu ešte vyžaduje Supabase RPC alebo prihlásenie. <button class="order-support order-button" type="button" onclick="openAccount()">Prihlásiť sa</button> <a class="order-support" href="${safeAttr(supportMailtoHref('Stav objednávky ' + orderNo, 'Dobrý deň, prosím o stav objednávky ' + orderNo + ' pre e-mail ' + email + '.'))}">Kontaktovať podporu</a>`;
+    }
 }
 
 function openOrderConfirmation(orderPayload = {}, payment = {}) {
@@ -2755,7 +3058,7 @@ function legalValue(value, fallback) {
     return text || fallback;
 }
 
-function safeLegalEmail(value, fallback = 'computrax.sk@gmail.com') {
+function safeLegalEmail(value, fallback = DEFAULT_CONTACT_EMAIL) {
     const email = legalValue(value, fallback).replace(/\s+/g, '');
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : fallback;
 }
@@ -2767,7 +3070,7 @@ function safeLegalPhone(value, fallback = '0949 835 923') {
 }
 
 function supportMailtoHref(subject, body) {
-    const email = safeLegalEmail(currentSiteSettings.email || DEFAULT_SITE_SETTINGS.email);
+    const email = notificationRecipientEmail();
     return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
@@ -2913,6 +3216,7 @@ function applyServiceSettings(settings = {}) {
         return normalizeService(custom || defaultService, defaultService);
     }).filter(service => service.id && service.name && service.enabled);
     renderServiceOptions();
+    renderServiceMarketplace();
 }
 
 function renderServiceOptions() {
@@ -2944,6 +3248,90 @@ function renderServiceOptions() {
             if (wizardStep === 3) buildOrderSummary();
         });
     });
+}
+
+function getEnabledServices() {
+    return Array.isArray(serviceAddons) ? serviceAddons.filter(service => service && service.enabled !== false) : [];
+}
+
+function renderServiceMarketplace() {
+    const wrap = document.getElementById('services-market');
+    if (!wrap) return;
+    const services = getEnabledServices();
+    if (!services.length) return;
+    const upgradeCard = `
+        <div class="service-market-card">
+            <h3>Upgrade RAM / SSD</h3>
+            <p>Pri kompatibilných kusoch vieme pripraviť väčšiu RAM alebo úložisko ešte pred doručením.</p>
+            <div class="service-market-price">individuálne</div>
+            <div class="service-market-actions"><a class="detail-btn" href="#kontakt">Poslať dopyt</a></div>
+        </div>`;
+    wrap.innerHTML = services.map(service => `
+        <div class="service-market-card">
+            <h3>${safeAttr(service.name)}</h3>
+            <p>${safeAttr(service.desc || 'Doplnková služba k počítaču, ktorú si môžete vybrať v košíku.')}</p>
+            <div class="service-market-price">${money(service.price)}</div>
+            <div class="service-market-actions">
+                <a class="detail-btn" href="#ponuka">Vybrať PC</a>
+                <a class="add-cart-btn" href="#kontakt" style="text-decoration:none;">Opýtať sa</a>
+            </div>
+        </div>
+    `).join('') + upgradeCard;
+}
+
+function productScoreForAdvisor(product, use, budget, priority) {
+    if (!product || Number(product.stock || 0) <= 0 || product.status === 'sold') return -999999;
+    let score = 0;
+    const price = Number(product.price || 0);
+    const ram = Number(product.ramFilter || parseInt(product.ram, 10) || 0);
+    const gpu = String(product.gpu || product.gpuFilter || '').toLowerCase();
+    const cpu = String(product.cpu || '').toLowerCase();
+    if (price <= budget) score += 120; else score -= Math.min(140, (price - budget) / 8);
+    if (use === 'gaming') {
+        if (product.cat === 'gaming') score += 80;
+        if (/rtx|gtx|radeon|rx/.test(gpu)) score += 55;
+        if (/4070|4080|4090|3080|3090/.test(gpu)) score += 25;
+    }
+    if (use === 'office') {
+        if (product.cat === 'office') score += 70;
+        if (price <= 600) score += 35;
+        if (/uhd|iris|integr/.test(gpu)) score += 15;
+    }
+    if (use === 'work') {
+        if (/i7|i9|ryzen 7|ryzen 9/.test(cpu)) score += 55;
+        if (ram >= 32) score += 35;
+        if (Number(product.storageGb || 0) >= 1000) score += 20;
+    }
+    if (priority === 'gpu' && /rtx|gtx|radeon|rx/.test(gpu)) score += 45;
+    if (priority === 'ram') score += ram * 2;
+    if (priority === 'stock') score += Math.min(40, Number(product.stock || 0) * 6);
+    if (priority === 'value') score += Math.max(0, 60 - price / 25);
+    score += Number(product.popular || 0) + Number(product.newest || 0) / 10;
+    return score;
+}
+
+function runAdvisorRecommendation() {
+    const result = document.getElementById('advisor-result');
+    if (!result) return;
+    const use = document.getElementById('advisor-use')?.value || 'gaming';
+    const budget = Number(document.getElementById('advisor-budget')?.value || 900);
+    const priority = document.getElementById('advisor-priority')?.value || 'value';
+    const candidates = activeProducts
+        .map(product => ({ product, score: productScoreForAdvisor(product, use, budget, priority) }))
+        .filter(item => item.score > -999999)
+        .sort((a, b) => b.score - a.score);
+    const best = candidates[0]?.product;
+    if (!best) {
+        result.innerHTML = 'Momentálne nevidím skladový kus pre túto kombináciu. Skúste vyšší rozpočet alebo nám napíšte cez kontakt.';
+        return;
+    }
+    result.innerHTML = `
+        <strong>Odporúčanie: ${safeAttr(best.name)}</strong><br>
+        ${safeAttr(best.cpu)} · ${safeAttr(best.gpu)} · ${safeAttr(best.ram)} · ${money(best.price)}
+        <div style="margin-top:0.7rem;display:flex;gap:0.6rem;flex-wrap:wrap">
+            <button class="detail-btn" type="button" onclick="openProductDetail(${jsArg(best.name)})">Pozrieť detail</button>
+            <button class="add-cart-btn" type="button" onclick="addToCart(${jsArg(best.name)}, ${Number(best.price || 0)}, this)">Do košíka</button>
+        </div>`;
 }
 
 async function loadSiteSettingsFromSupabase() {
@@ -3071,10 +3459,14 @@ function renderProducts() {
         const nameArg = jsArg(p.name);
         const cartBtn = isSold
             ? `<button class="add-cart-btn" disabled style="background:rgba(255,255,255,0.1);cursor:not-allowed;">Vypredané</button>`
-            : `<button class="add-cart-btn" onclick="addToCart(${nameArg}, ${p.price}, this)">Do košíka 🛒</button>`;
+            : `<button class="add-cart-btn" onclick="addToCart(${nameArg}, ${p.price}, this)" aria-label="Pridať ${safeName} do košíka">Do košíka</button>`;
         const conditionNote = String(p.pcConditionNote || '').replace(/\s+/g, ' ').trim();
         const shortConditionNote = conditionNote.length > 112 ? conditionNote.slice(0, 109).trim() + '...' : conditionNote;
         const detailBtn = `<button class="detail-btn" onclick="openProductDetail(${nameArg})" aria-label="Zobraziť detail produktu ${safeName}">Detail</button>`;
+        const enabledServices = getEnabledServices(currentSiteSettings);
+        const serviceText = enabledServices.length
+            ? `${enabledServices.length} doplnkové služby`
+            : 'Služby v košíku';
 
         const card = document.createElement('div');
         card.className = 'pc-card reveal';
@@ -3105,24 +3497,31 @@ function renderProducts() {
             <div class="stock-badge ${stockClass}"><span class="stock-dot"></span> ${stockLabel}</div>
             ${productImageMarkup(p)}
             <h3 class="pc-name">${safeName}</h3>
+            <div class="spec-chip-grid" aria-label="Hlavné parametre">
+                <div class="spec-chip"><span>CPU</span><b>${safeAttr(p.cpu)}</b></div>
+                <div class="spec-chip"><span>GPU</span><b>${safeAttr(p.gpu)}</b></div>
+                <div class="spec-chip"><span>RAM</span><b>${safeAttr(p.ram)}</b></div>
+                <div class="spec-chip"><span>Úložisko</span><b>${safeAttr(p.ssd)}</b></div>
+            </div>
             <div class="condition-strip">
                 <span>🔧</span>
                 <span><strong>${safeAttr(p.pcCondition)}</strong>${safeAttr(shortConditionNote || 'Vyčistený, otestovaný a pripravený na používanie.')}</span>
             </div>
             <ul class="pc-specs">
-                <li>Procesor <b>${safeAttr(p.cpu)}</b></li>
-                <li>Grafika <b>${safeAttr(p.gpu)}</b></li>
-                <li>RAM <b>${safeAttr(p.ram)}</b></li>
-                <li>SSD <b>${safeAttr(p.ssd)}</b></li>
                 <li>OS <b>${safeAttr(p.os)}</b></li>
+                <li>Doručenie <b>${safeAttr(p.delivery)}</b></li>
             </ul>
             <div class="card-guarantee">
                 <span class="g-item">🛡️ 12M záruka</span>
                 <span class="g-item">✅ Otestovaný</span>
-                <span class="g-item">📦 ${safeAttr(p.delivery)}</span>
+                <span class="g-item">🔄 14 dní vrátenie</span>
+            </div>
+            <div class="service-teaser">
+                <strong>Pripraviť pred odoslaním</strong>
+                <span>${safeAttr(serviceText)}</span>
             </div>
             <div class="pc-footer">
-                <div class="pc-price">${p.price}€</div>
+                <div class="pc-price">${p.price}€<span class="pc-price-note">s DPH podľa režimu predajcu</span></div>
                 ${detailBtn}
                 ${cartBtn}
             </div>
@@ -3152,6 +3551,7 @@ function renderProducts() {
     document.getElementById('results-count').textContent = activeProducts.length;
     updateProductStructuredData(activeProducts);
     updateContactProductOptions(activeProducts);
+    runAdvisorRecommendation();
     applyFilters();
     renderRecentProducts();
     openProductFromUrlOnce();
@@ -3282,6 +3682,8 @@ setTimeout(() => document.documentElement.classList.add('js-ready'), 900);
 
 handleAuthRedirect();
 updateAccountUI();
+renderServiceMarketplace();
+runAdvisorRecommendation();
 
 // Load live products from Supabase, with bundled demo products as fallback.
 loadProductsFromSupabase();
@@ -3761,6 +4163,9 @@ function openProductDetail(name) {
         return;
     }
     rememberRecentProduct(name);
+    const url = new URL(location.href);
+    url.searchParams.set('pc', p.name);
+    history.replaceState(null, '', `${url.pathname}?${url.searchParams.toString()}${url.hash || '#ponuka'}`);
 
     const isSold = Number(p.stock || 0) <= 0 || p.status === 'sold';
     const stockLabel = isSold ? 'Momentálne vypredané' : p.stock <= 2 ? `Posledné ${p.stock} ks skladom` : `Skladom ${p.stock} ks`;
@@ -3825,6 +4230,11 @@ function openProductDetail(name) {
 
 function closeProductDetail() {
     setDialogOpen('product-modal', false);
+    if (location.search.includes('pc=')) {
+        const url = new URL(location.href);
+        url.searchParams.delete('pc');
+        history.replaceState(null, '', `${url.pathname}${url.search ? '?' + url.searchParams.toString() : ''}${url.hash || '#ponuka'}`);
+    }
 }
 
 function addToCartFromDetail(name, price) {
@@ -4528,7 +4938,7 @@ function submitContact(e) {
 
 function contactFallbackHref(name, email, model, msg) {
     const subject = `Dopyt z webu${model ? ' - ' + model : ''}`;
-    const recipient = safeLegalEmail(currentSiteSettings.email || DEFAULT_SITE_SETTINGS.email);
+    const recipient = notificationRecipientEmail();
     const body = [
         'Dobrý deň,',
         '',

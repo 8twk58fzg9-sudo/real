@@ -4,6 +4,7 @@
 window.COMPUTRAX_CONFIG = Object.freeze({
   // Supabase anon/publishable key only. Never use service_role in frontend.
   SUPABASE_ANON_KEY: 'PASTE_PUBLIC_SUPABASE_ANON_KEY_HERE',
+  SUPPORT_EMAIL: 'computerax.sk@gmail.com',
 
   // Optional server-side notification endpoint, e.g. Supabase Edge Function.
   // Store SMTP/provider/API secrets in that function's environment variables.
