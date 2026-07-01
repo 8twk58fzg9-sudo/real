@@ -6,3 +6,9 @@ window.COMPUTRAX_CONFIG = Object.freeze({
   SUPPORT_EMAIL: 'computerax.sk@gmail.com',
   EMAIL_ENDPOINT: ''
 });
+
+// Small compatibility layer shared by the storefront and admin on GitHub Pages.
+const computraxEnhancements = document.createElement('script');
+computraxEnhancements.src = 'site-enhancements.js?v=20260701';
+computraxEnhancements.async = false;
+document.head.appendChild(computraxEnhancements);

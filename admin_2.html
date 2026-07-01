@@ -565,6 +565,7 @@ INSERT INTO site_settings(key, settings) VALUES ('main', jsonb_build_object(
   'taxId','Doplň DIČ',
   'vatId','',
   'bankAccount','',
+  'invoiceVatMode','no_vat_note',
   'legalUpdated','06.06.2026',
   'phone','0949 835 923',
   'email','computerax.sk@gmail.com',
@@ -1070,7 +1071,96 @@ REVOKE ALL ON FUNCTION track_customer_order(TEXT, TEXT, TEXT) FROM PUBLIC, anon,
 GRANT EXECUTE ON FUNCTION track_customer_order(TEXT, TEXT, TEXT) TO service_role;
 GRANT EXECUTE ON FUNCTION enforce_rate_limit(TEXT, INTEGER, INTEGER) TO service_role;
 
-REVOKE EXECUTE ON FUNCTION admin_autopilot() FROM anon, authenticated;
+CREATE OR REPLACE FUNCTION public.get_payment_order(p_order_number TEXT, p_email TEXT)
+RETURNS TABLE (
+  id BIGINT,
+  order_number TEXT,
+  total NUMERIC,
+  customer_email TEXT,
+  payment_status TEXT,
+  payment_method TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  normalized_order_number TEXT := upper(btrim(COALESCE(p_order_number, '')));
+  normalized_email TEXT := lower(btrim(COALESCE(p_email, '')));
+BEGIN
+  IF normalized_order_number !~ '^CTX-[0-9]{8}-[A-Z0-9]{5}$'
+     OR char_length(normalized_email) NOT BETWEEN 5 AND 254
+     OR normalized_email !~* '^[^@\s]+@[^@\s]+\.[^@\s]+$' THEN
+    RAISE EXCEPTION 'Invalid payment lookup';
+  END IF;
+
+  RETURN QUERY
+  SELECT o.id, o.order_number, o.total, o.customer_email,
+         o.payment_status, o.payment_method
+  FROM public.orders AS o
+  WHERE upper(o.order_number) = normalized_order_number
+    AND lower(o.customer_email) = normalized_email
+  LIMIT 1;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.get_payment_order(TEXT, TEXT) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.get_payment_order(TEXT, TEXT) TO service_role;
+
+CREATE OR REPLACE FUNCTION public.admin_autopilot()
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+DECLARE
+  fixed_zero_stock INTEGER := 0;
+  generated_skus INTEGER := 0;
+  synced_warehouse_skus INTEGER := 0;
+BEGIN
+  IF NOT public.is_admin() THEN
+    RAISE EXCEPTION 'Admin only';
+  END IF;
+
+  UPDATE public.products
+  SET status = 'sold'
+  WHERE COALESCE(stock, 0) = 0
+    AND status IS DISTINCT FROM 'sold';
+  GET DIAGNOSTICS fixed_zero_stock = ROW_COUNT;
+
+  UPDATE public.products
+  SET sku = 'CTX-PC-' || id::TEXT
+  WHERE NULLIF(BTRIM(COALESCE(sku, '')), '') IS NULL;
+  GET DIAGNOSTICS generated_skus = ROW_COUNT;
+
+  UPDATE public.products
+  SET warehouse_sku = sku
+  WHERE NULLIF(BTRIM(COALESCE(warehouse_sku, '')), '') IS NULL
+    AND NULLIF(BTRIM(COALESCE(sku, '')), '') IS NOT NULL;
+  GET DIAGNOSTICS synced_warehouse_skus = ROW_COUNT;
+
+  INSERT INTO public.admin_events(user_id, action, entity_type, entity_id, summary, metadata)
+  VALUES (
+    auth.uid(),
+    'admin_autopilot',
+    'system',
+    NULL,
+    'Autopilot údržba skladu a SKU',
+    jsonb_build_object(
+      'fixed_zero_stock', fixed_zero_stock,
+      'generated_skus', generated_skus,
+      'synced_warehouse_skus', synced_warehouse_skus
+    )
+  );
+
+  RETURN jsonb_build_object(
+    'fixed_zero_stock', fixed_zero_stock,
+    'generated_skus', generated_skus,
+    'synced_warehouse_skus', synced_warehouse_skus
+  );
+END;
+$$;
+REVOKE ALL ON FUNCTION public.admin_autopilot() FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.admin_autopilot() TO authenticated;
 REVOKE EXECUTE ON FUNCTION get_customer_orders(TEXT, TEXT, TEXT) FROM anon, authenticated;
 REVOKE EXECUTE ON FUNCTION is_admin() FROM anon;
 GRANT EXECUTE ON FUNCTION is_admin() TO authenticated;
@@ -1079,23 +1169,45 @@ GRANT EXECUTE ON FUNCTION is_admin() TO authenticated;
 -- INSERT INTO admin_users (user_id) VALUES ('SEM_DAJ_ADMIN_USER_ID')
 -- ON CONFLICT (user_id) DO NOTHING;
 
--- Storage (spusti osobitne po vytvorení bucketu product-images)
+-- Storage obrázkov produktov
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'product-images',
+  'product-images',
+  TRUE,
+  10485760,
+  ARRAY['image/jpeg', 'image/png', 'image/webp']
+)
+ON CONFLICT (id) DO UPDATE SET
+  public = EXCLUDED.public,
+  file_size_limit = EXCLUDED.file_size_limit,
+  allowed_mime_types = EXCLUDED.allowed_mime_types;
+
+DROP POLICY IF EXISTS "Public images" ON storage.objects;
 DROP POLICY IF EXISTS "Public image read" ON storage.objects;
 DROP POLICY IF EXISTS "Admin image upload" ON storage.objects;
 DROP POLICY IF EXISTS "Admin image update" ON storage.objects;
 DROP POLICY IF EXISTS "Admin image delete" ON storage.objects;
-CREATE POLICY "Public image read" ON storage.objects
-FOR SELECT USING (bucket_id = 'product-images');
+-- Verejný bucket poskytuje obrázky cez /object/public/ URL.
+-- SELECT policy úmyselne nevytvárame, aby nebolo možné vypísať zoznam súborov.
 CREATE POLICY "Admin image upload" ON storage.objects
 FOR INSERT TO authenticated
-WITH CHECK (bucket_id = 'product-images' AND is_admin());
+WITH CHECK (
+  bucket_id = 'product-images'
+  AND public.is_admin()
+  AND lower(storage.extension(name)) IN ('jpg', 'jpeg', 'png', 'webp')
+);
 CREATE POLICY "Admin image update" ON storage.objects
 FOR UPDATE TO authenticated
-USING (bucket_id = 'product-images' AND is_admin())
-WITH CHECK (bucket_id = 'product-images' AND is_admin());
+USING (bucket_id = 'product-images' AND public.is_admin())
+WITH CHECK (
+  bucket_id = 'product-images'
+  AND public.is_admin()
+  AND lower(storage.extension(name)) IN ('jpg', 'jpeg', 'png', 'webp')
+);
 CREATE POLICY "Admin image delete" ON storage.objects
 FOR DELETE TO authenticated
-USING (bucket_id = 'product-images' AND is_admin());</pre>
+USING (bucket_id = 'product-images' AND public.is_admin());</pre>
       <div style="display:flex;gap:0.8rem;justify-content:flex-end;margin-top:1rem">
         <button type="button" class="btn btn-ghost" data-admin-action="closeSqlModal">Zavrieť</button>
         <button type="button" class="btn btn-primary" data-admin-action="copySqlSetup">📋 Kopírovať</button>
@@ -1889,7 +2001,7 @@ const DEFAULT_SITE_SETTINGS = {
     vatId: '',
     bankAccount: '',
     invoiceDueDays: 14,
-    invoiceVatMode: 'non_payer',
+    invoiceVatMode: 'no_vat_note',
     legalUpdated: '06.06.2026',
     paymentGateway: 'manual',
     gopayMode: 'disabled',
@@ -2762,6 +2874,7 @@ function deploymentChecklistItems() {
     add(result.invalidActivePrices.length === 0 && result.invalidStock.length === 0, 'Ceny a sklad sú platné', `${result.invalidActivePrices.length} zlé ceny, ${result.invalidStock.length} zlý sklad`);
     add(!result.duplicateNames.length && !result.duplicateSku.length, 'Bez duplicitných názvov/SKU', `${result.duplicateNames.length} názvov, ${result.duplicateSku.length} SKU`);
     add(!['companyAddress','companyId','taxId'].some(key => !settings[key] || /^Doplň/i.test(String(settings[key]))), 'Firemné a právne údaje sú doplnené', 'Adresa, IČO, DIČ.');
+    add(['non_payer', 'vat_included'].includes(settings.invoiceVatMode), 'DPH režim je potvrdený', 'Vyber podľa účtovníctva: neplatiteľ DPH alebo ceny s DPH.');
     add(result.enabledServices.length > 0 && result.brokenServices.length === 0, 'Doplnkové služby sú použiteľné', `${result.enabledServices.length} zapnutých`);
     add(settings.paymentGateway !== 'manual' && settings.gopayMode !== 'disabled', 'Platobná brána je pripojená', 'Manuálny režim je OK len pred ostrým predajom.');
     add(settings.idokladMode !== 'manual_export', 'Faktúry sú automatizované', 'Manuálny export znamená ručnú kontrolu objednávok.');
@@ -4114,6 +4227,7 @@ function eShopReadinessItems() {
         { group: 'Produkty', level: result.missingFilters.length || result.missingSku.length ? 'warn' : 'ok', label: 'Filtre a SKU', detail: `${result.missingFilters.length} chýbajúcich filtrov, ${result.missingSku.length} chýbajúcich SKU.` },
         { group: 'Produkty', level: result.invalidActivePrices.length || result.invalidStock.length || result.duplicateNames.length || result.duplicateSku.length ? 'blocker' : 'ok', label: 'Ceny, sklad a duplicity', detail: `${result.invalidActivePrices.length} zlé ceny, ${result.invalidStock.length} zlý sklad, ${result.duplicateNames.length + result.duplicateSku.length} duplicít.` },
         { group: 'Právo', level: hasRealLegal ? 'ok' : 'blocker', label: 'Firemné údaje', detail: hasRealLegal ? 'Firma, adresa, IČO a DIČ sú doplnené.' : 'Doplň reálnu firmu/adresu/IČO/DIČ pred predajom.' },
+        { group: 'Právo', level: ['non_payer', 'vat_included'].includes(settings.invoiceVatMode) ? 'ok' : 'blocker', label: 'DPH režim', detail: ['non_payer', 'vat_included'].includes(settings.invoiceVatMode) ? 'DPH režim faktúr je potvrdený.' : 'V Nastaveniach webu potvrď DPH režim podľa účtovníctva.' },
         { group: 'Právo', level: settings.legalUpdated ? 'ok' : 'warn', label: 'Dátum právnych textov', detail: settings.legalUpdated || 'Doplň dátum aktualizácie právnych textov.' },
         { group: 'Kontakt', level: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(settings.email || '').trim()) ? 'ok' : 'blocker', label: 'Kontaktný e-mail', detail: settings.email || 'Chýba platný e-mail.' },
         { group: 'Kontakt', level: String(settings.phone || settings.whatsappPhone || '').replace(/\D/g, '').length >= 9 ? 'ok' : 'warn', label: 'Telefón / WhatsApp', detail: settings.phone || settings.whatsappPhone || 'Doplň telefón.' },
@@ -4294,12 +4408,48 @@ BEGIN
   LIMIT 1;
 END;
 $$;`,
+        `CREATE OR REPLACE FUNCTION public.get_payment_order(p_order_number TEXT, p_email TEXT)
+RETURNS TABLE (
+  id BIGINT,
+  order_number TEXT,
+  total NUMERIC,
+  customer_email TEXT,
+  payment_status TEXT,
+  payment_method TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  normalized_order_number TEXT := upper(btrim(COALESCE(p_order_number, '')));
+  normalized_email TEXT := lower(btrim(COALESCE(p_email, '')));
+BEGIN
+  IF normalized_order_number !~ '^CTX-[0-9]{8}-[A-Z0-9]{5}$'
+     OR char_length(normalized_email) NOT BETWEEN 5 AND 254
+     OR normalized_email !~* '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$' THEN
+    RAISE EXCEPTION 'Invalid payment lookup';
+  END IF;
+  RETURN QUERY
+  SELECT o.id, o.order_number, o.total, o.customer_email,
+         o.payment_status, o.payment_method
+  FROM public.orders AS o
+  WHERE upper(o.order_number) = normalized_order_number
+    AND lower(o.customer_email) = normalized_email
+  LIMIT 1;
+END;
+$$;`,
         'REVOKE EXECUTE ON FUNCTION purchase_products(JSONB) FROM anon, authenticated;',
-        'REVOKE EXECUTE ON FUNCTION admin_autopilot() FROM anon, authenticated;',
+        'ALTER FUNCTION public.admin_autopilot() SECURITY INVOKER;',
+        'ALTER FUNCTION public.admin_autopilot() SET search_path = \'\';',
+        'REVOKE ALL ON FUNCTION public.admin_autopilot() FROM PUBLIC, anon;',
+        'GRANT EXECUTE ON FUNCTION public.admin_autopilot() TO authenticated;',
         'REVOKE EXECUTE ON FUNCTION get_customer_orders(TEXT, TEXT, TEXT) FROM anon, authenticated;',
         'REVOKE ALL ON FUNCTION track_customer_order(TEXT, TEXT, TEXT) FROM PUBLIC, anon, authenticated;',
         'GRANT EXECUTE ON FUNCTION track_customer_order(TEXT, TEXT, TEXT) TO service_role;',
         'GRANT EXECUTE ON FUNCTION enforce_rate_limit(TEXT, INTEGER, INTEGER) TO service_role;',
+        'REVOKE ALL ON FUNCTION public.get_payment_order(TEXT, TEXT) FROM PUBLIC, anon, authenticated;',
+        'GRANT EXECUTE ON FUNCTION public.get_payment_order(TEXT, TEXT) TO service_role;',
         'REVOKE EXECUTE ON FUNCTION is_admin() FROM anon;',
         'GRANT EXECUTE ON FUNCTION is_admin() TO authenticated;',
         uid
@@ -6076,6 +6226,7 @@ async function openModal() {
     editingId = null;
     document.getElementById('modal-title').textContent = '+ Pridať nový PC';
     clearForm();
+    showImageUploadReadiness(false);
     if (!useLocalStorage && hasSupabaseWriteAuth()) await loadWarehouses(true);
     renderProductInventoryFields(null, 1);
     setAdminModalOpen('product-modal', true);
@@ -6122,6 +6273,7 @@ async function openEdit(id) {
         setPreview(p.image_url, 'Aktuálna fotka produktu z URL.');
     } else {
         clearImageInput();
+        showImageUploadReadiness(false);
     }
     renderProductInventoryFields(id, Number(p.stock || 0));
     setAdminModalOpen('product-modal', true);
@@ -6197,9 +6349,12 @@ async function saveProduct() {
             setImageStatus(useLocalStorage ? 'Fotka je uložená lokálne. Aby ju videli všetci návštevníci, prepni na Supabase režim a nahraj ju do Storage.' : 'Fotka bola nahraná a uloží sa k produktu.');
             showToast(useLocalStorage ? '📸 Fotka uložená lokálne' : '📸 Fotka nahraná');
         } catch(e) {
-            imageUrl = null;
-            setImageStatus('Fotka sa nenahrala. Produkt sa uloží bez nej. Skontroluj bucket product-images alebo použi https adresu.', true);
-            showToast('⚠️ Fotka sa nenahrala, produkt ukladám bez fotky', true);
+            const message = productImageUploadErrorMessage(e);
+            setImageStatus(message + ' Fotka aj vyplnené údaje zostali zachované, skúste uloženie znova.', true);
+            showToast('❌ ' + message, true);
+            saveBtn.textContent = originalSaveText;
+            saveBtn.disabled = false;
+            return;
         }
     }
 
@@ -6646,6 +6801,19 @@ function setImageStatus(message, isError = false) {
     status.style.color = isError ? 'var(--danger)' : 'var(--muted)';
 }
 
+function showImageUploadReadiness(hasExistingImage = false) {
+    if (hasExistingImage) return;
+    if (useLocalStorage) {
+        setImageStatus('Lokálny režim: fotka zostane iba v tomto prehliadači. Pre verejný web použite Supabase režim.');
+        return;
+    }
+    if (!hasSupabaseWriteAuth()) {
+        setImageStatus('Pred nahratím fotky pripojte hore „Supabase admin zápis“. Potom sa fotka bezpečne uloží do product-images a zobrazí sa všetkým návštevníkom.');
+        return;
+    }
+    setImageStatus('Supabase admin je pripojený. Fotku môžete nahrať zo súboru; admin ju upraví a uloží do verejného Storage.');
+}
+
 function clearImageInput() {
     pendingImageFile = null;
     const fileInput = document.getElementById('f-image-file');
@@ -6689,20 +6857,48 @@ async function uploadImage(file, productName) {
     if (!useLocalStorage && !(await ensureSupabaseWriteAuth(false))) throw new Error('Najprv pripoj Supabase admin zápis');
     const ext = PRODUCT_IMAGE_TYPES[file.type];
     if (!ext || file.size > PRODUCT_IMAGE_MAX_BYTES) throw new Error('Neplatný obrázok. Povolené sú JPG, PNG alebo WebP do 10 MB.');
+    const accessToken = String(authSession?.access_token || '');
+    if (!accessToken) throw new Error('Supabase admin relácia chýba alebo vypršala.');
     const safeBase = String(productName || 'produkt').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '').toLowerCase().slice(0, 70) || 'produkt';
     const path = `${safeBase}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const res = await fetch(`${SB_URL}/storage/v1/object/product-images/${path}`, {
+    const res = await fetchWithTimeout(`${SB_URL}/storage/v1/object/product-images/${encodeURIComponent(path)}`, {
         method: 'POST',
         headers: {
             'apikey': SB_KEY,
-            'Authorization': `Bearer ${authSession?.access_token || SB_KEY}`,
+            'Authorization': `Bearer ${accessToken}`,
             'Content-Type': file.type,
-            'x-upsert': 'true'
+            'x-upsert': 'false'
         },
         body: file
     });
-    if (!res.ok) throw new Error('Nahratie fotky zlyhalo: ' + await res.text());
-    return `${SB_URL}/storage/v1/object/public/product-images/${path}`;
+    if (!res.ok) {
+        const responseText = await res.text();
+        throw new Error(`Storage ${res.status}: ${responseText.slice(0, 500)}`);
+    }
+    return `${SB_URL}/storage/v1/object/public/product-images/${encodeURIComponent(path)}`;
+}
+
+function productImageUploadErrorMessage(error) {
+    const raw = String(error?.message || error || '').toLowerCase();
+    if (raw.includes('abort') || raw.includes('timeout') || raw.includes('network') || raw.includes('failed to fetch')) {
+        return 'Nahratie fotky prerušilo pripojenie. Skontrolujte internet.';
+    }
+    if (raw.includes('bucket') && (raw.includes('not found') || raw.includes('does not exist'))) {
+        return 'Supabase Storage bucket product-images neexistuje.';
+    }
+    if (raw.includes('row-level security') || raw.includes('rls') || raw.includes('unauthorized') || raw.includes('storage 401') || raw.includes('storage 403')) {
+        return 'Supabase admin účet nemá právo nahrať fotku. Odhláste a znovu prihláste Supabase admin účet.';
+    }
+    if (raw.includes('mime') || raw.includes('content-type') || raw.includes('invalid image') || raw.includes('neplatný obrázok')) {
+        return 'Fotka musí byť JPG, PNG alebo WebP.';
+    }
+    if (raw.includes('too large') || raw.includes('maximum') || raw.includes('10 mb') || raw.includes('payload')) {
+        return 'Fotka je príliš veľká. Maximum je 10 MB.';
+    }
+    if (raw.includes('relácia') || raw.includes('pripoj supabase') || raw.includes('access token')) {
+        return 'Supabase admin prihlásenie vypršalo. Prihláste sa znova.';
+    }
+    return 'Fotku sa nepodarilo nahrať do Supabase Storage.';
 }
 
 // ---- TOAST ----

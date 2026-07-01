@@ -120,7 +120,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        html { scroll-behavior: smooth; scroll-padding-top: 7rem; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: linear-gradient(180deg, #0b0f1a 0%, #0e1422 46%, #0b0f1a 100%); color: var(--text); line-height: 1.6; overflow-x: hidden; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
         button, input, select, textarea { font: inherit; }
         input, select, textarea { font-size: 16px; }
@@ -324,6 +324,9 @@
         .filter-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
         .filter-row + .filter-row { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
         .filter-details { align-items: flex-start; }
+        .mobile-filter-toggle { display: none; width: 100%; min-height: 46px; align-items: center; justify-content: space-between; gap: 0.75rem; margin-top: 1rem; padding: 0.75rem 0.9rem; border: 1px solid var(--border); border-radius: 10px; background: rgba(255,255,255,0.04); color: var(--text); font-weight: 800; cursor: pointer; }
+        .mobile-filter-toggle .filter-toggle-icon { color: var(--accent); font-size: 1.1rem; transition: transform 0.2s ease; }
+        .mobile-filter-toggle[aria-expanded="true"] .filter-toggle-icon { transform: rotate(180deg); }
         .filter-item { display: flex; flex-direction: column; gap: 0.5rem; min-width: 140px; }
         .filter-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
         .filter-select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1rem; border-radius: 10px; font-size: 0.88rem; outline: none; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif; }
@@ -753,6 +756,7 @@
         .footer-bottom { text-align: center; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); padding-top: 2rem; }
 
         @media (max-width: 1320px) {
+            html { scroll-padding-top: 11.5rem; }
             nav { align-items: flex-start; flex-wrap: wrap; }
             .nav-menu-btn { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; }
             nav ul { display: none; width: 100%; order: 4; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
@@ -786,7 +790,12 @@
             .category-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 720px) {
+            html { scroll-padding-top: 13.5rem; }
             input, select, textarea { font-size: 16px !important; }
+            .auth-link { min-height: 44px; padding: 0.6rem 0; }
+            .wish-btn { width: 44px; height: 44px; }
+            .compare-check-wrap { min-height: 44px; padding: 0.35rem 0; }
+            .compare-check-wrap input { width: 20px; height: 20px; }
             nav { position: sticky; top: 0; align-items: flex-start; padding: 0.8rem 4%; flex-wrap: wrap; }
             .logo { font-size: 1.45rem; line-height: 1; padding-top: 0.25rem; }
             .logo img { width: 128px; }
@@ -808,6 +817,9 @@
             .hero-btns .btn-primary, .hero-btns .btn-ghost { width: 100%; text-align: center; }
             .filter-panel { padding: 1rem; border-radius: 16px; }
             .filter-row { display: grid; grid-template-columns: 1fr; align-items: stretch; }
+            .mobile-filter-toggle { display: flex; }
+            .filter-details:not(.mobile-open) { display: none; }
+            .filter-details.mobile-open { display: grid; }
             .filter-item { min-width: 0; }
             .filter-select, .filter-reset { width: 100%; min-height: 44px; }
             .wizard-row { grid-template-columns: 1fr; }
@@ -826,7 +838,7 @@
             .usecase-item a { grid-column: 2; }
             .auth-tabs { gap: 0.45rem; }
             .auth-tab, .wizard-btn, .auth-field input { min-height: 46px; }
-            .auth-link { display: block; width: 100%; text-align: left; padding: 0.25rem 0; }
+            .auth-link { display: block; width: 100%; text-align: left; }
             .toast { left: 1rem; right: 1rem; top: auto; bottom: 1rem; max-width: none; }
             .pc-footer { display: grid; grid-template-columns: 1fr 1fr; }
             .pc-price { grid-column: 1 / -1; }
@@ -1685,8 +1697,13 @@
             </div>
         </div>
 
+        <button type="button" class="mobile-filter-toggle" data-action="toggle-filters" aria-expanded="false" aria-controls="detailed-product-filters">
+            <span>Podrobné filtre</span>
+            <span class="filter-toggle-icon" aria-hidden="true">⌄</span>
+        </button>
+
         <!-- Row 2: Detailed filters -->
-        <div class="filter-row filter-details">
+        <div class="filter-row filter-details" id="detailed-product-filters">
             <!-- Price range -->
             <div class="filter-item">
                 <label class="filter-label">Cena</label>
@@ -1854,7 +1871,7 @@
         </div>
         <div class="faq-item">
             <div class="faq-q">Dodávate aj pre firmy s faktúrou? <span>+</span></div>
-            <div class="faq-a">Samozrejme! Pre firemných zákazníkov vystavujeme faktúru s DPH. Kontaktujte nás priamo pre hromadné objednávky alebo špeciálne cenové podmienky.</div>
+            <div class="faq-a">Áno. Pre firemných zákazníkov vystavujeme faktúru; spôsob uvedenia DPH sa riadi aktuálnym režimom predávajúceho. Pri hromadnej objednávke si môžete vyžiadať individuálnu ponuku.</div>
         </div>
         <div class="faq-item">
             <div class="faq-q">Čo sa stane, keď online platba zlyhá? <span>+</span></div>
@@ -2086,6 +2103,7 @@ const DEFAULT_SITE_SETTINGS = {
     companyId: 'Doplň IČO',
     taxId: 'Doplň DIČ',
     vatId: '',
+    invoiceVatMode: 'no_vat_note',
     bankAccount: '',
     paymentGateway: 'manual',
     gopayMode: 'disabled',
@@ -3710,6 +3728,21 @@ function applyCommerceControls(s) {
     if (whatsapp && digits.length >= 9) {
         whatsapp.href = `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
     }
+    updateProductPriceTaxNotes(s);
+}
+
+function productPriceTaxNote(settings = currentSiteSettings) {
+    const mode = enumValue(settings?.invoiceVatMode, ['non_payer', 'vat_included', 'no_vat_note'], 'non_payer');
+    if (mode === 'vat_included') return 'cena s DPH';
+    if (mode === 'non_payer') return 'konečná cena · predávajúci nie je platiteľ DPH';
+    return 'konečná cena';
+}
+
+function updateProductPriceTaxNotes(settings = currentSiteSettings) {
+    const label = productPriceTaxNote(settings);
+    document.querySelectorAll('.pc-price-note').forEach(note => {
+        note.textContent = label;
+    });
 }
 
 function normalizeService(service, fallback = {}) {
@@ -4101,9 +4134,9 @@ function renderProducts() {
         card.setAttribute('data-stock', stockData);
         card.setAttribute('data-popular', p.popular);
         card.setAttribute('data-newest', p.newest);
-        card.setAttribute('role', 'button');
+        card.setAttribute('role', 'article');
         card.setAttribute('tabindex', '0');
-        card.setAttribute('aria-label', `Otvoriť detail produktu ${p.name}`);
+        card.setAttribute('aria-label', `${p.name}. Stlačením Enter otvoríte detail produktu.`);
 
         card.innerHTML = `
             <div class="pc-card-top">
@@ -4141,7 +4174,7 @@ function renderProducts() {
                 <span>${safeAttr(serviceText)}</span>
             </div>
             <div class="pc-footer">
-                <div class="pc-price">${p.price}€<span class="pc-price-note">s DPH podľa režimu predajcu</span></div>
+                <div class="pc-price">${p.price}€<span class="pc-price-note">${safeAttr(productPriceTaxNote())}</span></div>
                 ${detailBtn}
                 ${cartBtn}
             </div>
@@ -4256,7 +4289,7 @@ function handleDelegatedActions(event) {
         'resend-confirmation', 'logout-customer', 'load-customer-orders', 'close-return-request',
         'order-confirm-account', 'order-confirm-signup', 'open-return-request',
         'email-return-request', 'copy-return-request', 'add-cart-detail', 'copy-product-link'
-        , 'run-advisor'
+        , 'run-advisor', 'toggle-filters'
     ].includes(action) && !(action === 'close-cart' && actionEl.matches('a[href^="#"]'));
     if (shouldPreventDefault) {
         event.preventDefault();
@@ -4269,6 +4302,11 @@ function handleDelegatedActions(event) {
         openProductDetail(actionEl.dataset.name || '');
     } else if (action === 'run-advisor') {
         runAdvisorRecommendation();
+    } else if (action === 'toggle-filters') {
+        const panel = document.getElementById('detailed-product-filters');
+        const expanded = actionEl.getAttribute('aria-expanded') === 'true';
+        actionEl.setAttribute('aria-expanded', String(!expanded));
+        panel?.classList.toggle('mobile-open', !expanded);
     } else if (action === 'toggle-wish') {
         toggleWish(actionEl, actionEl.dataset.name || '');
     } else if (action === 'cart-qty') {
@@ -4500,6 +4538,18 @@ function observeRevealElements(root = document) {
     root.querySelectorAll?.('.reveal:not(.visible)').forEach(el => observer.observe(el));
 }
 
+function prioritizeProductCatalog() {
+    const catalog = document.getElementById('ponuka');
+    const nextSection = document.getElementById('ako-to-funguje');
+    if (catalog && nextSection && catalog.nextElementSibling !== nextSection) {
+        nextSection.before(catalog);
+    }
+    if (catalog && location.hash === '#ponuka') {
+        requestAnimationFrame(() => requestAnimationFrame(() => catalog.scrollIntoView({ block: 'start' })));
+    }
+}
+
+prioritizeProductCatalog();
 observeRevealElements();
 setTimeout(() => document.documentElement.classList.add('js-ready'), 900);
 
