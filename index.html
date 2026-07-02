@@ -112,11 +112,14 @@
             --card-bg: rgba(22, 30, 45, 0.7);
             --accent: #3b82f6;
             --accent-glow: rgba(59, 130, 246, 0.4);
+            --action: #2563eb;
+            --action-hover: #1d4ed8;
             --text: #f1f5f9;
             --muted: #94a3b8;
             --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.08);
             --radius: 24px;
+            --section-space: 5.5rem;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -126,7 +129,7 @@
         input, select, textarea { font-size: 16px; }
         button, a, input, select, textarea { -webkit-tap-highlight-color: rgba(59,130,246,0.25); touch-action: manipulation; }
         a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(96,165,250,0.85); outline-offset: 3px; }
-        .skip-link { position: fixed; left: 1rem; top: 1rem; z-index: 5000; transform: translateY(-150%); background: var(--accent); color: white; padding: 0.75rem 1rem; border-radius: 10px; font-weight: 800; text-decoration: none; transition: transform 0.2s; }
+        .skip-link { position: fixed; left: 1rem; top: 1rem; z-index: 5000; transform: translateY(-150%); background: var(--action); color: white; padding: 0.75rem 1rem; border-radius: 10px; font-weight: 800; text-decoration: none; transition: transform 0.2s; }
         .skip-link:focus { transform: translateY(0); }
 
         /* NAV */
@@ -188,23 +191,24 @@
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
         h1 { font-family: 'Outfit', sans-serif; font-size: 4.5rem; line-height: 1.1; font-weight: 900; margin-bottom: 2rem; }
         h1 span { color: var(--accent); }
-        .hero p { font-size: 1.15rem; color: var(--muted); max-width: 550px; margin-bottom: 2.5rem; }
-        .hero-btns { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
-        .btn-primary { background: var(--accent); color: white; padding: 1.1rem 2.2rem; border-radius: 14px; text-decoration: none; font-weight: 700; transition: 0.3s; display: inline-block; }
-        .btn-primary:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.4); }
+        .hero p { font-size: 1.15rem; color: var(--muted); max-width: 550px; margin-bottom: 1.75rem; }
+        .hero-btns { display: flex; gap: 0.85rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
+        .hero-cta-note { margin: 0 0 1.75rem; color: #cbd5e1; font-size: 0.84rem; font-weight: 650; }
+        .btn-primary { background: var(--action); color: white; border: 1px solid #60a5fa; padding: 1.1rem 2.2rem; border-radius: 14px; text-decoration: none; font-weight: 800; transition: 0.3s; display: inline-block; box-shadow: 0 10px 28px rgba(37,99,235,0.28); }
+        .btn-primary:hover { background: var(--action-hover); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(37,99,235,0.4); }
         .btn-ghost { background: transparent; border: 1px solid var(--border); color: white; padding: 1.1rem 2.2rem; border-radius: 14px; text-decoration: none; font-weight: 700; transition: 0.3s; display: inline-block; }
         .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
         /* TRUST BADGES */
-        .trust-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .trust-row { display: flex; column-gap: 1.4rem; row-gap: 0.7rem; flex-wrap: wrap; }
         .trust-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--muted); }
         .trust-item span:first-child { font-size: 1.1rem; }
         .buy-confidence-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
         .buy-confidence-item { border: 1px solid rgba(148,163,184,0.16); border-radius: 14px; background: rgba(255,255,255,0.035); padding: 0.95rem; }
         .buy-confidence-item strong { display: block; color: var(--text); font-family: 'Outfit'; font-size: 1rem; margin-bottom: 0.22rem; }
         .buy-confidence-item span { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
-        .nav-cta { color: #fff !important; background: var(--accent); border: 1px solid var(--accent); border-radius: 10px; padding: 0.62rem 0.9rem !important; font-weight: 800 !important; }
-        .nav-cta:hover { color: #fff !important; background: #2563eb; }
+        .nav-cta { color: #fff !important; background: var(--action); border: 1px solid #60a5fa; border-radius: 10px; padding: 0.62rem 0.9rem !important; font-weight: 800 !important; }
+        .nav-cta:hover { color: #fff !important; background: var(--action-hover); }
 
         /* CATEGORY GUIDE */
         .category-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
@@ -234,7 +238,7 @@
         .quiz-needs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
         .quiz-need { display: flex; align-items: center; gap: 0.55rem; border: 1px solid var(--border); border-radius: 10px; padding: 0.72rem; background: rgba(255,255,255,0.03); color: var(--muted); font-size: 0.82rem; cursor: pointer; }
         .quiz-need input { width: 17px; height: 17px; min-height: 0; accent-color: var(--accent); }
-        .quiz-submit { margin-top: 0.85rem; width: 100%; min-height: 48px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 850; cursor: pointer; }
+        .quiz-submit { margin-top: 0.85rem; width: 100%; min-height: 48px; border: 1px solid #60a5fa; border-radius: 10px; background: var(--action); color: #fff; font-weight: 850; cursor: pointer; }
         .quiz-submit:hover { background: #2563eb; }
         .advisor-result-list { display: grid; gap: 0.65rem; margin-top: 0.8rem; }
         .advisor-match { border: 1px solid rgba(59,130,246,0.2); border-radius: 12px; background: rgba(59,130,246,0.055); padding: 0.85rem; }
@@ -253,7 +257,7 @@
         .b2b-form-field { display: grid; gap: 0.35rem; min-width: 0; color: var(--muted); font-size: 0.78rem; font-weight: 750; }
         .b2b-form-field.full { grid-column: 1 / -1; }
         .b2b-form-actions { grid-column: 1 / -1; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-        .b2b-submit { min-height: 46px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; padding: 0.8rem 1rem; font-weight: 850; cursor: pointer; }
+        .b2b-submit { min-height: 46px; border: 1px solid #60a5fa; border-radius: 10px; background: var(--action); color: #fff; padding: 0.8rem 1rem; font-weight: 850; cursor: pointer; }
         .b2b-form-status { color: var(--muted); font-size: 0.82rem; }
         .product-category-badge { display: inline-flex; width: fit-content; align-items: center; margin: 0.2rem 0 0.75rem; padding: 0.35rem 0.58rem; border: 1px solid rgba(148,163,184,0.2); border-radius: 999px; color: var(--muted); background: rgba(255,255,255,0.035); font-size: 0.72rem; font-weight: 800; }
         .related-products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; margin-top: 0.7rem; }
@@ -306,7 +310,7 @@
         .js .reveal > *:nth-child(5) { --stagger: 4; }
 
         /* STATS SECTION */
-        .stats-section { padding: 4rem 8%; }
+        .stats-section { padding: var(--section-space) 8%; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
         .stat-card { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem 2rem; text-align: center; transition: 0.3s; }
         .stat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
@@ -314,10 +318,10 @@
         .stat-label { color: var(--muted); font-size: 0.95rem; margin-top: 0.3rem; }
 
         /* SECTIONS */
-        section { padding: 5rem 8%; }
-        .section-header { text-align: center; margin-bottom: 3rem; }
+        section { padding: var(--section-space) 8%; }
+        .section-header { width: min(100%, 820px); text-align: center; margin: 0 auto 2.5rem; }
         .section-label { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; }
-        .section-title { font-family: 'Outfit'; font-size: 3rem; font-weight: 700; margin: 0.5rem 0 0; }
+        .section-title { font-family: 'Outfit'; font-size: 2.75rem; line-height: 1.15; font-weight: 750; margin: 0.55rem 0 0; }
 
         /* FILTER PANEL */
         .filter-panel { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; }
@@ -345,7 +349,7 @@
         .product-controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
         .filter-group { display: flex; gap: 0.7rem; flex-wrap: wrap; }
         .filter-btn { background: var(--glass); border: 1px solid var(--border); color: var(--muted); padding: 0.7rem 1.6rem; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 0.9rem; }
-        .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .filter-btn.active { background: var(--action); color: white; border-color: #60a5fa; }
 
         .price-filter { display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; color: var(--muted); }
         .price-filter input[type=range] { accent-color: var(--accent); width: 130px; cursor: pointer; }
@@ -363,7 +367,7 @@
         .compare-bar-items { display: flex; gap: 0.8rem; }
         .compare-chip { background: rgba(59,130,246,0.15); border: 1px solid var(--accent); border-radius: 8px; padding: 0.4rem 0.8rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; }
         .compare-chip button { background: none; border: none; color: #f87171; cursor: pointer; font-size: 1rem; line-height: 1; }
-        .compare-now-btn { background: var(--accent); color: white; border: none; padding: 0.7rem 1.4rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .compare-now-btn { background: var(--action); color: white; border: 1px solid #60a5fa; padding: 0.7rem 1.4rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .compare-now-btn:hover { background: #2563eb; }
         .compare-clear { background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; font-size: 0.85rem; }
 
@@ -429,8 +433,8 @@
         .pc-footer { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 0.55rem; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1rem; }
         .pc-price { font-family: 'Outfit'; font-size: 2rem; font-weight: 900; line-height: 1; }
         .pc-price-note { display: block; color: var(--muted); font-family: 'Inter'; font-size: 0.68rem; font-weight: 600; margin-top: 0.2rem; }
-        .add-cart-btn { background: var(--accent); color: white; border: none; padding: 1rem 1.3rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; white-space: nowrap; }
-        .add-cart-btn:hover { background: #2563eb; transform: translateY(-2px); }
+        .add-cart-btn { background: var(--action); color: white; border: 1px solid #60a5fa; padding: 1rem 1.3rem; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 0.9rem; white-space: nowrap; }
+        .add-cart-btn:hover { background: var(--action-hover); transform: translateY(-2px); }
         .add-cart-btn.added { background: #22c55e; }
         .detail-btn { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); padding: 1rem 1.1rem; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; white-space: nowrap; }
         a.detail-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
@@ -546,7 +550,7 @@
         .product-detail-actions { display: flex; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; }
         .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
         .auth-tab { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); border-radius: 12px; padding: 0.75rem; font-weight: 800; cursor: pointer; }
-        .auth-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .auth-tab.active { background: var(--action); border-color: #60a5fa; color: #fff; }
         .auth-panel { display: none; }
         .auth-panel.active { display: block; }
         .auth-field { margin-bottom: 0.85rem; }
@@ -626,8 +630,8 @@
         .wizard-input:focus { border-color: var(--accent); }
         .wizard-input option { background: #0f1623; }
         .wizard-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.3rem; display: block; }
-        .wizard-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 1.1rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 0.5rem; font-size: 1rem; }
-        .wizard-btn:hover { background: #2563eb; transform: translateY(-2px); }
+        .wizard-btn { width: 100%; background: var(--action); color: white; border: 1px solid #60a5fa; padding: 1.1rem; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 0.5rem; font-size: 1rem; }
+        .wizard-btn:hover { background: var(--action-hover); transform: translateY(-2px); }
         .wizard-btn-ghost { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
         .wizard-btn-ghost:hover { background: rgba(255,255,255,0.1); transform: none; }
         .wizard-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
@@ -701,7 +705,7 @@
         .form-group input, .form-group select, .form-group textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 1rem; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
         .form-group select option { background: #0f1623; }
-        .send-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 1.2rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .send-btn { width: 100%; background: var(--action); color: white; border: 1px solid #60a5fa; padding: 1.2rem; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 1rem; }
         .send-btn:hover { background: #2563eb; }
         .contact-fallback { display: none; margin-top: 1rem; padding: 0.9rem; border: 1px solid rgba(251,191,36,0.28); border-radius: 12px; background: rgba(251,191,36,0.08); color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
         .contact-fallback[hidden], .b2b-form-status[hidden] { display: none !important; }
@@ -1193,6 +1197,7 @@
             <a href="#ponuka" class="btn-primary">Prezrieť PC</a>
             <a href="#poradca" class="btn-ghost">Nájsť vhodný PC</a>
         </div>
+        <div class="hero-cta-note">Nákup aj bez registrácie · aktuálny sklad · jasná konečná cena</div>
         <div class="trust-row" id="hero-trust-row">
             <div class="trust-item"><span>✓</span> Kontrola pred predajom</div>
             <div class="trust-item"><span>✓</span> Jasné parametre</div>
@@ -1225,6 +1230,187 @@
                     <div class="hero-stock-pill">Skladom</div>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="ponuka">
+    <div class="section-header reveal">
+        <div class="section-label">Aktuálny stav skladu</div>
+        <h2 class="section-title">Vyberte si svoj nový stroj</h2>
+    </div>
+    <div class="buy-confidence-strip reveal" aria-label="Výhody nákupu">
+        <div class="buy-confidence-item"><strong>12M záruka</strong><span>Jasná záruka na predané repasované kusy.</span></div>
+        <div class="buy-confidence-item"><strong>Kontrola kusu</strong><span>Kontrola parametrov a príprava pred odoslaním.</span></div>
+        <div class="buy-confidence-item"><strong>Skladové kusy</strong><span>Objednávka pracuje s reálnou zásobou.</span></div>
+        <div class="buy-confidence-item"><strong>14 dní vrátenie</strong><span>Pri nákupe na diaľku podľa podmienok.</span></div>
+    </div>
+
+    <div class="filter-panel reveal">
+
+        <!-- Row 1: Category + Sort + Reset -->
+        <div class="filter-row">
+            <div class="filter-group">
+                <button type="button" class="filter-btn active" data-action="set-filter" data-filter-type="cat" data-filter-value="vsetko">Všetky</button>
+                <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="cat" data-filter-value="gaming">🎮 Herné</button>
+                <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="cat" data-filter-value="office">💼 Kancelárske</button>
+                <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="cat" data-filter-value="retro">🕹️ Retro</button>
+            </div>
+            <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
+                <select class="filter-select" id="sort-select" data-action="apply-filters" aria-label="Zoradenie produktov">
+                    <option value="default">Zoradiť: Predvolené</option>
+                    <option value="price-asc">Cena: od najlacnejšej</option>
+                    <option value="price-desc">Cena: od najdrahšej</option>
+                    <option value="newest">Najnovšie pridané</option>
+                    <option value="popular">Najobľúbenejšie</option>
+                    <option value="gaming">Najvhodnejšie na hranie</option>
+                    <option value="office">Najvhodnejšie do kancelárie</option>
+                    <option value="value">Pomer cena / výbava</option>
+                </select>
+                <button type="button" class="filter-reset" data-action="reset-filters">✕ Zrušiť filtre</button>
+            </div>
+        </div>
+
+        <button type="button" class="mobile-filter-toggle" data-action="toggle-filters" aria-expanded="false" aria-controls="detailed-product-filters">
+            <span>Podrobné filtre</span>
+            <span class="filter-toggle-icon" aria-hidden="true">⌄</span>
+        </button>
+
+        <!-- Row 2: Detailed filters -->
+        <div class="filter-row filter-details" id="detailed-product-filters">
+            <!-- Price range -->
+            <div class="filter-item">
+                <span class="filter-label">Cena</span>
+                <div class="price-range-wrap">
+                    <span class="price-val" id="price-min-label">0€</span>
+                    <div class="range-track">
+                        <input type="range" min="0" max="5000" value="0" step="50" id="price-min" data-action="apply-filters" aria-label="Minimálna cena">
+                        <input type="range" min="0" max="5000" value="5000" step="50" id="price-max" data-action="apply-filters" aria-label="Maximálna cena">
+                    </div>
+                    <span class="price-val" id="price-max-label">5000€</span>
+                </div>
+            </div>
+
+            <!-- GPU -->
+            <div class="filter-item">
+                <label class="filter-label">Grafická karta</label>
+                <select class="filter-select" id="filter-gpu" data-action="apply-filters">
+                    <option value="">Všetky</option>
+                    <option value="RTX 3080">RTX 3080</option>
+                    <option value="RTX 3070">RTX 3070</option>
+                    <option value="UHD">Integrovaná</option>
+                </select>
+            </div>
+
+            <!-- CPU -->
+            <div class="filter-item">
+                <label class="filter-label">Procesor</label>
+                <select class="filter-select" id="filter-cpu" data-action="apply-filters">
+                    <option value="">Všetky</option>
+                    <option value="amd">AMD (Ryzen)</option>
+                    <option value="intel">Intel</option>
+                </select>
+            </div>
+
+            <!-- CPU generation -->
+            <div class="filter-item">
+                <label class="filter-label">Generácia CPU</label>
+                <select class="filter-select" id="filter-cpu-gen" data-action="apply-filters">
+                    <option value="">Všetky</option>
+                </select>
+            </div>
+
+            <!-- RAM -->
+            <div class="filter-item">
+                <label class="filter-label">RAM</label>
+                <div class="filter-group" id="ram-group">
+                    <button type="button" class="filter-btn active" data-action="set-filter" data-filter-type="ram" data-filter-value="">Všetky</button>
+                    <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="ram" data-filter-value="16">16GB</button>
+                    <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="ram" data-filter-value="32">32GB</button>
+                </div>
+            </div>
+
+            <!-- Storage -->
+            <div class="filter-item">
+                <label class="filter-label">Úložisko</label>
+                <select class="filter-select" id="filter-storage" data-action="apply-filters">
+                    <option value="">Všetky</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label class="filter-label">Typ úložiska</label>
+                <select class="filter-select" id="filter-storage-type" data-action="apply-filters">
+                    <option value="">Všetky</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label class="filter-label">Operačný systém</label>
+                <select class="filter-select" id="filter-os" data-action="apply-filters">
+                    <option value="">Všetky</option>
+                </select>
+            </div>
+
+            <!-- Renovation condition -->
+            <div class="filter-item">
+                <label class="filter-label">Stav PC</label>
+                <select class="filter-select" id="filter-condition" data-action="apply-filters">
+                    <option value="">Všetky</option>
+                </select>
+            </div>
+
+            <!-- Stock status -->
+            <div class="filter-item">
+                <label class="filter-label">Dostupnosť</label>
+                <div class="filter-group">
+                    <button type="button" class="filter-btn active" data-action="set-filter" data-filter-type="stock" data-filter-value="vsetko">Všetky</button>
+                    <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="stock" data-filter-value="skladom">🟢 Skladom</button>
+                    <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="stock" data-filter-value="malo">🔴 Posledné kusy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active filter tags -->
+        <div id="active-tags" style="display:none; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;"></div>
+
+        <!-- Results count -->
+        <div class="products-live-row">
+            <div>
+                Zobrazuje sa <span id="results-count" style="color:var(--accent);font-weight:700;" aria-live="polite">—</span> produktov
+            </div>
+            <div class="live-status" id="products-live-status" role="status" aria-live="polite"><span class="live-dot"></span><span>Načítavam sklad...</span></div>
+            <button class="refresh-products-btn" type="button" data-action="refresh-products">Obnoviť sklad</button>
+        </div>
+    </div>
+
+    <div class="products-grid" id="products-grid">
+        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+    </div>
+
+    <div class="recent-strip" id="recent-strip">
+        <div class="recent-head">
+            <strong>Naposledy pozerané</strong>
+            <button type="button" data-action="clear-recent">Vymazať</button>
+        </div>
+        <div class="recent-items" id="recent-items"></div>
+    </div>
+
+    <!-- No results -->
+    <div id="no-results" role="status" aria-live="polite" style="display:none; text-align:center; padding: 4rem; color: var(--muted);">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+        <p id="no-results-text">Žiadne PC nezodpovedá filtru. Skúste iné nastavenie.</p>
+        <div class="empty-suggestions" aria-label="Rýchle alternatívy">
+            <a class="empty-suggestion" href="#poradca"><strong>Nájsť vhodný PC</strong>Poradca vyberie najbližšie skladové zhody.</a>
+            <a class="empty-suggestion" href="#skoly-firmy"><strong>Pre firmy a školy</strong>Pošlite požiadavku na viac kusov alebo podobné konfigurácie.</a>
+            <a class="empty-suggestion" href="#kontakt"><strong>Nevidíte vhodný kus?</strong>Napíšte rozpočet a použitie, ozveme sa s možnosťami.</a>
+        </div>
+        <div class="stock-empty-actions">
+            <button class="detail-btn" type="button" data-action="reset-filters">Zrušiť filtre</button>
+            <a class="add-cart-btn" href="#kontakt" style="text-decoration:none;text-align:center;">Napísať, čo hľadám</a>
         </div>
     </div>
 </section>
@@ -1669,186 +1855,7 @@
     </div>
 </section>
 
-<!-- PRODUCTS -->
-<section id="ponuka">
-    <div class="section-header reveal">
-        <div class="section-label">Aktuálny stav skladu</div>
-        <h2 class="section-title">Vyberte si svoj nový stroj</h2>
-    </div>
-    <div class="buy-confidence-strip reveal" aria-label="Výhody nákupu">
-        <div class="buy-confidence-item"><strong>12M záruka</strong><span>Jasná záruka na predané repasované kusy.</span></div>
-        <div class="buy-confidence-item"><strong>Kontrola kusu</strong><span>Kontrola parametrov a príprava pred odoslaním.</span></div>
-        <div class="buy-confidence-item"><strong>Skladové kusy</strong><span>Objednávka pracuje s reálnou zásobou.</span></div>
-        <div class="buy-confidence-item"><strong>14 dní vrátenie</strong><span>Pri nákupe na diaľku podľa podmienok.</span></div>
-    </div>
 
-    <div class="filter-panel reveal">
-
-        <!-- Row 1: Category + Sort + Reset -->
-        <div class="filter-row">
-            <div class="filter-group">
-                <button type="button" class="filter-btn active" data-action="set-filter" data-filter-type="cat" data-filter-value="vsetko">Všetky</button>
-                <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="cat" data-filter-value="gaming">🎮 Herné</button>
-                <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="cat" data-filter-value="office">💼 Kancelárske</button>
-                <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="cat" data-filter-value="retro">🕹️ Retro</button>
-            </div>
-            <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
-                <select class="filter-select" id="sort-select" data-action="apply-filters" aria-label="Zoradenie produktov">
-                    <option value="default">Zoradiť: Predvolené</option>
-                    <option value="price-asc">Cena: od najlacnejšej</option>
-                    <option value="price-desc">Cena: od najdrahšej</option>
-                    <option value="newest">Najnovšie pridané</option>
-                    <option value="popular">Najobľúbenejšie</option>
-                    <option value="gaming">Najvhodnejšie na hranie</option>
-                    <option value="office">Najvhodnejšie do kancelárie</option>
-                    <option value="value">Pomer cena / výbava</option>
-                </select>
-                <button type="button" class="filter-reset" data-action="reset-filters">✕ Zrušiť filtre</button>
-            </div>
-        </div>
-
-        <button type="button" class="mobile-filter-toggle" data-action="toggle-filters" aria-expanded="false" aria-controls="detailed-product-filters">
-            <span>Podrobné filtre</span>
-            <span class="filter-toggle-icon" aria-hidden="true">⌄</span>
-        </button>
-
-        <!-- Row 2: Detailed filters -->
-        <div class="filter-row filter-details" id="detailed-product-filters">
-            <!-- Price range -->
-            <div class="filter-item">
-                <span class="filter-label">Cena</span>
-                <div class="price-range-wrap">
-                    <span class="price-val" id="price-min-label">0€</span>
-                    <div class="range-track">
-                        <input type="range" min="0" max="5000" value="0" step="50" id="price-min" data-action="apply-filters" aria-label="Minimálna cena">
-                        <input type="range" min="0" max="5000" value="5000" step="50" id="price-max" data-action="apply-filters" aria-label="Maximálna cena">
-                    </div>
-                    <span class="price-val" id="price-max-label">5000€</span>
-                </div>
-            </div>
-
-            <!-- GPU -->
-            <div class="filter-item">
-                <label class="filter-label">Grafická karta</label>
-                <select class="filter-select" id="filter-gpu" data-action="apply-filters">
-                    <option value="">Všetky</option>
-                    <option value="RTX 3080">RTX 3080</option>
-                    <option value="RTX 3070">RTX 3070</option>
-                    <option value="UHD">Integrovaná</option>
-                </select>
-            </div>
-
-            <!-- CPU -->
-            <div class="filter-item">
-                <label class="filter-label">Procesor</label>
-                <select class="filter-select" id="filter-cpu" data-action="apply-filters">
-                    <option value="">Všetky</option>
-                    <option value="amd">AMD (Ryzen)</option>
-                    <option value="intel">Intel</option>
-                </select>
-            </div>
-
-            <!-- CPU generation -->
-            <div class="filter-item">
-                <label class="filter-label">Generácia CPU</label>
-                <select class="filter-select" id="filter-cpu-gen" data-action="apply-filters">
-                    <option value="">Všetky</option>
-                </select>
-            </div>
-
-            <!-- RAM -->
-            <div class="filter-item">
-                <label class="filter-label">RAM</label>
-                <div class="filter-group" id="ram-group">
-                    <button type="button" class="filter-btn active" data-action="set-filter" data-filter-type="ram" data-filter-value="">Všetky</button>
-                    <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="ram" data-filter-value="16">16GB</button>
-                    <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="ram" data-filter-value="32">32GB</button>
-                </div>
-            </div>
-
-            <!-- Storage -->
-            <div class="filter-item">
-                <label class="filter-label">Úložisko</label>
-                <select class="filter-select" id="filter-storage" data-action="apply-filters">
-                    <option value="">Všetky</option>
-                </select>
-            </div>
-
-            <div class="filter-item">
-                <label class="filter-label">Typ úložiska</label>
-                <select class="filter-select" id="filter-storage-type" data-action="apply-filters">
-                    <option value="">Všetky</option>
-                </select>
-            </div>
-
-            <div class="filter-item">
-                <label class="filter-label">Operačný systém</label>
-                <select class="filter-select" id="filter-os" data-action="apply-filters">
-                    <option value="">Všetky</option>
-                </select>
-            </div>
-
-            <!-- Renovation condition -->
-            <div class="filter-item">
-                <label class="filter-label">Stav PC</label>
-                <select class="filter-select" id="filter-condition" data-action="apply-filters">
-                    <option value="">Všetky</option>
-                </select>
-            </div>
-
-            <!-- Stock status -->
-            <div class="filter-item">
-                <label class="filter-label">Dostupnosť</label>
-                <div class="filter-group">
-                    <button type="button" class="filter-btn active" data-action="set-filter" data-filter-type="stock" data-filter-value="vsetko">Všetky</button>
-                    <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="stock" data-filter-value="skladom">🟢 Skladom</button>
-                    <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="stock" data-filter-value="malo">🔴 Posledné kusy</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active filter tags -->
-        <div id="active-tags" style="display:none; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;"></div>
-
-        <!-- Results count -->
-        <div class="products-live-row">
-            <div>
-                Zobrazuje sa <span id="results-count" style="color:var(--accent);font-weight:700;" aria-live="polite">—</span> produktov
-            </div>
-            <div class="live-status" id="products-live-status" role="status" aria-live="polite"><span class="live-dot"></span><span>Načítavam sklad...</span></div>
-            <button class="refresh-products-btn" type="button" data-action="refresh-products">Obnoviť sklad</button>
-        </div>
-    </div>
-
-    <div class="products-grid" id="products-grid">
-        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-    </div>
-
-    <div class="recent-strip" id="recent-strip">
-        <div class="recent-head">
-            <strong>Naposledy pozerané</strong>
-            <button type="button" data-action="clear-recent">Vymazať</button>
-        </div>
-        <div class="recent-items" id="recent-items"></div>
-    </div>
-
-    <!-- No results -->
-    <div id="no-results" role="status" aria-live="polite" style="display:none; text-align:center; padding: 4rem; color: var(--muted);">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
-        <p id="no-results-text">Žiadne PC nezodpovedá filtru. Skúste iné nastavenie.</p>
-        <div class="empty-suggestions" aria-label="Rýchle alternatívy">
-            <a class="empty-suggestion" href="#poradca"><strong>Nájsť vhodný PC</strong>Poradca vyberie najbližšie skladové zhody.</a>
-            <a class="empty-suggestion" href="#skoly-firmy"><strong>Pre firmy a školy</strong>Pošlite požiadavku na viac kusov alebo podobné konfigurácie.</a>
-            <a class="empty-suggestion" href="#kontakt"><strong>Nevidíte vhodný kus?</strong>Napíšte rozpočet a použitie, ozveme sa s možnosťami.</a>
-        </div>
-        <div class="stock-empty-actions">
-            <button class="detail-btn" type="button" data-action="reset-filters">Zrušiť filtre</button>
-            <a class="add-cart-btn" href="#kontakt" style="text-decoration:none;text-align:center;">Napísať, čo hľadám</a>
-        </div>
-    </div>
-</section>
 
 <!-- FAQ -->
 <section id="faq">
