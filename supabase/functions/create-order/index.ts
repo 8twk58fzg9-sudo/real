@@ -16,7 +16,16 @@ const allowedPayloadFields = new Set([
 
 function isAllowedOrigin(origin: string): boolean {
   if (allowedOrigins.has(origin)) return true;
-  return /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
+  // "null" is used by browsers when the downloaded index.html is opened directly.
+  if (origin === "null") return true;
+  try {
+    const parsed = new URL(origin);
+    const localHosts = new Set(["localhost", "127.0.0.1", "[::1]", "0.0.0.0"]);
+    return (parsed.protocol === "http:" || parsed.protocol === "https:") &&
+      localHosts.has(parsed.hostname);
+  } catch {
+    return false;
+  }
 }
 
 function responseHeaders(origin: string): Record<string, string> {
@@ -111,7 +120,10 @@ function safeDatabaseError(message: string): { status: number; message: string }
 
 Deno.serve(async (req: Request) => {
   const origin = req.headers.get("origin") || "";
-  if (origin && !isAllowedOrigin(origin)) return json("", 403, { message: "Origin is not allowed" });
+  if (origin && !isAllowedOrigin(origin)) {
+    console.warn("create-order rejected origin", { origin: origin.slice(0, 200) });
+    return json("", 403, { message: "Origin is not allowed" });
+  }
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: responseHeaders(origin) });
   if (req.method !== "POST") {
     return json(origin, 405, { message: "Method not allowed" }, { Allow: "POST, OPTIONS" });

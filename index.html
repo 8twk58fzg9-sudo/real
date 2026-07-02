@@ -2693,6 +2693,15 @@ function authHeaders(token = customerSession?.access_token) {
     };
 }
 
+function publicSupabaseHeaders({ json = false, noCache = false } = {}) {
+    const headers = { apikey: SB_KEY };
+    // Legacy anon keys are JWTs. New publishable keys belong only in apikey.
+    if (SB_KEY.startsWith('eyJ')) headers.Authorization = `Bearer ${SB_KEY}`;
+    if (json) headers['Content-Type'] = 'application/json';
+    if (noCache) headers['Cache-Control'] = 'no-cache';
+    return headers;
+}
+
 function setAuthMode(mode) {
     const login = mode === 'login';
     const signup = mode === 'signup';
@@ -5641,16 +5650,12 @@ function buildOrderSummary() {
 }
 
 async function fetchLiveProducts() {
-    const res = await fetch(`${SB_URL}/rest/v1/products?select=*&order=id.asc`, {
+    const rows = await fetchSupabaseJson(`${SB_URL}/rest/v1/products?select=*&order=id.asc`, {
         cache: 'no-store',
-        headers: {
-            apikey: SB_KEY,
-            Authorization: `Bearer ${SB_KEY}`,
-            'Cache-Control': 'no-cache'
-        }
+        headers: publicSupabaseHeaders()
     });
-    if (!res.ok) throw new Error(await res.text());
-    return (await res.json()).map(normalizeProduct);
+    if (!Array.isArray(rows)) throw new Error('Invalid Supabase products response');
+    return rows.map(normalizeProduct);
 }
 
 async function validateCartAgainstLiveStock() {
@@ -5744,23 +5749,11 @@ async function createSupabaseOrder(orderPayload) {
     if (!SB_KEY) throw new Error('Missing Supabase public key');
     const orderFunctionUrl = safePublicFunctionUrl(`${SB_URL}/functions/v1/create-order`);
     if (!orderFunctionUrl) throw new Error('Invalid Supabase order endpoint');
-    const res = await fetch(orderFunctionUrl, {
+    return fetchSupabaseJson(orderFunctionUrl, {
         method: 'POST',
-        headers: {
-            apikey: SB_KEY,
-            Authorization: `Bearer ${SB_KEY}`,
-            'Content-Type': 'application/json'
-        },
+        headers: publicSupabaseHeaders({ json: true }),
         body: JSON.stringify({ order_payload: orderPayload })
-    });
-    const text = await res.text();
-    if (!res.ok) {
-        const err = parseResponseJson(text, { message: text });
-        const requestError = new Error(err.message || 'Objednávku sa nepodarilo uložiť.');
-        requestError.httpStatus = res.status;
-        throw requestError;
-    }
-    return parseResponseJson(text, {});
+    }, 1);
 }
 
 async function startGoPayPayment(orderPayload, createdOrder = {}) {
@@ -5769,11 +5762,7 @@ async function startGoPayPayment(orderPayload, createdOrder = {}) {
     if (settings.paymentGateway !== 'gopay' || settings.gopayMode !== 'edge_function' || !functionUrl) return null;
     const res = await fetch(functionUrl, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            apikey: SB_KEY,
-            Authorization: `Bearer ${SB_KEY}`
-        },
+        headers: publicSupabaseHeaders({ json: true }),
         body: JSON.stringify({
             order_number: orderPayload.order_number,
             order_id: createdOrder?.id || createdOrder?.order_id || null,
@@ -5799,6 +5788,8 @@ function resetSubmitOrderButton() {
 function friendlyOrderError(error) {
     const message = String(error?.message || error || '').toLowerCase();
     if (message.includes('missing supabase public key')) return 'Web nemá nastavený verejný Supabase kľúč v config.js. Objednávku zatiaľ pošlite cez kontakt.';
+    if (message.includes('origin is not allowed') || error?.httpStatus === 403) return 'Táto adresa webu nemá povolené odosielanie objednávok. Otvorte aktuálnu stránku cez GitHub Pages alebo kontaktujte podporu.';
+    if (message.includes('timeout')) return 'Server neodpovedal do 10 sekúnd. Košík ostal uložený; skontrolujte internet a skúste objednávku znova.';
     if (message.includes('failed to fetch') || message.includes('networkerror') || message.includes('load failed')) return 'Nepodarilo sa spojiť so serverom. Košík ostal uložený, skontrolujte internet a skúste objednávku odoslať znova.';
     if (message.includes('supabase') || message.includes('permission denied') || message.includes('row-level security') || message.includes('42501')) return 'Objednávku blokuje nastavenie databázy/Supabase. Košík ostal uložený, kontaktujte podporu alebo skúste neskôr.';
     if (message.includes('rate limit')) return 'Príliš veľa pokusov za krátky čas. Skúste to prosím znova o pár minút.';
