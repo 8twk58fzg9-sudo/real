@@ -44,7 +44,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <script src="config.js?v=20260614"></script>
+    <script src="config.js?v=20260702e"></script>
     <script>
     const PRODUCTS_DATA = [
         { id: 1, name: "Alienware Aurora R14", price: 949, cat: "gaming", stock: 2, status: "active", tag: "HERNÝ ŠPECIÁL", tagColor: "#f87171", cpu: "Ryzen 9 5900X", cpuBrand: "amd", gpu: "RTX 3080 10GB", gpuFilter: "RTX 3080", ram: "32GB DDR4", ramFilter: "32", ssd: "1TB NVMe", os: "Windows 11 Pro", delivery: "Doprava zdarma", popular: 3, newest: 1 },
@@ -369,6 +369,14 @@
 
         /* PRODUCTS GRID */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: stretch; }
+        .product-skeleton { min-height: 510px; border: 1px solid rgba(148,163,184,0.14); border-radius: 20px; padding: 1.15rem; background: rgba(17,24,39,0.82); overflow: hidden; }
+        .skeleton-line, .skeleton-image { position: relative; overflow: hidden; background: rgba(148,163,184,0.12); border-radius: 8px; }
+        .skeleton-line::after, .skeleton-image::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(255,255,255,0.11), transparent); animation: skeleton-shimmer 1.35s ease-in-out infinite; }
+        .skeleton-image { width: 100%; aspect-ratio: 16 / 10; border-radius: 16px; margin: 2.9rem 0 1rem; }
+        .skeleton-line { height: 0.82rem; margin-top: 0.72rem; }
+        .skeleton-line.title { height: 1.55rem; width: 72%; }
+        .skeleton-line.short { width: 46%; }
+        @keyframes skeleton-shimmer { to { transform: translateX(100%); } }
         .pc-card { background: linear-gradient(180deg, rgba(22,30,45,0.9), rgba(13,20,34,0.96)); border: 1px solid rgba(148,163,184,0.16); border-radius: 20px; padding: 1.15rem; backdrop-filter: blur(10px); transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; position: relative; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; min-height: 100%; box-shadow: 0 18px 50px rgba(0,0,0,0.22); content-visibility: auto; contain-intrinsic-size: 520px; }
         .pc-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 0%, rgba(59,130,246,0.16), transparent 32%); opacity: 0; transition: opacity 0.25s ease; pointer-events: none; }
         .pc-card:hover { transform: translateY(-6px); border-color: rgba(59,130,246,0.75); box-shadow: 0 24px 60px rgba(0,0,0,0.38); }
@@ -696,6 +704,7 @@
         .send-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 1.2rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
         .send-btn:hover { background: #2563eb; }
         .contact-fallback { display: none; margin-top: 1rem; padding: 0.9rem; border: 1px solid rgba(251,191,36,0.28); border-radius: 12px; background: rgba(251,191,36,0.08); color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+        .contact-fallback[hidden], .b2b-form-status[hidden] { display: none !important; }
         .contact-fallback.visible { display: block; }
         .contact-fallback a { color: #fde68a; font-weight: 800; text-decoration: none; }
         .contact-fallback a:hover { text-decoration: underline; }
@@ -790,7 +799,7 @@
             .category-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 720px) {
-            html { scroll-padding-top: 13.5rem; }
+            html { scroll-padding-top: 9rem; }
             input, select, textarea { font-size: 16px !important; }
             .auth-link { min-height: 44px; padding: 0.6rem 0; }
             .wish-btn { width: 44px; height: 44px; }
@@ -801,10 +810,11 @@
             .logo img { width: 128px; }
             .nav-menu-btn { order: 2; }
             nav ul { order: 4; grid-template-columns: 1fr; }
-            .nav-right { order: 3; width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.55rem; }
-            .nav-search { grid-column: 1 / -1; }
+            .nav-right { order: 3; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) repeat(3, 44px); gap: 0.5rem; }
+            .nav-search { grid-column: auto; }
             .nav-search input, .nav-search input:focus { width: 100%; min-height: 44px; }
-            .cart-btn { justify-content: center; min-width: 0; width: 100%; min-height: 44px; padding: 0.58rem 0.45rem; border-radius: 10px; font-size: 0.78rem; line-height: 1.15; white-space: normal; text-align: center; gap: 0.28rem; overflow-wrap: anywhere; }
+            .cart-btn { justify-content: center; min-width: 0; width: 44px; height: 44px; min-height: 44px; padding: 0; border-radius: 10px; font-size: 1rem; line-height: 1; text-align: center; gap: 0; overflow: visible; }
+            .cart-btn .btn-label { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
             .cart-count { position: absolute; top: -0.35rem; right: -0.35rem; }
             .hero { padding-top: 2.5rem; }
             h1 { font-size: 2.35rem; }
@@ -922,16 +932,16 @@
     <div class="nav-right">
         <div class="nav-search">
             <span class="search-icon">🔍</span>
-            <input type="search" id="nav-search-input" placeholder="Hľadať PC..." autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" data-action="search-products">
+            <input type="search" id="nav-search-input" placeholder="Hľadať PC..." aria-label="Hľadať produkty" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" data-action="search-products">
         </div>
-        <button type="button" class="cart-btn" style="background:rgba(251,113,133,0.1);border-color:#fb7185;" data-action="open-wishlist">
+        <button type="button" class="cart-btn" style="background:rgba(251,113,133,0.1);border-color:#fb7185;" data-action="open-wishlist" aria-label="Otvoriť obľúbené produkty">
             <span class="btn-icon">♥</span><span class="btn-label" data-short="Obľúb.">Obľúbené</span>
             <span class="cart-count" id="wish-count" style="background:#fb7185;">0</span>
         </button>
-        <button type="button" class="cart-btn account-btn" id="account-btn" data-action="open-account">
+        <button type="button" class="cart-btn account-btn" id="account-btn" data-action="open-account" aria-label="Otvoriť zákaznícky účet">
             <span class="btn-icon">👤</span><span class="btn-label" data-short="Účet">Prihlásiť</span>
         </button>
-        <button type="button" class="cart-btn" data-action="open-cart">
+        <button type="button" class="cart-btn" data-action="open-cart" aria-label="Otvoriť nákupný košík">
             <span class="btn-icon">🛒</span><span class="btn-label" data-short="Košík">Košík</span>
             <span class="cart-count" id="cart-count">0</span>
         </button>
@@ -976,43 +986,43 @@
     <!-- STEP 2: Delivery -->
     <div class="wizard-panel" id="wp-2" style="padding: 1.5rem 2rem; overflow-y: auto; flex: 1;">
         <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem;">Zadajte údaje pre doručenie</p>
-        <label class="wizard-label">Meno a priezvisko</label>
+        <label class="wizard-label" for="d-name">Meno a priezvisko</label>
         <input class="wizard-input" id="d-name" autocomplete="name" maxlength="120" placeholder="Ján Novák">
-        <label class="wizard-label">E-mail</label>
+        <label class="wizard-label" for="d-email">E-mail</label>
         <input class="wizard-input" id="d-email" type="email" inputmode="email" autocomplete="email" maxlength="254" spellcheck="false" placeholder="jan@priklad.sk">
-        <label class="wizard-label">Telefón</label>
+        <label class="wizard-label" for="d-phone">Telefón</label>
         <input class="wizard-input" id="d-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09XX XXX XXX alebo +421">
         <div class="wizard-row">
             <div>
-                <label class="wizard-label">Ulica a číslo</label>
+                <label class="wizard-label" for="d-street">Ulica a číslo</label>
                 <input class="wizard-input" id="d-street" autocomplete="street-address" maxlength="160" placeholder="Hlavná 1">
             </div>
             <div>
-                <label class="wizard-label">PSČ</label>
+                <label class="wizard-label" for="d-zip">PSČ</label>
                 <input class="wizard-input" id="d-zip" inputmode="numeric" autocomplete="postal-code" maxlength="12" placeholder="010 01">
             </div>
         </div>
-        <label class="wizard-label">Mesto</label>
+        <label class="wizard-label" for="d-city">Mesto</label>
         <input class="wizard-input" id="d-city" autocomplete="address-level2" maxlength="80" placeholder="Žilina">
         <label class="wizard-label">Fakturačné údaje pre firmu (voliteľné)</label>
         <div class="wizard-row">
             <div>
-                <input class="wizard-input" id="d-billing-company" autocomplete="organization" maxlength="140" placeholder="Názov firmy">
+                <input class="wizard-input" id="d-billing-company" autocomplete="organization" maxlength="140" placeholder="Názov firmy" aria-label="Názov firmy">
             </div>
             <div>
-                <input class="wizard-input" id="d-billing-id" inputmode="numeric" maxlength="20" placeholder="IČO">
+                <input class="wizard-input" id="d-billing-id" inputmode="numeric" maxlength="20" placeholder="IČO" aria-label="IČO">
             </div>
         </div>
         <div class="wizard-row">
             <div>
-                <input class="wizard-input" id="d-billing-tax" maxlength="24" placeholder="DIČ">
+                <input class="wizard-input" id="d-billing-tax" maxlength="24" placeholder="DIČ" aria-label="DIČ">
             </div>
             <div>
-                <input class="wizard-input" id="d-billing-vat" maxlength="24" placeholder="IČ DPH">
+                <input class="wizard-input" id="d-billing-vat" maxlength="24" placeholder="IČ DPH" aria-label="IČ DPH">
             </div>
         </div>
         <input id="d-company" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0;">
-        <label class="wizard-label">Spôsob doručenia</label>
+        <label class="wizard-label" for="d-delivery">Spôsob doručenia</label>
         <select class="wizard-input" id="d-delivery">
             <option value="kurier">Kuriér GLS – 5,90€ (do 2 dní)</option>
             <option value="packeta">Packeta – 3,90€ (do 3 dní)</option>
@@ -1109,34 +1119,34 @@
                 <button type="button" class="auth-tab" id="auth-signup-tab" role="tab" aria-selected="false" aria-controls="auth-signup-panel" data-action="auth-mode" data-mode="signup">Registrácia</button>
             </div>
             <div class="auth-panel active" id="auth-login-panel" role="tabpanel" aria-labelledby="auth-login-tab">
-                <div class="auth-field"><label>E-mail</label><input id="login-email" type="email" autocomplete="username" placeholder="email@priklad.sk"></div>
-                <div class="auth-field"><label>Heslo</label><input id="login-password" type="password" autocomplete="current-password" placeholder="Min. 6 znakov"></div>
+                <div class="auth-field"><label for="login-email">E-mail</label><input id="login-email" type="email" autocomplete="username" placeholder="email@priklad.sk"></div>
+                <div class="auth-field"><label for="login-password">Heslo</label><input id="login-password" type="password" autocomplete="current-password" placeholder="Min. 6 znakov"></div>
                 <button type="button" class="wizard-btn" id="login-submit-btn" data-action="login-customer">Prihlásiť sa</button>
                 <button type="button" class="auth-link" data-action="open-password-reset">Zabudli ste heslo?</button>
                 <button type="button" class="auth-link" data-action="open-confirm-resend">Potvrdenie účtu neprišlo?</button>
             </div>
             <div class="auth-panel" id="auth-signup-panel" role="tabpanel" aria-labelledby="auth-signup-tab" hidden>
-                <div class="auth-field"><label>Meno</label><input id="signup-name" type="text" autocomplete="name" placeholder="Ján Novák"></div>
-                <div class="auth-field"><label>E-mail</label><input id="signup-email" type="email" autocomplete="username" placeholder="email@priklad.sk"></div>
-                <div class="auth-field"><label>Telefón</label><input id="signup-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09XX XXX XXX alebo +421"></div>
-                <div class="auth-field"><label>Heslo</label><input id="signup-password" type="password" autocomplete="new-password" placeholder="10+ znakov, A-z a číslo"></div>
+                <div class="auth-field"><label for="signup-name">Meno</label><input id="signup-name" type="text" autocomplete="name" placeholder="Ján Novák"></div>
+                <div class="auth-field"><label for="signup-email">E-mail</label><input id="signup-email" type="email" autocomplete="username" placeholder="email@priklad.sk"></div>
+                <div class="auth-field"><label for="signup-phone">Telefón</label><input id="signup-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09XX XXX XXX alebo +421"></div>
+                <div class="auth-field"><label for="signup-password">Heslo</label><input id="signup-password" type="password" autocomplete="new-password" placeholder="10+ znakov, A-z a číslo"></div>
                 <button type="button" class="wizard-btn" id="signup-submit-btn" data-action="signup-customer">Vytvoriť účet</button>
             </div>
             <div class="auth-panel" id="auth-reset-panel" role="tabpanel" aria-label="Reset hesla" hidden>
                 <div id="reset-request-view">
-                    <div class="auth-field"><label>E-mail účtu</label><input id="reset-email" type="email" autocomplete="email" placeholder="email@priklad.sk"></div>
+                    <div class="auth-field"><label for="reset-email">E-mail účtu</label><input id="reset-email" type="email" autocomplete="email" placeholder="email@priklad.sk"></div>
                     <button type="button" class="wizard-btn" id="reset-submit-btn" data-action="request-password-reset">Poslať reset hesla</button>
                     <button type="button" class="auth-link" data-action="auth-mode" data-mode="login">Späť na prihlásenie</button>
                 </div>
                 <div id="reset-new-password-view" style="display:none;">
                     <p class="auth-note" style="margin-bottom:1rem;">Zadajte nové bezpečné heslo pre svoj účet.</p>
-                    <div class="auth-field"><label>Nové heslo</label><input id="reset-new-password" type="password" autocomplete="new-password" placeholder="10+ znakov, A-z a číslo"></div>
+                    <div class="auth-field"><label for="reset-new-password">Nové heslo</label><input id="reset-new-password" type="password" autocomplete="new-password" placeholder="10+ znakov, A-z a číslo"></div>
                     <button type="button" class="wizard-btn" id="reset-password-submit-btn" data-action="update-recovered-password">Uložiť nové heslo</button>
                 </div>
             </div>
             <div class="auth-panel" id="auth-confirm-panel" role="tabpanel" aria-label="Potvrdenie účtu" hidden>
                 <p class="auth-note" style="margin-bottom:1rem;">Toto používajte iba pre nový účet, ktorý ešte nebol potvrdený. Ak je účet už potvrdený a neviete heslo, použite Zabudli ste heslo.</p>
-                <div class="auth-field"><label>E-mail účtu</label><input id="confirm-email" type="email" autocomplete="email" placeholder="email@priklad.sk"></div>
+                <div class="auth-field"><label for="confirm-email">E-mail účtu</label><input id="confirm-email" type="email" autocomplete="email" placeholder="email@priklad.sk"></div>
                 <button type="button" class="wizard-btn" id="confirm-submit-btn" data-action="resend-confirmation">Poslať potvrdenie znova</button>
                 <button type="button" class="auth-link" data-action="auth-mode" data-mode="login">Späť na prihlásenie</button>
             </div>
@@ -1595,7 +1605,7 @@
             <label class="hp-field" aria-hidden="true">Web<input id="b2b-company-url" name="website" type="text" tabindex="-1" autocomplete="off"></label>
             <div class="b2b-form-actions">
                 <button class="b2b-submit" id="b2b-submit" type="submit">Pripraviť dopyt</button>
-                <span class="b2b-form-status" id="b2b-status" role="status" aria-live="polite"></span>
+                <span class="b2b-form-status" id="b2b-status" role="status" aria-live="polite" hidden></span>
             </div>
         </form>
     </div>
@@ -1683,7 +1693,7 @@
                 <button type="button" class="filter-btn" data-action="set-filter" data-filter-type="cat" data-filter-value="retro">🕹️ Retro</button>
             </div>
             <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
-                <select class="filter-select" id="sort-select" data-action="apply-filters">
+                <select class="filter-select" id="sort-select" data-action="apply-filters" aria-label="Zoradenie produktov">
                     <option value="default">Zoradiť: Predvolené</option>
                     <option value="price-asc">Cena: od najlacnejšej</option>
                     <option value="price-desc">Cena: od najdrahšej</option>
@@ -1706,14 +1716,14 @@
         <div class="filter-row filter-details" id="detailed-product-filters">
             <!-- Price range -->
             <div class="filter-item">
-                <label class="filter-label">Cena</label>
+                <span class="filter-label">Cena</span>
                 <div class="price-range-wrap">
                     <span class="price-val" id="price-min-label">0€</span>
                     <div class="range-track">
-                        <input type="range" min="0" max="10000" value="0" step="50" id="price-min" data-action="apply-filters">
-                        <input type="range" min="0" max="10000" value="10000" step="50" id="price-max" data-action="apply-filters">
+                        <input type="range" min="0" max="5000" value="0" step="50" id="price-min" data-action="apply-filters" aria-label="Minimálna cena">
+                        <input type="range" min="0" max="5000" value="5000" step="50" id="price-max" data-action="apply-filters" aria-label="Maximálna cena">
                     </div>
-                    <span class="price-val" id="price-max-label">10000€</span>
+                    <span class="price-val" id="price-max-label">5000€</span>
                 </div>
             </div>
 
@@ -1803,7 +1813,7 @@
         <!-- Results count -->
         <div class="products-live-row">
             <div>
-                Zobrazuje sa <span id="results-count" style="color:var(--accent);font-weight:700;" aria-live="polite">0</span> produktov
+                Zobrazuje sa <span id="results-count" style="color:var(--accent);font-weight:700;" aria-live="polite">—</span> produktov
             </div>
             <div class="live-status" id="products-live-status" role="status" aria-live="polite"><span class="live-dot"></span><span>Načítavam sklad...</span></div>
             <button class="refresh-products-btn" type="button" data-action="refresh-products">Obnoviť sklad</button>
@@ -1811,7 +1821,9 @@
     </div>
 
     <div class="products-grid" id="products-grid">
-        <!-- Produkty sa načítavajú dynamicky z vložených dát alebo Supabase -->
+        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+        <div class="product-skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
     </div>
 
     <div class="recent-strip" id="recent-strip">
@@ -1930,10 +1942,7 @@
                 </div>
                 <div class="form-group"><label>Správa</label><textarea id="c-msg" rows="4" maxlength="1200" enterkeyhint="send" placeholder="Dobrý deň, mal by som záujem o..."></textarea></div>
                 <button type="submit" class="send-btn" aria-describedby="contact-fallback">Odoslať dopyt ✉️</button>
-                <div class="contact-fallback" id="contact-fallback" role="status" aria-live="polite">
-                    Automatické odoslanie zlyhalo. Správu môžete odoslať priamo cez e-mail:
-                    <a id="contact-fallback-link" href="mailto:computerax.sk@gmail.com">Otvoriť e-mail</a>
-                </div>
+                <div class="contact-fallback" id="contact-fallback" role="status" aria-live="polite" hidden></div>
             </form>
         </div>
     </div>
@@ -1947,17 +1956,16 @@
         <p>Prehľad základných pravidiel nákupu, reklamácie a spracovania údajov. Údaje predávajúceho sa dopĺňajú z admin nastavení.</p>
     </div>
     <div class="legal-grid">
-        <article id="predavajuci" class="legal-card">
+        <article id="predavajuci" class="legal-card" hidden>
             <h3>Predávajúci</h3>
             <p><strong id="legal-company-name">Computrax.sk</strong></p>
-            <p>Adresa: <span id="legal-company-address">Doplň adresu predávajúceho</span></p>
-            <p>IČO: <span id="legal-company-id">Doplň IČO</span></p>
-            <p>DIČ: <span id="legal-tax-id">Doplň DIČ</span></p>
+            <p>Adresa: <span id="legal-company-address"></span></p>
+            <p>IČO: <span id="legal-company-id"></span></p>
+            <p>DIČ: <span id="legal-tax-id"></span></p>
             <p id="legal-vat-row">IČ DPH: <span id="legal-vat-id">-</span></p>
             <p>E-mail: <a id="legal-email" href="mailto:computerax.sk@gmail.com">computerax.sk@gmail.com</a></p>
             <p>Telefón: <a id="legal-phone" href="tel:+421949835923">0949 835 923</a></p>
             <p class="legal-muted">Posledná aktualizácia: <span id="legal-updated">06.06.2026</span></p>
-            <p class="legal-muted">Ak sú vyššie uvedené údaje označené ako „Doplň“, pred spustením verejného predaja ich treba nahradiť reálnymi údajmi predávajúceho.</p>
         </article>
         <article id="obchodne-podmienky" class="legal-card">
             <h3>Obchodné podmienky</h3>
@@ -2067,7 +2075,7 @@ document.documentElement.classList.add('js');
 // ============================================================
 const products = {};
 const RUNTIME_CONFIG = Object.freeze(window.COMPUTRAX_CONFIG || {});
-const SB_URL = 'https://aryjaqexfgalxaiseqtp.supabase.co';
+const SB_URL = safeStartupSupabaseUrl(RUNTIME_CONFIG.supabaseUrl || RUNTIME_CONFIG.SUPABASE_URL || 'https://aryjaqexfgalxaiseqtp.supabase.co');
 const SB_KEY = safeStartupPublicKey(RUNTIME_CONFIG.supabaseAnonKey || RUNTIME_CONFIG.SUPABASE_ANON_KEY || '');
 const DEFAULT_CONTACT_EMAIL = 'computerax.sk@gmail.com';
 const LOCAL_PRODUCTS_KEY = 'ctrax_local_products';
@@ -2083,6 +2091,7 @@ const CONTACT_COOLDOWN_MS = 90 * 1000;
 const SECURITY_RATE_KEY = 'ctrax_rate_limits_v2';
 const ORDER_LOCK_KEY = 'ctrax_order_submit_lock_v2';
 const PRODUCT_AUTO_REFRESH_MS = 60000;
+const SUPABASE_REQUEST_TIMEOUT_MS = 10000;
 const DEFAULT_SITE_SETTINGS = {
     heroBadge: 'Testované repasované PC skladom',
     heroTitle: 'Spoľahlivé počítače pre <span>hry, prácu aj školu.</span>',
@@ -2120,7 +2129,7 @@ const DEFAULT_SITE_SETTINGS = {
     whatsappPhone: '421949835923',
     whatsappText: 'Dobrý deň, zaujímal by ma jeden z vašich počítačov.',
     priceMin: 0,
-    priceMax: 10000
+    priceMax: 5000
 };
 const DEFAULT_SERVICE_ADDONS = [
     { id: 'setup', name: 'Expresné nastavenie PC', price: 29, desc: 'Windows konto, aktualizácie, ovládače a základné nastavenia pred odoslaním.' },
@@ -2128,7 +2137,7 @@ const DEFAULT_SERVICE_ADDONS = [
     { id: 'warranty', name: 'Predĺžená záruka +12 mesiacov', price: 49, desc: 'Spolu 24 mesiacov záruky na repasovaný počítač.' }
 ];
 let serviceAddons = DEFAULT_SERVICE_ADDONS.map(service => ({ ...service, enabled: true }));
-let activeProducts = PRODUCTS_DATA.map(normalizeProduct);
+let activeProducts = [];
 let customerSession = loadCustomerSession();
 let currentSiteSettings = { ...DEFAULT_SITE_SETTINGS };
 let productDeepLinkOpened = false;
@@ -2297,6 +2306,44 @@ function safeStartupPublicKey(value) {
     return key.startsWith('eyJ') ? key : '';
 }
 
+function safeStartupSupabaseUrl(value) {
+    try {
+        const url = new URL(String(value || '').trim());
+        if (url.protocol !== 'https:' || !/^[a-z0-9-]+\.supabase\.co$/i.test(url.hostname)) return '';
+        return `${url.protocol}//${url.hostname}`;
+    } catch(e) {
+        return '';
+    }
+}
+
+async function fetchSupabaseJson(url, options = {}, attempts = 2) {
+    let lastError = new Error('Supabase request failed');
+    for (let attempt = 0; attempt < attempts; attempt++) {
+        const controller = typeof AbortController === 'function' ? new AbortController() : null;
+        const timeout = controller ? setTimeout(() => controller.abort(), SUPABASE_REQUEST_TIMEOUT_MS) : null;
+        try {
+            const res = await fetch(url, { ...options, signal: controller?.signal });
+            const text = await res.text();
+            if (!res.ok) {
+                const error = new Error(text || `Supabase HTTP ${res.status}`);
+                error.httpStatus = res.status;
+                throw error;
+            }
+            return text ? JSON.parse(text) : null;
+        } catch(error) {
+            lastError = error?.name === 'AbortError'
+                ? new Error(`Supabase timeout after ${SUPABASE_REQUEST_TIMEOUT_MS} ms`)
+                : error;
+            const retryable = !Number.isFinite(lastError?.httpStatus) || lastError.httpStatus === 429 || lastError.httpStatus >= 500;
+            if (!retryable || attempt === attempts - 1) break;
+            await new Promise(resolve => setTimeout(resolve, 350));
+        } finally {
+            if (timeout) clearTimeout(timeout);
+        }
+    }
+    throw lastError;
+}
+
 function cleanText(value, max = 120) {
     return String(value ?? '')
         .replace(/[\u0000-\u001f\u007f]/g, ' ')
@@ -2445,8 +2492,9 @@ async function sendSecureNotification(params) {
         body: JSON.stringify(payload)
     });
     if (res.status === 429) throw new Error('rate limit');
-    if (!res.ok) throw new Error(await res.text() || 'Notification endpoint failed');
-    return true;
+    const text = await res.text();
+    if (!res.ok) throw new Error(text || 'Notification endpoint failed');
+    return parseResponseJson(text, { ok: true });
 }
 
 function jsArg(value) {
@@ -3622,6 +3670,16 @@ function applyLegalSettings(s) {
     setText('legal-tax-id', taxId);
     setText('legal-vat-id', vatId || '-');
     setText('legal-updated', legalValue(s.legalUpdated, '06.06.2026'));
+    const seller = document.getElementById('predavajuci');
+    const completeSeller = [companyName, address, companyId, taxId].every(value => {
+        const text = String(value || '').trim();
+        const normalized = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        return text && !normalized.startsWith('dopln') && !normalized.startsWith('todo') && !normalized.startsWith('placeholder');
+    });
+    if (seller) {
+        seller.hidden = !completeSeller;
+        seller.setAttribute('aria-hidden', String(!completeSeller));
+    }
     const vatRow = document.getElementById('legal-vat-row');
     if (vatRow) vatRow.style.display = vatId ? 'block' : 'none';
     const emailEl = document.getElementById('legal-email');
@@ -3639,8 +3697,6 @@ function applyLegalSettings(s) {
         contactEmail.textContent = email;
         contactEmail.href = `mailto:${email}`;
     }
-    const fallbackEmail = document.getElementById('contact-fallback-link');
-    if (fallbackEmail) fallbackEmail.href = `mailto:${email}`;
     const contactPhone = document.getElementById('contact-phone-text');
     if (contactPhone) {
         contactPhone.textContent = phone.label;
@@ -3695,6 +3751,10 @@ function applySiteSettings(settings = {}) {
     applyLegalSettings(s);
     updateStoreStructuredData(s);
     applyCommerceControls(s);
+    const contactButton = document.querySelector('#contact-form .send-btn');
+    if (contactButton && !contactSubmitting) {
+        contactButton.textContent = notificationEndpoint() ? 'Odoslať dopyt ✉️' : 'Pripraviť e-mail ✉️';
+    }
     updateProductStructuredData(activeProducts);
     if (!announcement) return;
     const announcementText = String(s.announcementText || '').trim();
@@ -3926,7 +3986,8 @@ function runAdvisorRecommendation() {
 
 async function loadSiteSettingsFromSupabase() {
     try {
-        const res = await fetch(`${SB_URL}/rest/v1/site_settings?select=settings&key=eq.main&limit=1`, {
+        if (!SB_URL || !SB_KEY) throw new Error('Supabase public config is missing');
+        const rows = await fetchSupabaseJson(`${SB_URL}/rest/v1/site_settings?select=settings&key=eq.main&limit=1`, {
             cache: 'no-store',
             headers: {
                 apikey: SB_KEY,
@@ -3934,8 +3995,6 @@ async function loadSiteSettingsFromSupabase() {
                 'Cache-Control': 'no-cache'
             }
         });
-        if (!res.ok) throw new Error(await res.text());
-        const rows = await res.json();
         const settings = rows?.[0]?.settings || {};
         applySiteSettings(settings);
         applyServiceSettings(settings);
@@ -3955,13 +4014,18 @@ async function loadProductsFromSupabase() {
         statusEl.innerHTML = `<span class="live-dot" style="background:${color};box-shadow:0 0 12px ${color}77"></span><span>${safeAttr(message)}</span>`;
     };
     setProductStatus('Načítavam sklad...');
+    if (!activeProducts.length) {
+        const count = document.getElementById('results-count');
+        if (count) count.textContent = '—';
+    }
     try {
         localProducts = parseStoredJson(LOCAL_PRODUCTS_KEY, []).map(normalizeProduct).filter(p => p.name);
     } catch(e) {
         localProducts = [];
     }
     try {
-        const res = await fetch(`${SB_URL}/rest/v1/products?select=*&order=id.asc`, {
+        if (!SB_URL || !SB_KEY) throw new Error('Supabase public config is missing');
+        const rows = await fetchSupabaseJson(`${SB_URL}/rest/v1/products?select=*&order=id.asc`, {
             cache: 'no-store',
             headers: {
                 apikey: SB_KEY,
@@ -3969,14 +4033,17 @@ async function loadProductsFromSupabase() {
                 'Cache-Control': 'no-cache'
             }
         });
-        if (!res.ok) throw new Error(await res.text());
-        const rows = await res.json();
-        const liveProducts = rows.map(normalizeProduct).filter(p => p.name && p.status !== 'sold' && p.stock > 0).slice(0, 300);
+        if (!Array.isArray(rows)) throw new Error('Invalid Supabase products response');
+        const publicStatuses = new Set(['active', 'published', 'in_stock']);
+        const liveProducts = rows
+            .map(normalizeProduct)
+            .filter(p => p.name && publicStatuses.has(String(p.status || '').toLowerCase()) && p.stock > 0)
+            .slice(0, 300);
         const merged = [...liveProducts];
         localProducts.forEach(localProduct => {
             if (!merged.some(p => p.name.toLowerCase() === localProduct.name.toLowerCase())) merged.push(localProduct);
         });
-        if (merged.length) activeProducts = merged;
+        activeProducts = merged;
         if (liveProducts.length) {
             setProductStatus(`Live sklad zo Supabase · ${liveProducts.length} produktov`);
         } else if (activeProducts.length) {
@@ -3986,8 +4053,8 @@ async function loadProductsFromSupabase() {
         }
     } catch(e) {
         console.warn('Supabase products fallback:', e.message || e);
-        if (localProducts.length) activeProducts = localProducts;
-        setProductStatus(localProducts.length ? 'Lokálny sklad z admina' : 'Nepodarilo sa načítať Supabase sklad', localProducts.length ? 'local' : 'error');
+        activeProducts = localProducts;
+        setProductStatus(localProducts.length ? 'Lokálny sklad z admina' : 'Nepodarilo sa načítať Supabase sklad · skúste Obnoviť sklad', localProducts.length ? 'local' : 'error');
     }
     rebuildFilterOptions(activeProducts);
     renderProducts();
@@ -4188,7 +4255,7 @@ function renderProducts() {
     grid.querySelectorAll('.wish-btn').forEach(btn => {
         const card = btn.closest('.pc-card');
         const name = card.querySelector('.pc-name').textContent.trim();
-        if (wishlist.includes(name)) { btn.textContent = '♥'; btn.classList.add('active'); card.classList.add('wishlisted'); }
+        setWishButtonState(btn, name, wishlist.includes(name));
     });
 
     document.getElementById('results-count').textContent = activeProducts.length;
@@ -4540,9 +4607,9 @@ function observeRevealElements(root = document) {
 
 function prioritizeProductCatalog() {
     const catalog = document.getElementById('ponuka');
-    const nextSection = document.getElementById('ako-to-funguje');
-    if (catalog && nextSection && catalog.nextElementSibling !== nextSection) {
-        nextSection.before(catalog);
+    const hero = document.querySelector('.hero');
+    if (catalog && hero && hero.nextElementSibling !== catalog) {
+        hero.after(catalog);
     }
     if (catalog && location.hash === '#ponuka') {
         requestAnimationFrame(() => requestAnimationFrame(() => catalog.scrollIntoView({ block: 'start' })));
@@ -4815,7 +4882,7 @@ function updateActiveTags(priceMin, priceMax, gpu, cpu, cpuGen, storageMin, stor
     const minEl = document.getElementById('price-min');
     const maxEl = document.getElementById('price-max');
     const defaultMin = Number(minEl?.min || 0);
-    const defaultMax = Number(maxEl?.max || 10000);
+    const defaultMax = Number(maxEl?.max || 5000);
     if (priceMin > defaultMin || priceMax < defaultMax) tags.push({ label: `${priceMin}€ – ${priceMax}€`, clear: () => { document.getElementById('price-min').value = defaultMin; document.getElementById('price-max').value = defaultMax; applyFilters(); } });
     if (gpu) tags.push({ label: 'GPU: ' + gpu, clear: () => { document.getElementById('filter-gpu').value = ''; applyFilters(); } });
     if (cpu) tags.push({ label: 'CPU: ' + (cpu === 'amd' ? 'AMD' : 'Intel'), clear: () => { document.getElementById('filter-cpu').value = ''; applyFilters(); } });
@@ -4845,7 +4912,7 @@ function resetFilters() {
     const minEl = document.getElementById('price-min');
     const maxEl = document.getElementById('price-max');
     minEl.value = minEl.min || 0;
-    maxEl.value = maxEl.max || 10000;
+    maxEl.value = maxEl.max || 5000;
     document.getElementById('filter-gpu').value = '';
     document.getElementById('filter-cpu').value = '';
     if (document.getElementById('filter-cpu-gen')) document.getElementById('filter-cpu-gen').value = '';
@@ -4878,21 +4945,27 @@ function filterByPrice(val) { applyFilters(); }
 let wishlist = parseStoredJson('ctrax_wish', []);
 if (!Array.isArray(wishlist)) wishlist = [];
 
+function setWishButtonState(btn, name, active) {
+    if (!btn) return;
+    btn.textContent = active ? '♥' : '♡';
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-label', `${active ? 'Odstrániť' : 'Pridať'} ${name} ${active ? 'z obľúbených' : 'do obľúbených'}`);
+    btn.setAttribute('aria-pressed', String(active));
+    const card = btn.closest('.pc-card');
+    if (card) card.classList.toggle('wishlisted', active);
+}
+
 function toggleWish(btn, name) {
     const idx = wishlist.indexOf(name);
     if (idx === -1) {
         wishlist.push(name);
-        btn.textContent = '♥';
-        btn.classList.add('active');
-        btn.closest('.pc-card').classList.add('wishlisted');
         showToast('❤️ Pridané do obľúbených: ' + name);
     } else {
         wishlist.splice(idx, 1);
-        btn.textContent = '♡';
-        btn.classList.remove('active');
-        btn.closest('.pc-card').classList.remove('wishlisted');
         showToast('💔 Odobrané z obľúbených');
     }
+    const active = wishlist.includes(name);
+    setWishButtonState(btn, name, active);
     localStorage.setItem('ctrax_wish', JSON.stringify(wishlist));
     updateWishlistUI();
 }
@@ -4946,7 +5019,7 @@ function removeFromWish(name) {
     localStorage.setItem('ctrax_wish', JSON.stringify(wishlist));
     document.querySelectorAll('.wish-btn').forEach(btn => {
         const cardName = btn.closest('.pc-card').querySelector('.pc-name').textContent.trim();
-        if (cardName === name) { btn.textContent = '♡'; btn.classList.remove('active'); btn.closest('.pc-card').classList.remove('wishlisted'); }
+        if (cardName === name) setWishButtonState(btn, cardName, false);
     });
     updateWishlistUI();
 }
@@ -4971,11 +5044,7 @@ function addAllWishToCart() {
 document.querySelectorAll('.wish-btn').forEach(btn => {
     const card = btn.closest('.pc-card');
     const name = card.querySelector('.pc-name').textContent.trim();
-    if (wishlist.includes(name)) {
-        btn.textContent = '♥';
-        btn.classList.add('active');
-        card.classList.add('wishlisted');
-    }
+    setWishButtonState(btn, name, wishlist.includes(name));
 });
 updateWishlistUI();
 
@@ -5935,11 +6004,25 @@ async function submitOrder() {
 // ============================================================
 //  CONTACT FORM
 // ============================================================
+function setB2BStatus(message, fallbackHref = '') {
+    const status = document.getElementById('b2b-status');
+    if (!status) return;
+    status.replaceChildren();
+    status.hidden = !message;
+    if (!message) return;
+    status.appendChild(document.createTextNode(message + (fallbackHref ? ' ' : '')));
+    if (fallbackHref) {
+        const link = document.createElement('a');
+        link.href = fallbackHref;
+        link.textContent = 'Otvoriť pripravený e-mail';
+        status.appendChild(link);
+    }
+}
+
 async function submitB2BInquiry(event) {
     event.preventDefault();
     if (b2bSubmitting) return;
     const form = event.currentTarget;
-    const status = document.getElementById('b2b-status');
     const button = document.getElementById('b2b-submit');
     if (document.getElementById('b2b-company-url')?.value.trim()) {
         form.reset();
@@ -5955,10 +6038,11 @@ async function submitB2BInquiry(event) {
     const note = cleanMultiline(document.getElementById('b2b-message')?.value, 1500);
     const phoneDigits = phone.replace(/\D/g, '');
 
-    if (name.length < 2 || organization.length < 2) { status.textContent = 'Doplňte meno a organizáciu.'; return; }
-    if (!isValidEmail(email)) { status.textContent = 'Zadajte platný e-mail.'; return; }
-    if (phone && (phoneDigits.length < 9 || phoneDigits.length > 15)) { status.textContent = 'Skontrolujte telefónne číslo.'; return; }
-    if (!count || !use) { status.textContent = 'Vyberte počet kusov a využitie.'; return; }
+    setB2BStatus('');
+    if (name.length < 2 || organization.length < 2) { setB2BStatus('Doplňte meno a organizáciu.'); return; }
+    if (!isValidEmail(email)) { setB2BStatus('Zadajte platný e-mail.'); return; }
+    if (phone && (phoneDigits.length < 9 || phoneDigits.length > 15)) { setB2BStatus('Skontrolujte telefónne číslo.'); return; }
+    if (!count || !use) { setB2BStatus('Vyberte počet kusov a využitie.'); return; }
     if (!guardRateLimit('b2b-submit', email, 2, 10 * 60 * 1000)) return;
 
     const message = [
@@ -5978,31 +6062,46 @@ async function submitB2BInquiry(event) {
     b2bSubmitting = true;
     button.disabled = true;
     button.textContent = 'Odosielam...';
-    status.textContent = '';
+    setB2BStatus('');
     try {
         if (!notificationEndpoint()) {
-            status.replaceChildren(document.createTextNode('Automatické odoslanie nie je nastavené. '));
-            const link = document.createElement('a');
-            link.href = fallbackHref;
-            link.textContent = 'Otvoriť pripravený e-mail';
-            status.appendChild(link);
+            setB2BStatus('Automatické odoslanie zatiaľ nie je zapnuté.', fallbackHref);
             return;
         }
-        await sendSecureNotification({ from_name: `${name} · ${organization}`, from_email: email, phone: phone || '–', message });
+        const result = await sendSecureNotification({ from_name: `${name} · ${organization}`, from_email: email, phone: phone || '–', message });
         form.reset();
-        status.textContent = 'Dopyt bol odoslaný. Ozveme sa po overení dostupnosti.';
+        setB2BStatus(result?.email_sent
+            ? 'Dopyt bol odoslaný e-mailom. Ozveme sa po overení dostupnosti.'
+            : 'Dopyt bol bezpečne prijatý a uložený v admine.');
     } catch (error) {
         console.error('B2B notification failed:', error);
-        status.replaceChildren(document.createTextNode('Odoslanie zlyhalo. '));
-        const link = document.createElement('a');
-        link.href = fallbackHref;
-        link.textContent = 'Otvoriť pripravený e-mail';
-        status.appendChild(link);
+        setB2BStatus('Odoslanie sa nepodarilo.', fallbackHref);
     } finally {
         b2bSubmitting = false;
         button.disabled = false;
         button.textContent = 'Pripraviť dopyt';
     }
+}
+
+function hideContactFallback() {
+    const box = document.getElementById('contact-fallback');
+    if (!box) return;
+    box.hidden = true;
+    box.classList.remove('visible');
+    box.replaceChildren();
+}
+
+function showContactFallback(message, href) {
+    const box = document.getElementById('contact-fallback');
+    if (!box) return;
+    box.replaceChildren(document.createTextNode(message + ' '));
+    const link = document.createElement('a');
+    link.id = 'contact-fallback-link';
+    link.href = href;
+    link.textContent = 'Otvoriť pripravený e-mail';
+    box.appendChild(link);
+    box.hidden = false;
+    box.classList.add('visible');
 }
 
 function contactCooldownLeft() {
@@ -6020,8 +6119,7 @@ async function submitContact(e) {
         showToast('⏳ Správa sa už odosiela');
         return;
     }
-    const fallbackBox = document.getElementById('contact-fallback');
-    if (fallbackBox) fallbackBox.classList.remove('visible');
+    hideContactFallback();
     if (document.getElementById('c-company')?.value.trim()) {
         e.target.reset();
         showToast('✅ Správa odoslaná!');
@@ -6065,26 +6163,24 @@ async function submitContact(e) {
 
     try {
         if (!notificationEndpoint()) {
-            const fallbackLink = document.getElementById('contact-fallback-link');
-            if (fallbackLink) fallbackLink.href = fallbackHref;
-            if (fallbackBox) fallbackBox.classList.add('visible');
+            showContactFallback('Automatické odoslanie zatiaľ nie je zapnuté.', fallbackHref);
             showToast('✉️ Otvorte pripravený e-mail pod formulárom.');
             return;
         }
-        await sendSecureNotification(params);
+        const result = await sendSecureNotification(params);
         rememberContactAttempt();
-        if (fallbackBox) fallbackBox.classList.remove('visible');
-        showToast('✅ Správa odoslaná! Potvrdenie sme poslali na ' + email);
+        hideContactFallback();
+        showToast(result?.email_sent
+            ? '✅ Správa bola odoslaná e-mailom.'
+            : '✅ Správa bola bezpečne prijatá a uložená.');
         e.target.reset();
     } catch(err) {
         console.error('Notification endpoint error:', err);
-        const fallbackLink = document.getElementById('contact-fallback-link');
-        if (fallbackLink) fallbackLink.href = fallbackHref;
-        if (fallbackBox) fallbackBox.classList.add('visible');
+        showContactFallback('Automatické odoslanie zlyhalo.', fallbackHref);
         showToast('⚠️ Automatické odoslanie zlyhalo. Použite pripravený e-mail pod formulárom.');
     } finally {
         contactSubmitting = false;
-        btn.textContent = 'Odoslať dopyt ✉️';
+        btn.textContent = notificationEndpoint() ? 'Odoslať dopyt ✉️' : 'Pripraviť e-mail ✉️';
         btn.disabled = false;
     }
 }

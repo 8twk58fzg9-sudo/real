@@ -23,15 +23,30 @@
   function enhanceProductCard(card) {
     if (!(card instanceof HTMLElement) || !card.matches('[data-product-card]')) return;
     card.setAttribute('role', 'article');
+    card.setAttribute('tabindex', '0');
     const name = card.getAttribute('data-product-name') || 'Produkt';
-    card.setAttribute('aria-label', name + '. Stlacenim Enter otvorite detail produktu.');
+    card.setAttribute('aria-label', name + '. Stlačením Enter otvoríte detail produktu.');
+  }
+
+  function associateFormLabels(root) {
+    (root || document).querySelectorAll('.form-group, .filter-item, .auth-field').forEach(function (group) {
+      const control = group.querySelector('input:not([type="hidden"]), select, textarea');
+      const label = group.querySelector('label');
+      const textLabel = group.querySelector('.form-label, .filter-label');
+      if (!control) return;
+      if (label && control.id) label.htmlFor = control.id;
+      if (!label && !control.getAttribute('aria-label') && textLabel) {
+        const text = String(textLabel.textContent || '').trim();
+        if (text) control.setAttribute('aria-label', text);
+      }
+    });
   }
 
   function enhanceStorefront() {
     const catalog = document.getElementById('ponuka');
-    const howItWorks = document.getElementById('ako-to-funguje');
-    if (catalog && howItWorks && catalog.nextElementSibling !== howItWorks) {
-      howItWorks.before(catalog);
+    const hero = document.querySelector('.hero');
+    if (catalog && hero && hero.nextElementSibling !== catalog) {
+      hero.after(catalog);
     }
 
     const details = document.getElementById('detailed-product-filters') ||
@@ -54,6 +69,7 @@
     }
 
     document.querySelectorAll('[data-product-card]').forEach(enhanceProductCard);
+    associateFormLabels(document);
     const grid = document.getElementById('products-grid');
     if (grid) {
       new MutationObserver(function (entries) {
@@ -79,24 +95,24 @@
   function adminImageReadyMessage() {
     if (!document.getElementById('img-status') || typeof setImageStatus !== 'function') return;
     if (typeof useLocalStorage !== 'undefined' && useLocalStorage) {
-      setImageStatus('Lokalny rezim: fotka zostane iba v tomto prehliadaci. Pre verejny web pouzite Supabase rezim.');
+      setImageStatus('Lokálny režim: fotka zostane iba v tomto prehliadači. Pre verejný web použite Supabase režim.');
     } else if (typeof hasSupabaseWriteAuth === 'function' && !hasSupabaseWriteAuth()) {
-      setImageStatus('Pred nahratim fotky pripojte hore "Supabase admin zapis". Potom sa fotka bezpecne ulozi do product-images a zobrazi sa vsetkym navstevnikom.');
+      setImageStatus('Pred nahratím fotky pripojte hore „Supabase admin zápis“. Potom sa fotka bezpečne uloží do product-images a zobrazí sa všetkým návštevníkom.');
     } else {
-      setImageStatus('Supabase admin je pripojeny. Fotku mozete nahrat zo suboru.');
+      setImageStatus('Supabase admin je pripojený. Fotku môžete nahrať zo súboru.');
     }
   }
 
   async function secureProductImageUpload(file, productName) {
     if (typeof ensureSupabaseWriteAuth !== 'function' || !(await ensureSupabaseWriteAuth(false))) {
-      throw new Error('Najprv pripojte Supabase admin zapis.');
+      throw new Error('Najprv pripojte Supabase admin zápis.');
     }
     const extension = PRODUCT_IMAGE_TYPES[file.type];
     if (!extension || file.size > PRODUCT_IMAGE_MAX_BYTES) {
-      throw new Error('Povolene su JPG, PNG alebo WebP subory do 10 MB.');
+      throw new Error('Povolené sú JPG, PNG alebo WebP súbory do 10 MB.');
     }
     const token = String(authSession?.access_token || '');
-    if (!token) throw new Error('Supabase admin relacia chyba alebo vyprsala.');
+    if (!token) throw new Error('Supabase admin relácia chýba alebo vypršala.');
     const base = String(productName || 'produkt')
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '')
@@ -137,17 +153,17 @@
           return originalSaveProduct();
         }
         try {
-          setImageStatus('Nahravam fotku do Supabase Storage...');
+          setImageStatus('Nahrávam fotku do Supabase Storage...');
           const imageUrl = await secureProductImageUpload(file, name);
           document.getElementById('f-image-url').value = imageUrl;
           pendingImageFile = null;
-          setImageStatus('Fotka bola nahrana. Ukladam produkt...');
+          setImageStatus('Fotka bola nahraná. Ukladám produkt...');
         } catch (error) {
           const message = typeof productImageUploadErrorMessage === 'function'
             ? productImageUploadErrorMessage(error)
             : String(error?.message || error);
-          setImageStatus(message + ' Fotka aj udaje zostali zachovane; skuste to znova.', true);
-          if (typeof showToast === 'function') showToast('Fotku sa nepodarilo nahrat: ' + message, true);
+          setImageStatus(message + ' Fotka aj údaje zostali zachované; skúste to znova.', true);
+          if (typeof showToast === 'function') showToast('Fotku sa nepodarilo nahrať: ' + message, true);
           return;
         }
       }
@@ -163,8 +179,13 @@
   }
 
   addResponsiveStyles();
-  document.addEventListener('DOMContentLoaded', function () {
+  function initializeEnhancements() {
     enhanceStorefront();
     enhanceAdmin();
-  });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeEnhancements, { once: true });
+  } else {
+    initializeEnhancements();
+  }
 }());
