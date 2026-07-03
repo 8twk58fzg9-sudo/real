@@ -35,7 +35,7 @@
     <meta name="twitter:image" content="https://8twk58fzg9-sudo.github.io/real/og-image.png">
     <meta name="twitter:image:alt" content="Computrax - repasované počítače so skladom a zárukou">
     <link rel="canonical" href="https://8twk58fzg9-sudo.github.io/real/">
-    <link rel="icon" href="og-image.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon-32.png" type="image/png">
     <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="preload" href="computrax-logo.png?v=20260614b" as="image" type="image/png">
@@ -757,6 +757,87 @@
         .refresh-products-btn { border:1px solid var(--border); background:rgba(255,255,255,0.05); color:var(--text); border-radius:10px; padding:0.55rem 0.85rem; cursor:pointer; font-weight:700; }
         .refresh-products-btn:hover { border-color:var(--accent); color:var(--accent); }
 
+        /* STOREFRONT ENTRY + INFORMATION HUB */
+        .shop-entry {
+            display: grid;
+            grid-template-columns: minmax(250px, 1.25fr) minmax(0, 2fr);
+            gap: 1rem;
+            padding: 1.1rem 8%;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: #0d1424;
+        }
+        .shop-promo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            min-width: 0;
+            padding: 1rem 1.1rem;
+            border: 1px solid rgba(34,197,94,0.38);
+            border-radius: 8px;
+            background: rgba(34,197,94,0.07);
+        }
+        .shop-promo strong { display:block; font:700 1.05rem 'Outfit',sans-serif; }
+        .shop-promo span { color:var(--muted); font-size:0.82rem; }
+        .shop-promo a { flex:0 0 auto; color:#fff; font-weight:800; text-decoration:none; }
+        .shop-shortcuts {
+            display:grid;
+            grid-template-columns:repeat(4,minmax(0,1fr));
+            gap:0.65rem;
+        }
+        .shop-shortcut {
+            display:flex;
+            align-items:center;
+            gap:0.65rem;
+            min-width:0;
+            padding:0.9rem;
+            border:1px solid var(--border);
+            border-radius:8px;
+            background:rgba(255,255,255,0.035);
+            color:var(--text);
+            text-decoration:none;
+            font-weight:750;
+            transition:border-color .2s ease, background .2s ease, transform .2s ease;
+        }
+        .shop-shortcut:hover { border-color:var(--accent); background:rgba(59,130,246,0.09); transform:translateY(-2px); }
+        .shop-shortcut-icon { font-size:1.2rem; flex:0 0 auto; }
+        .shop-shortcut-copy { min-width:0; }
+        .shop-shortcut-copy small { display:block; color:var(--muted); font-size:0.7rem; font-weight:600; margin-top:0.12rem; }
+        .info-hub { padding-top:3.5rem; padding-bottom:3.5rem; background:#0c1322; }
+        .info-hub-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0.8rem; }
+        .info-hub-link {
+            display:grid;
+            grid-template-columns:auto 1fr auto;
+            align-items:center;
+            gap:0.75rem;
+            min-height:78px;
+            padding:1rem;
+            border:1px solid var(--border);
+            border-radius:8px;
+            background:#111a2c;
+            color:var(--text);
+            text-decoration:none;
+            text-align:left;
+            cursor:pointer;
+            transition:border-color .2s ease, background .2s ease;
+        }
+        .info-hub-link:hover, .info-hub-link:focus-visible { border-color:var(--accent); background:#152139; outline:none; }
+        .info-hub-link strong { display:block; font-size:0.9rem; }
+        .info-hub-link small { display:block; color:var(--muted); font-size:0.74rem; margin-top:0.15rem; }
+        .info-hub-arrow { color:var(--accent); font-weight:900; }
+        .js .info-section-collapsed { display:none !important; }
+        .info-section-expanded { animation:infoReveal .28s ease-out both; }
+        @keyframes infoReveal { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+        .info-back {
+            display:flex;
+            justify-content:flex-end;
+            max-width:1400px;
+            margin:0 auto;
+            padding:0 8% 1rem;
+        }
+        .info-back a { color:var(--accent); text-decoration:none; font-weight:750; font-size:0.85rem; }
+
         /* FOOTER */
         footer { padding: 4rem 8%; border-top: 1px solid var(--border); }
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
@@ -801,6 +882,8 @@
             .contact-info, .contact-form { padding: 2rem; }
             .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
             .category-grid { grid-template-columns: 1fr; }
+            .shop-entry { grid-template-columns:1fr; padding-left:6%; padding-right:6%; }
+            .info-hub-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
         }
         @media (max-width: 720px) {
             html { scroll-padding-top: 9rem; }
@@ -864,6 +947,11 @@
             .related-products { grid-template-columns: 1fr; }
             .quiz-field.full, .b2b-form-field.full, .b2b-form-actions { grid-column: 1; }
             .category-card { min-height: 285px; }
+            .shop-shortcuts { grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .shop-entry { padding:0.85rem 4%; }
+            .shop-promo { align-items:flex-start; }
+            .info-hub-grid { grid-template-columns:1fr; }
+            .info-hub-link { min-height:68px; }
         }
         @media (max-width: 500px) {
             .nav-right { gap: 0.42rem; }
@@ -926,11 +1014,8 @@
     <ul id="main-nav-links">
         <li><a href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="gaming">Herné PC</a></li>
         <li><a href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="office">Kancelárske PC</a></li>
-        <li><a href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="retro">Retro PC</a></li>
         <li><a href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="vsetko">Všetky produkty</a></li>
-        <li><a href="#skoly-firmy">Pre firmy a školy</a></li>
-        <li><a href="#preco-my">O nás</a></li>
-        <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="informacie.html">Služby a informácie</a></li>
         <li><a class="nav-cta" href="#poradca">Nájsť PC</a></li>
     </ul>
     <div class="nav-right">
@@ -1052,7 +1137,7 @@
         </div>
         <label style="display:flex;gap:0.7rem;align-items:flex-start;font-size:0.86rem;color:var(--muted);line-height:1.45;margin-top:1rem;">
             <input type="checkbox" id="terms-accepted" style="margin-top:0.2rem;accent-color:var(--accent);">
-            <span>Súhlasím s <a href="#obchodne-podmienky" data-action="close-cart" style="color:var(--accent);">obchodnými podmienkami</a>, <a href="#ochrana-udajov" data-action="close-cart" style="color:var(--accent);">spracovaním údajov</a> pre vybavenie objednávky, odpočítaním skladovej zásoby a odoslaním objednávky s povinnosťou platby.</span>
+            <span>Súhlasím s <a href="pravne.html#obchodne-podmienky" target="_blank" rel="noopener" style="color:var(--accent);">obchodnými podmienkami</a>, <a href="pravne.html#ochrana-udajov" target="_blank" rel="noopener" style="color:var(--accent);">spracovaním údajov</a> pre vybavenie objednávky, odpočítaním skladovej zásoby a odoslaním objednávky s povinnosťou platby.</span>
         </label>
         <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
             <button type="button" class="wizard-btn wizard-btn-ghost" data-action="go-step" data-step="2" style="flex: 0.4;">← Späť</button>
@@ -1233,6 +1318,30 @@
         </div>
     </div>
 </section>
+
+<div class="shop-entry" aria-label="Rýchly vstup do ponuky">
+    <div class="shop-promo">
+        <div>
+            <strong id="promo-title">Počítače pripravené zo skladu</strong>
+            <span><b id="promo-stock-count">Aktualizujem ponuku</b> · <span id="promo-text">jasné parametre a stav každého kusu</span></span>
+        </div>
+        <a href="#ponuka">Nakupovať →</a>
+    </div>
+    <div class="shop-shortcuts">
+        <a class="shop-shortcut" href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="gaming">
+            <span class="shop-shortcut-icon" aria-hidden="true">🎮</span><span class="shop-shortcut-copy">Herné PC<small>Dedikovaná grafika</small></span>
+        </a>
+        <a class="shop-shortcut" href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="office">
+            <span class="shop-shortcut-icon" aria-hidden="true">💼</span><span class="shop-shortcut-copy">Pracovné PC<small>SSD a svižná práca</small></span>
+        </a>
+        <a class="shop-shortcut" href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="retro">
+            <span class="shop-shortcut-icon" aria-hidden="true">🕹️</span><span class="shop-shortcut-copy">Retro PC<small>Starší softvér a hry</small></span>
+        </a>
+        <a class="shop-shortcut" href="#poradca">
+            <span class="shop-shortcut-icon" aria-hidden="true">◎</span><span class="shop-shortcut-copy">Poradca<small>Výber podľa použitia</small></span>
+        </a>
+    </div>
+</div>
 
 <!-- PRODUCTS -->
 <section id="ponuka">
@@ -1431,7 +1540,7 @@
         <article class="category-card office">
             <div class="category-visual" aria-hidden="true"><span class="category-device"></span><span class="category-spec-lines"><span></span><span></span><span></span></span></div>
             <h3>Kancelárske PC</h3>
-            <p>Počítače pre kanceláriu, školu, administratívu a bežné domáce používanie s dôrazom na SSD a dostatok RAM.</p>
+            <p>Počítače pre kanceláriu, školu, firemnú agendu a bežné domáce používanie s dôrazom na SSD a dostatok RAM.</p>
             <a class="category-action" href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="office">Pozrieť kancelárske PC →</a>
         </article>
         <article class="category-card retro">
@@ -1440,6 +1549,27 @@
             <p>Staršie konfigurácie pre retro hry alebo pôvodný softvér. Ponuka závisí od kusov, ktoré sú práve skladom.</p>
             <a class="category-action" href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="retro">Pozrieť retro PC →</a>
         </article>
+    </div>
+</section>
+
+<section class="info-hub" id="centrum-informacii">
+    <div class="section-header reveal">
+        <div class="section-label">Všetko dôležité na jednom mieste</div>
+        <h2 class="section-title">Služby a informácie</h2>
+        <p style="color:var(--muted);max-width:720px;margin-top:0.8rem;">Otvorte iba tému, ktorú práve potrebujete. Ponuka produktov zostáva prehľadná a nákupné informácie sú stále dostupné.</p>
+    </div>
+    <div class="info-hub-grid reveal">
+        <a class="info-hub-link" href="informacie.html#ako-nakupit"><span aria-hidden="true">01</span><span><strong>Ako prebieha nákup</strong><small>Výber, objednávka a doručenie</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="informacie.html#kontrola"><span aria-hidden="true">02</span><span><strong>Kontrola a stav PC</strong><small>Čo pri produktoch overujeme</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="informacie.html#sluzby"><span aria-hidden="true">03</span><span><strong>Doplnkové služby</strong><small>Nastavenie a príprava počítača</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="#skoly-firmy" data-action="open-info-section" data-info-target="skoly-firmy"><span aria-hidden="true">04</span><span><strong>Firmy a školy</strong><small>Viac kusov a individuálny dopyt</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="#sledovanie-objednavky" data-action="open-info-section" data-info-target="sledovanie-objednavky"><span aria-hidden="true">05</span><span><strong>Sledovanie objednávky</strong><small>Stav podľa čísla a e-mailu</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="informacie.html#podpora"><span aria-hidden="true">06</span><span><strong>Časté otázky</strong><small>Záruka, vrátenie a doprava</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="#kontakt" data-action="open-info-section" data-info-target="kontakt"><span aria-hidden="true">07</span><span><strong>Kontakt a podpora</strong><small>Napíšte nám priamo z webu</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="pravne.html"><span aria-hidden="true">08</span><span><strong>Právne informácie</strong><small>Podmienky, súkromie a reklamácie</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="pravne.html#obchodne-podmienky"><span aria-hidden="true">09</span><span><strong>Bezpečný nákup</strong><small>Ochrana objednávky a údaje</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="pravne.html#doprava-platba"><span aria-hidden="true">10</span><span><strong>Platby a faktúry</strong><small>Spôsoby platby a doklady</small></span><span class="info-hub-arrow">→</span></a>
+        <a class="info-hub-link" href="informacie.html#repasovane"><span aria-hidden="true">11</span><span><strong>Repasované počítače</strong><small>Stav, použitie a očakávania</small></span><span class="info-hub-arrow">→</span></a>
     </div>
 </section>
 
@@ -1474,7 +1604,7 @@
 </div>
 
 <!-- BUYING PROCESS -->
-<section id="ako-to-funguje">
+<section id="ako-to-funguje" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Ako to funguje</div>
         <h2 class="section-title">Od výberu po pripravený počítač</h2>
@@ -1510,7 +1640,7 @@
 </section>
 
 <!-- TRUST / E-SHOP ASSURANCE -->
-<section class="trust-section" id="bezpecny-nakup">
+<section class="trust-section info-section-collapsed" id="bezpecny-nakup" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Bezpečný nákup</div>
         <h2 class="section-title">To, čo zákazník potrebuje vedieť pred platbou</h2>
@@ -1530,13 +1660,13 @@
         </div>
         <div class="trust-card">
             <strong>Pripravené na GoPay a iDoklad</strong>
-            <p>Admin má miesto pre platobnú bránu, fakturačné údaje, stav dokladu a exporty, aby sa web dal posúvať k reálnemu e-shopu.</p>
+            <p>Platba, fakturačné údaje a stav dokladu sú pripravené tak, aby bol priebeh objednávky zrozumiteľný.</p>
         </div>
     </div>
 </section>
 
 <!-- QUALITY CHECK -->
-<section id="kontrola-kvality">
+<section id="kontrola-kvality" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Kontrola kvality</div>
         <h2 class="section-title">Repasovaný PC má byť pripravený, nielen predaný</h2>
@@ -1669,7 +1799,7 @@
 </section>
 
 <!-- SERVICES -->
-<section id="servisne-sluzby">
+<section id="servisne-sluzby" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Doplnkové a servisné služby</div>
         <h2 class="section-title">Nielen kúpa PC, ale pripravený počítač na používanie</h2>
@@ -1705,14 +1835,14 @@
             <p>Kontrola stability, teplôt, disku, RAM a základná príprava systému pred predajom.</p>
             <div class="service-market-price">v cene PC</div>
             <div class="service-market-actions">
-                <a class="detail-btn" href="#kontrola-kvality">Ako kontrolujeme</a>
+                <a class="detail-btn" href="informacie.html#kontrola">Ako kontrolujeme</a>
             </div>
         </div>
     </div>
 </section>
 
 <!-- SCHOOLS / COMPANIES -->
-<section id="skoly-firmy">
+<section id="skoly-firmy" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Pre školy a firmy</div>
         <h2 class="section-title">Repasované počítače pre učebne, kancelárie a tímy</h2>
@@ -1777,7 +1907,7 @@
                 <select id="b2b-use" name="use" required>
                     <option value="Kancelária">Kancelária</option>
                     <option value="Učebňa">Učebňa</option>
-                    <option value="Administratíva">Administratíva</option>
+                    <option value="Firemná agenda">Firemná agenda</option>
                     <option value="Recepcia">Recepcia</option>
                     <option value="Iné">Iné</option>
                 </select>
@@ -1798,13 +1928,13 @@
 </section>
 
 <!-- PAYMENTS / INVOICES -->
-<section id="platby-faktury">
+<section id="platby-faktury" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Platby a faktúry</div>
         <h2 class="section-title">Pripravené na ostrý e-shop režim</h2>
     </div>
     <div class="order-track-box reveal">
-        <p style="color:var(--muted);margin:0;">Stránka už počíta s manuálnou platbou, GoPay Edge Function, rezerváciou online platby, fakturačnými údajmi a iDoklad/SuperFaktúra priestorom cez admin nastavenia.</p>
+        <p style="color:var(--muted);margin:0;">Objednávka podporuje manuálnu platbu, pripravené online platby, rezerváciu zásoby a firemné fakturačné údaje.</p>
         <div class="integration-strip">
             <div class="integration-pill"><strong>GoPay</strong>Platobný link sa vytvorí cez serverovú funkciu, nie cez tajný kľúč v prehliadači.</div>
             <div class="integration-pill"><strong>Faktúry</strong>Objednávka nesie firemné údaje, variabilný symbol a stav dokladu.</div>
@@ -1814,7 +1944,7 @@
 </section>
 
 <!-- ORDER TRACKING -->
-<section id="sledovanie-objednavky">
+<section id="sledovanie-objednavky" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Sledovanie objednávky</div>
         <h2 class="section-title">Zákazník vie skontrolovať stav aj bez písania správy</h2>
@@ -1834,7 +1964,7 @@
 </section>
 
 <!-- SEO / EDUCATION -->
-<section id="repasovane-pc-info">
+<section id="repasovane-pc-info" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Sprievodca nákupom</div>
         <h2 class="section-title">Ako rozmýšľať pri výbere repasovaného PC</h2>
@@ -1858,7 +1988,7 @@
 
 
 <!-- FAQ -->
-<section id="faq">
+<section id="faq" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
         <div class="section-label">Podpora</div>
         <h2 class="section-title">Často kladené otázky</h2>
@@ -1912,7 +2042,7 @@
 </section>
 
 <!-- CONTACT -->
-<section id="kontakt">
+<section id="kontakt" class="info-section-collapsed" data-info-section>
     <div class="contact-wrapper reveal">
         <div class="contact-info">
             <h2 style="font-family: 'Outfit'; font-size: 2.5rem; margin-bottom: 1.5rem;">Napíšte nám</h2>
@@ -1956,11 +2086,11 @@
 </section>
 
 <!-- LEGAL -->
-<section id="pravne-info" style="padding-top: 4rem;">
+<section id="pravne-info" class="info-section-collapsed" data-info-section style="padding-top: 4rem;">
     <div class="section-header" style="margin-bottom:2rem;">
         <div class="section-label">Právne info</div>
         <h2>Podmienky, súkromie a cookies</h2>
-        <p>Prehľad základných pravidiel nákupu, reklamácie a spracovania údajov. Údaje predávajúceho sa dopĺňajú z admin nastavení.</p>
+        <p>Prehľad základných pravidiel nákupu, reklamácie a spracovania údajov. Firemné údaje sa zobrazia po ich riadnom doplnení.</p>
     </div>
     <div class="legal-grid">
         <article id="predavajuci" class="legal-card" hidden>
@@ -2036,23 +2166,23 @@
             <h4>Navigácia</h4>
             <a href="#ponuka">Ponuka</a>
             <a href="#preco-my">O nás</a>
-            <a href="#kontrola-kvality">Kontrola kvality</a>
+            <a href="informacie.html#kontrola">Kontrola kvality</a>
             <a href="#poradca">Poradca výberom</a>
-            <a href="#servisne-sluzby">Služby</a>
-            <a href="#skoly-firmy">Školy/Firmy</a>
-            <a href="#sledovanie-objednavky">Sledovanie objednávky</a>
-            <a href="#faq">FAQ</a>
-            <a href="#kontakt">Kontakt</a>
+            <a href="informacie.html#sluzby">Služby</a>
+            <a href="#skoly-firmy" data-action="open-info-section" data-info-target="skoly-firmy">Školy/Firmy</a>
+            <a href="#sledovanie-objednavky" data-action="open-info-section" data-info-target="sledovanie-objednavky">Sledovanie objednávky</a>
+            <a href="informacie.html#podpora">FAQ</a>
+            <a href="#kontakt" data-action="open-info-section" data-info-target="kontakt">Kontakt</a>
         </div>
         <div class="footer-col">
             <h4>Právne info</h4>
-            <a href="#obchodne-podmienky">Obchodné podmienky</a>
-            <a href="#ochrana-udajov">Ochrana údajov (GDPR)</a>
-            <a href="#doprava-platba">Doprava a platba</a>
-            <a href="#reklamacny-poriadok">Reklamačný poriadok</a>
-            <a href="#formular-odstupenia">Formulár vrátenia</a>
-            <a href="#alternativne-riesenie-sporov">Riešenie sporov</a>
-            <a href="#cookies">Cookies</a>
+            <a href="pravne.html#obchodne-podmienky">Obchodné podmienky</a>
+            <a href="pravne.html#ochrana-udajov">Ochrana údajov (GDPR)</a>
+            <a href="pravne.html#doprava-platba">Doprava a platba</a>
+            <a href="pravne.html#reklamacny-poriadok">Reklamačný poriadok</a>
+            <a href="pravne.html#formular-odstupenia">Formulár vrátenia</a>
+            <a href="pravne.html#alternativne-riesenie-sporov">Riešenie sporov</a>
+            <a href="pravne.html#cookies">Cookies</a>
         </div>
     </div>
     <div class="footer-bottom">
@@ -2068,7 +2198,7 @@
 
 <!-- COOKIE BANNER -->
 <div class="cookie-banner" id="cookie-banner">
-    <p>🍪 Táto stránka používa nevyhnutné cookies a localStorage na fungovanie košíka a obľúbených položiek. Nezbierame žiadne analytické ani reklamné údaje. Viac informácií v našich <a href="#ochrana-udajov">Zásadách ochrany súkromia</a>.</p>
+    <p>🍪 Táto stránka používa nevyhnutné cookies a localStorage na fungovanie košíka a obľúbených položiek. Nezbierame žiadne analytické ani reklamné údaje. Viac informácií v našich <a href="pravne.html#ochrana-udajov">Zásadách ochrany súkromia</a>.</p>
     <div class="cookie-btns">
         <button type="button" class="cookie-accept" data-action="accept-cookies">Rozumiem</button>
         <button type="button" class="cookie-decline" data-action="decline-cookies">Zavrieť</button>
@@ -2103,6 +2233,8 @@ const DEFAULT_SITE_SETTINGS = {
     heroBadge: 'Testované repasované PC skladom',
     heroTitle: 'Spoľahlivé počítače pre <span>hry, prácu aj školu.</span>',
     heroText: 'Repasované a použité PC s jasnými parametrami, uvedeným stavom a aktuálnou skladovou dostupnosťou.',
+    promoTitle: 'Počítače pripravené zo skladu',
+    promoText: 'jasné parametre a stav každého kusu',
     trustItems: [
         'Kontrola pred predajom',
         'Jasné parametre',
@@ -2637,7 +2769,7 @@ function cleanPublicSiteBase(value) {
 
 function productImageMarkup(p, className = 'pc-image') {
     const src = safePublicImageUrl(p.imageUrl || p.image_url || '');
-    if (!src) return `<div class="${className}"><div class="pc-image-fallback">Fotka produktu bude doplnená v admine</div></div>`;
+    if (!src) return `<div class="${className}"><div class="pc-image-fallback">Fotku produktu pripravujeme</div></div>`;
     return `<div class="${className}"><img src="${safeAttr(src)}" alt="${safeAttr(p.name)}" width="1000" height="750" loading="lazy" decoding="async" data-product-image></div>`;
 }
 
@@ -3131,7 +3263,7 @@ function customerOrdersErrorHtml(message = '') {
     if (/permission denied|row-level security|rls|42501|not authorized|grant|policy/i.test(normalized)) {
         return `<div class="account-order-extra" style="border-color:rgba(252,165,165,0.45);background:rgba(239,68,68,0.08);">
             <strong>Objednávky blokuje nastavenie Supabase</strong>
-            Účet je prihlásený, ale databáza ešte nepúšťa čítanie objednávok pre zákazníka. V admine otvor Audit a spusti/kopíruj opravný SQL pre orders RLS/GRANT.
+            Účet je prihlásený, ale objednávky sa momentálne nepodarilo načítať. Skúste obnovenie alebo kontaktujte podporu.
             <br><a class="order-support" href="${safeAttr(supportHref)}">Kontaktovať podporu</a>
         </div>`;
     }
@@ -3748,6 +3880,8 @@ function applySiteSettings(settings = {}) {
         heroBadge: plainText(raw.heroBadge, 80) || DEFAULT_SITE_SETTINGS.heroBadge,
         heroTitle: plainText(raw.heroTitle, 140) || DEFAULT_SITE_SETTINGS.heroTitle,
         heroText: plainText(raw.heroText, 260) || DEFAULT_SITE_SETTINGS.heroText,
+        promoTitle: plainText(raw.promoTitle, 90) || DEFAULT_SITE_SETTINGS.promoTitle,
+        promoText: plainText(raw.promoText, 140) || DEFAULT_SITE_SETTINGS.promoText,
         announcementText: plainText(raw.announcementText, 160),
         announcementLinkLabel: plainText(raw.announcementLinkLabel, 50),
         whatsappText: plainText(raw.whatsappText, 220) || DEFAULT_SITE_SETTINGS.whatsappText
@@ -3759,10 +3893,14 @@ function applySiteSettings(settings = {}) {
     const badge = document.getElementById('hero-badge-text');
     const title = document.getElementById('hero-title');
     const text = document.getElementById('hero-text');
+    const promoTitle = document.getElementById('promo-title');
+    const promoText = document.getElementById('promo-text');
     const announcement = document.getElementById('site-announcement');
     if (badge) badge.textContent = s.heroBadge || DEFAULT_SITE_SETTINGS.heroBadge;
     if (title) title.innerHTML = safeHeroTitle(s.heroTitle);
     if (text) text.textContent = s.heroText || DEFAULT_SITE_SETTINGS.heroText;
+    if (promoTitle) promoTitle.textContent = s.promoTitle;
+    if (promoText) promoText.textContent = s.promoText;
     applyTrustItems(s.trustItems);
     applyLegalSettings(s);
     updateStoreStructuredData(s);
@@ -4070,7 +4208,14 @@ async function loadProductsFromSupabase() {
     } catch(e) {
         console.warn('Supabase products fallback:', e.message || e);
         activeProducts = localProducts;
-        setProductStatus(localProducts.length ? 'Lokálny sklad z admina' : 'Nepodarilo sa načítať Supabase sklad · skúste Obnoviť sklad', localProducts.length ? 'local' : 'error');
+        setProductStatus(localProducts.length ? 'Dočasne zobrazená lokálna ponuka' : 'Sklad sa nepodarilo načítať · skúste Obnoviť sklad', localProducts.length ? 'local' : 'error');
+    }
+    const promoCount = document.getElementById('promo-stock-count');
+    if (promoCount) {
+        const pieces = activeProducts.reduce((sum, product) => sum + Math.max(0, Number(product.stock || 0)), 0);
+        promoCount.textContent = activeProducts.length
+            ? `${activeProducts.length} modelov · ${pieces} ks skladom`
+            : 'Nové kusy pripravujeme';
     }
     rebuildFilterOptions(activeProducts);
     renderProducts();
@@ -4327,6 +4472,56 @@ function openProductFromUrlOnce() {
     setTimeout(() => openProductDetail(found.name), 120);
 }
 
+function infoSectionForTarget(targetId = '') {
+    const target = document.getElementById(String(targetId || '').replace(/^#/, ''));
+    if (!target) return null;
+    return target.matches('[data-info-section]') ? target : target.closest('[data-info-section]');
+}
+
+function openInfoSection(targetId, { updateHash = true, smooth = true } = {}) {
+    const cleanId = String(targetId || '').replace(/^#/, '');
+    const target = document.getElementById(cleanId);
+    const section = infoSectionForTarget(cleanId);
+    if (!target || !section) return false;
+    document.querySelectorAll('[data-info-section]').forEach(item => {
+        const active = item === section;
+        item.classList.toggle('info-section-collapsed', !active);
+        item.classList.toggle('info-section-expanded', active);
+    });
+    if (!section.querySelector(':scope > .info-back')) {
+        const back = document.createElement('div');
+        back.className = 'info-back';
+        back.innerHTML = '<a href="#centrum-informacii" data-action="close-info-sections">← Späť na všetky informácie</a>';
+        section.prepend(back);
+    }
+    if (updateHash && location.hash !== `#${cleanId}`) {
+        history.pushState(null, '', `#${cleanId}`);
+    }
+    observeRevealElements(section);
+    requestAnimationFrame(() => target.scrollIntoView({
+        behavior: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto',
+        block: 'start'
+    }));
+    return true;
+}
+
+function revealInfoSectionFromHash() {
+    if (!location.hash) return;
+    openInfoSection(decodeURIComponent(location.hash.slice(1)), { updateHash: false, smooth: false });
+}
+
+function closeInfoSections() {
+    document.querySelectorAll('[data-info-section]').forEach(item => {
+        item.classList.add('info-section-collapsed');
+        item.classList.remove('info-section-expanded');
+    });
+    history.pushState(null, '', '#centrum-informacii');
+    document.getElementById('centrum-informacii')?.scrollIntoView({
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start'
+    });
+}
+
 function handleDelegatedActions(event) {
     const actionEl = event.target.closest('[data-action]');
     if (!actionEl) {
@@ -4372,7 +4567,7 @@ function handleDelegatedActions(event) {
         'resend-confirmation', 'logout-customer', 'load-customer-orders', 'close-return-request',
         'order-confirm-account', 'order-confirm-signup', 'open-return-request',
         'email-return-request', 'copy-return-request', 'add-cart-detail', 'copy-product-link'
-        , 'run-advisor', 'toggle-filters'
+        , 'run-advisor', 'toggle-filters', 'open-info-section', 'close-info-sections'
     ].includes(action) && !(action === 'close-cart' && actionEl.matches('a[href^="#"]'));
     if (shouldPreventDefault) {
         event.preventDefault();
@@ -4390,6 +4585,10 @@ function handleDelegatedActions(event) {
         const expanded = actionEl.getAttribute('aria-expanded') === 'true';
         actionEl.setAttribute('aria-expanded', String(!expanded));
         panel?.classList.toggle('mobile-open', !expanded);
+    } else if (action === 'open-info-section') {
+        openInfoSection(actionEl.dataset.infoTarget || actionEl.getAttribute('href') || '');
+    } else if (action === 'close-info-sections') {
+        closeInfoSections();
     } else if (action === 'toggle-wish') {
         toggleWish(actionEl, actionEl.dataset.name || '');
     } else if (action === 'cart-qty') {
@@ -4498,6 +4697,7 @@ function handleDelegatedActions(event) {
 document.addEventListener('click', handleDelegatedActions);
 document.addEventListener('change', handleDelegatedActions);
 document.addEventListener('input', handleDelegatedActions);
+window.addEventListener('hashchange', revealInfoSectionFromHash);
 document.addEventListener('keydown', event => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
     const productCard = event.target.closest('[data-product-card]');
@@ -4624,8 +4824,10 @@ function observeRevealElements(root = document) {
 function prioritizeProductCatalog() {
     const catalog = document.getElementById('ponuka');
     const hero = document.querySelector('.hero');
-    if (catalog && hero && hero.nextElementSibling !== catalog) {
-        hero.after(catalog);
+    const entry = document.querySelector('.shop-entry');
+    const anchor = entry || hero;
+    if (catalog && anchor && anchor.nextElementSibling !== catalog) {
+        anchor.after(catalog);
     }
     if (catalog && location.hash === '#ponuka') {
         requestAnimationFrame(() => requestAnimationFrame(() => catalog.scrollIntoView({ block: 'start' })));
@@ -4633,6 +4835,7 @@ function prioritizeProductCatalog() {
 }
 
 prioritizeProductCatalog();
+revealInfoSectionFromHash();
 observeRevealElements();
 setTimeout(() => document.documentElement.classList.add('js-ready'), 900);
 
@@ -4885,7 +5088,7 @@ function runApplyFilters() {
     if (noResultsText) {
         noResultsText.innerHTML = cards.length
             ? 'Žiadne PC nezodpovedá filtru. Skúste iné nastavenie.'
-            : '<span class="stock-empty"><strong>Momentálne nie je zverejnený žiadny počítač</strong><p>Admin musí pridať produkt so skladom alebo prepnúť web na Supabase režim, aby ho videli všetci zákazníci.</p></span>';
+            : '<span class="stock-empty"><strong>Momentálne nie je zverejnený žiadny počítač</strong><p>Nové skladové kusy pripravujeme. Napíšte nám požadovaný rozpočet a použitie.</p></span>';
     }
     if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
     updateActiveTags(priceMin, priceMax, gpu, cpu, cpuGen, storageMin, storageType, os, condition);
@@ -5264,7 +5467,7 @@ function openProductDetail(name) {
         </div>
         <div class="product-detail-services">
             <strong>Dostupné doplnkové služby</strong>
-            ${services || 'Doplnkové služby si môžete zapnúť alebo upraviť v admine.'}
+            ${services || 'Doplnkové služby momentálne nie sú dostupné.'}
         </div>
         <div class="product-detail-services">
             <strong>Vhodné použitie</strong>
@@ -6031,7 +6234,7 @@ async function submitB2BInquiry(event) {
     const email = normalizeEmail(document.getElementById('b2b-email')?.value);
     const phone = cleanText(document.getElementById('b2b-phone')?.value, 20);
     const count = enumValue(document.getElementById('b2b-count')?.value, ['1', '2-5', '6-20', '20+']);
-    const use = enumValue(document.getElementById('b2b-use')?.value, ['Kancelária', 'Učebňa', 'Administratíva', 'Recepcia', 'Iné']);
+    const use = enumValue(document.getElementById('b2b-use')?.value, ['Kancelária', 'Učebňa', 'Firemná agenda', 'Recepcia', 'Iné']);
     const budget = Math.max(0, Math.min(100000, Number(document.getElementById('b2b-budget')?.value || 0)));
     const note = cleanMultiline(document.getElementById('b2b-message')?.value, 1500);
     const phoneDigits = phone.replace(/\D/g, '');
@@ -6070,7 +6273,7 @@ async function submitB2BInquiry(event) {
         form.reset();
         setB2BStatus(result?.email_sent
             ? 'Dopyt bol odoslaný e-mailom. Ozveme sa po overení dostupnosti.'
-            : 'Dopyt bol bezpečne prijatý a uložený v admine.');
+            : 'Dopyt bol bezpečne prijatý a uložený na spracovanie.');
     } catch (error) {
         console.error('B2B notification failed:', error);
         setB2BStatus('Odoslanie sa nepodarilo.', fallbackHref);

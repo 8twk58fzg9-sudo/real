@@ -2,32 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://8twk58fzg9-sudo.github.io/real/</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://8twk58fzg9-sudo.github.io/real/index.html#ponuka</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://8twk58fzg9-sudo.github.io/real/index.html#ako-to-funguje</loc>
-    <lastmod>2026-06-14</lastmod>
+    <loc>https://8twk58fzg9-sudo.github.io/real/informacie.html</loc>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://8twk58fzg9-sudo.github.io/real/index.html#faq</loc>
-    <lastmod>2026-06-14</lastmod>
+    <loc>https://8twk58fzg9-sudo.github.io/real/pravne.html</loc>
+    <lastmod>2026-07-03</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://8twk58fzg9-sudo.github.io/real/index.html#pravne-info</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.6</priority>
   </url>
 </urlset>

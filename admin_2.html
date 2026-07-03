@@ -186,6 +186,9 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.95);backdrop
 .health-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.8rem}
 .health-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0.7rem}
 .health-item{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:0.8rem}
+.health-item[type="button"]{width:100%;color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.health-item[type="button"]:hover,.health-item[type="button"]:focus-visible{border-color:var(--accent);background:rgba(59,130,246,0.09);outline:none}
+.health-item[type="button"] .health-detail::after{content:" Kliknutím otvorte miesto opravy.";color:var(--accent);font-weight:700}
 .health-title{font-weight:800;font-size:0.82rem;margin-bottom:0.2rem}
 .health-detail{color:var(--muted);font-size:0.76rem;line-height:1.45}
 .health-ok{border-color:rgba(34,197,94,0.35)}
@@ -1313,6 +1316,14 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
         <label class="form-label">Hero text</label>
         <input class="form-input" id="s-hero-text" maxlength="260">
       </div>
+      <div class="form-group">
+        <label class="form-label">Nadpis akčného pásu nad ponukou</label>
+        <input class="form-input" id="s-promo-title" maxlength="90">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Text akčného pásu</label>
+        <input class="form-input" id="s-promo-text" maxlength="140">
+      </div>
       <div class="form-group form-full">
         <label class="form-label">Dôveryhodnostné body pod hero tlačidlami</label>
         <input class="form-input" id="s-trust-items" maxlength="520" placeholder="Bezpečná objednávka | Doprava od 3,90€ | 12 mesiacov záruka">
@@ -2028,6 +2039,8 @@ const DEFAULT_SITE_SETTINGS = {
     heroBadge: 'Testované repasované PC skladom',
     heroTitle: 'Spoľahlivé počítače pre <span>hry, prácu aj školu.</span>',
     heroText: 'Repasované a použité PC s jasnými parametrami, uvedeným stavom a aktuálnou skladovou dostupnosťou.',
+    promoTitle: 'Počítače pripravené zo skladu',
+    promoText: 'jasné parametre a stav každého kusu',
     trustItems: [
         'Bezpečná objednávka',
         'Doprava od 3,90€',
@@ -3017,6 +3030,8 @@ function loadSiteSettingsForm(settingsOverride = null) {
         's-hero-badge': s.heroBadge,
         's-hero-title': s.heroTitle,
         's-hero-text': s.heroText,
+        's-promo-title': s.promoTitle,
+        's-promo-text': s.promoText,
         's-trust-items': normalizeTrustItems(s.trustItems).join(' | '),
         's-countdown-label': plainTextSetting(s.countdownLabel),
         's-public-site-url': s.publicSiteUrl,
@@ -3090,6 +3105,8 @@ function readSiteSettingsForm() {
         heroBadge: plainTextSetting(document.getElementById('s-hero-badge').value, 80),
         heroTitle: plainTextSetting(document.getElementById('s-hero-title').value, 140),
         heroText: plainTextSetting(document.getElementById('s-hero-text').value, 260),
+        promoTitle: plainTextSetting(document.getElementById('s-promo-title')?.value, 90) || DEFAULT_SITE_SETTINGS.promoTitle,
+        promoText: plainTextSetting(document.getElementById('s-promo-text')?.value, 140) || DEFAULT_SITE_SETTINGS.promoText,
         trustItems: normalizeTrustItems(document.getElementById('s-trust-items')?.value || ''),
         countdownLabel: plainTextSetting(document.getElementById('s-countdown-label').value, 120),
         publicSiteUrl,
@@ -3557,7 +3574,29 @@ function updateAuthPanel() {
 function healthCard(status, title, detail) {
     const cls = status === 'ok' ? 'health-ok' : status === 'bad' ? 'health-bad' : 'health-warn';
     const icon = status === 'ok' ? '✅' : status === 'bad' ? '❌' : '⚠️';
-    return `<div class="health-item ${cls}"><div class="health-title">${icon} ${escapeHTML(title)}</div><div class="health-detail">${escapeHTML(detail)}</div></div>`;
+    const normalized = String(title || '').toLowerCase();
+    const target = normalized.includes('produkt') ? 'products'
+        : normalized.includes('objednáv') ? 'orders'
+        : normalized.includes('sklad') ? 'warehouses'
+        : normalized.includes('nastaven') || normalized.includes('key') ? 'settings'
+        : 'audit';
+    const content = `<div class="health-title">${icon} ${escapeHTML(title)}</div><div class="health-detail">${escapeHTML(detail)}</div>`;
+    return status === 'ok'
+        ? `<div class="health-item ${cls}">${content}</div>`
+        : `<button type="button" class="health-item ${cls}" data-admin-action="openHealthIssue" data-admin-target="${target}" data-health-title="${escapeHTML(title)}">${content}</button>`;
+}
+
+function openHealthIssue(trigger) {
+    const target = trigger?.dataset?.adminTarget || 'audit';
+    const title = String(trigger?.dataset?.healthTitle || '').toLowerCase();
+    showAdminSection(target);
+    requestAnimationFrame(() => {
+        const destination = title.includes('login') || title.includes('práva')
+            ? document.getElementById('auth-panel')
+            : document.querySelector(`[data-admin-section~="${target}"]`);
+        destination?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (title.includes('login')) document.getElementById('auth-email')?.focus({ preventScroll: true });
+    });
 }
 
 async function supabaseCheck(path, tokenOverride) {
@@ -7223,6 +7262,8 @@ function handleAdminDelegatedAction(event) {
     event.preventDefault();
     if (action === 'showAdminSection') {
         showAdminSection(actionEl.dataset.adminTarget || 'dashboard');
+    } else if (action === 'openHealthIssue') {
+        openHealthIssue(actionEl);
     } else if (action === 'closeSqlModal') {
         setAdminModalOpen('sql-modal', false);
     } else if (action === 'copySqlSetup') {

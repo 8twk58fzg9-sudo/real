@@ -9,7 +9,14 @@ const allowedOrigins = new Set([
 const allowedFields = new Set(["to_email", "from_name", "from_email", "phone", "message"]);
 
 function isAllowedOrigin(origin: string): boolean {
-  return allowedOrigins.has(origin) || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
+  if (allowedOrigins.has(origin) || origin === "null") return true;
+  try {
+    const url = new URL(origin);
+    return ["localhost", "127.0.0.1", "[::1]", "0.0.0.0"].includes(url.hostname) &&
+      ["http:", "https:"].includes(url.protocol);
+  } catch {
+    return false;
+  }
 }
 
 function headers(origin: string): Record<string, string> {
@@ -136,7 +143,7 @@ Deno.serve(async (req: Request) => {
 
   const kind = inquiryKind(message);
   const resendKey = Deno.env.get("RESEND_API_KEY") || "";
-  const fromEmail = Deno.env.get("NOTIFICATION_FROM_EMAIL") || "";
+  const fromEmail = Deno.env.get("NOTIFICATION_FROM_EMAIL") || "Computrax <onboarding@resend.dev>";
   const recipient = Deno.env.get("NOTIFICATION_TO_EMAIL") || "computerax.sk@gmail.com";
   let emailStatus: "not_configured" | "sent" | "failed" = "not_configured";
 

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Informácie o nákupe, kontrole, záruke, službách a repasovaných počítačoch Computrax.">
+  <title>Nákup a služby | Computrax</title>
+  <link rel="icon" href="favicon-32.png" type="image/png">
+  <style>
+    :root{--bg:#0a0f1c;--panel:#111a2c;--text:#f4f7fb;--muted:#9ba8bf;--line:#243047;--accent:#4c8dff;--green:#34d17b}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,system-ui,sans-serif}
+    header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem max(4%,calc((100% - 1120px)/2));background:rgba(10,15,28,.96);border-bottom:1px solid var(--line)}header img{width:130px;height:auto;display:block}
+    nav{display:flex;gap:.6rem;flex-wrap:wrap}nav a,.button{color:var(--text);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:.65rem .9rem;font-weight:700}nav a:hover,.button:hover{border-color:var(--accent);color:var(--accent)}
+    main{width:min(1120px,92%);margin:auto;padding:3rem 0 5rem}.eyebrow{color:var(--accent);font-weight:800;text-transform:uppercase;font-size:.78rem}h1{font-size:clamp(2rem,5vw,3.7rem);line-height:1.05;margin:.45rem 0 1rem}h2{margin:.1rem 0 .6rem}p{color:var(--muted)}
+    .jump{display:flex;gap:.55rem;flex-wrap:wrap;margin:1.5rem 0 2.5rem}.jump a{color:var(--text);text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.55rem .75rem;font-size:.85rem}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.card{scroll-margin-top:95px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:1.35rem}.card:target{border-color:var(--accent)}.steps{counter-reset:step}.steps li{color:var(--muted);margin:.55rem 0}.steps li::marker{color:var(--accent);font-weight:800}.actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}.primary{background:var(--accent);border-color:var(--accent);color:#fff}.good{color:var(--green);font-weight:800}
+    footer{border-top:1px solid var(--line);padding:2rem 4%;text-align:center;color:var(--muted)}
+    @media(max-width:760px){header{align-items:flex-start}.grid{grid-template-columns:1fr}main{padding-top:2rem}.card{padding:1.1rem}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="index.html" aria-label="Computrax - späť na obchod"><img src="computrax-logo.png" alt="Computrax" width="130" height="65"></a>
+  <nav><a href="index.html">Obchod</a><a href="pravne.html">Právne info</a><a href="index.html#kontakt">Kontakt</a></nav>
+</header>
+<main>
+  <div class="eyebrow">Pomoc s nákupom</div><h1>Nákup, služby a podpora</h1>
+  <p>Samostatné miesto pre informácie, ktoré nepotrebujete pri každom prezeraní produktov.</p>
+  <div class="jump"><a href="#ako-nakupit">Ako nakúpiť</a><a href="#kontrola">Kontrola PC</a><a href="#repasovane">Repasované PC</a><a href="#sluzby">Služby</a><a href="#firmy">Firmy a školy</a><a href="#podpora">Podpora</a></div>
+  <div class="grid">
+    <article class="card" id="ako-nakupit"><h2>Ako prebieha nákup</h2><ol class="steps"><li>Vyberte konkrétny skladový počítač a skontrolujte parametre.</li><li>Vložte ho do košíka a vyberte dopravu a prípadné služby.</li><li>Skontrolujte konečnú cenu a odošlite objednávku.</li><li>O zmene stavu objednávky dostanete e-mail.</li></ol><div class="actions"><a class="button primary" href="index.html#ponuka">Pozrieť ponuku</a></div></article>
+    <article class="card" id="kontrola"><h2>Kontrola a stav počítača</h2><p>Pri produkte uvádzame CPU, grafiku, RAM, úložisko, operačný systém, dostupnosť a stav konkrétneho kusu. Bežné kozmetické opotrebenie repasovaného zariadenia oddeľujeme od funkčných nedostatkov.</p><p class="good">Parametre porovnajte aj s požiadavkami programov a hier, ktoré plánujete používať.</p></article>
+    <article class="card" id="repasovane"><h2>Čo znamená repasovaný počítač</h2><p>Ide o používané zariadenie pripravené na ďalšie používanie. Môže mať kozmetické stopy, no jeho deklarované parametre a stav musia zodpovedať popisu produktu.</p><p>Podmienky záruky, reklamácie a vrátenia nájdete na samostatnej právnej stránke.</p><div class="actions"><a class="button" href="pravne.html">Právne informácie</a></div></article>
+    <article class="card" id="sluzby"><h2>Doplnkové služby</h2><p>Pri objednávke sa môžu zobraziť služby ako prvotné nastavenie systému, príprava základných programov alebo predĺženie záruky. Dostupnosť a cena sa zobrazia priamo v košíku.</p></article>
+    <article class="card" id="firmy"><h2>Firmy a školy</h2><p>Pri požiadavke na viac kusov pripravíme dopyt podľa počtu zariadení, spôsobu použitia, programov a rozpočtu. Podobné konfigurácie závisia od aktuálneho skladu.</p><div class="actions"><a class="button primary" href="index.html#skoly-firmy">Otvoriť firemný dopyt</a></div></article>
+    <article class="card" id="podpora"><h2>Objednávky a podpora</h2><p>Stav objednávky môžete sledovať podľa čísla a e-mailu alebo cez zákaznícky účet. Pre otázky k produktu použite kontaktný formulár.</p><div class="actions"><a class="button" href="index.html#sledovanie-objednavky">Sledovať objednávku</a><a class="button" href="index.html#kontakt">Kontaktovať podporu</a></div></article>
+  </div>
+</main>
+<footer>© 2026 Computrax.sk</footer>
+</body>
+</html>

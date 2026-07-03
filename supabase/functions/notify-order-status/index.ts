@@ -10,7 +10,14 @@ const allowedFields = new Set(["order_id", "status"]);
 const allowedStatuses = new Set(["confirmed", "packed", "sent", "done", "cancelled"]);
 
 function isAllowedOrigin(origin: string): boolean {
-  return allowedOrigins.has(origin) || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
+  if (allowedOrigins.has(origin) || origin === "null") return true;
+  try {
+    const url = new URL(origin);
+    return ["localhost", "127.0.0.1", "[::1]", "0.0.0.0"].includes(url.hostname) &&
+      ["http:", "https:"].includes(url.protocol);
+  } catch {
+    return false;
+  }
 }
 
 function responseHeaders(origin: string): Record<string, string> {
@@ -210,9 +217,9 @@ Deno.serve(async (req: Request) => {
   }
 
   const resendKey = Deno.env.get("RESEND_API_KEY") || "";
-  const fromEmail = Deno.env.get("NOTIFICATION_FROM_EMAIL") || "";
+  const fromEmail = Deno.env.get("NOTIFICATION_FROM_EMAIL") || "Computrax <onboarding@resend.dev>";
   const supportEmail = cleanEmail(Deno.env.get("NOTIFICATION_TO_EMAIL") || "computerax.sk@gmail.com");
-  if (!resendKey || !fromEmail) {
+  if (!resendKey) {
     await admin.from("order_status_notifications").update({
       delivery_status: "failed",
       error_code: "email_not_configured",
