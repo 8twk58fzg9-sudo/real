@@ -223,6 +223,25 @@ header{position:relative;padding:.65rem max(1rem,env(safe-area-inset-right)) .65
 *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 .toast,.modal-bg,.del-modal{transition:none!important}
 }
+
+/* Order status timeline */
+.order-timeline{display:flex;align-items:flex-start;gap:0;margin:0.7rem 0 0.4rem;padding:0.55rem 0.2rem;border:1px solid rgba(148,163,184,0.14);border-radius:12px;background:rgba(255,255,255,0.025)}
+.order-timeline-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.28rem;position:relative;min-width:0}
+.order-timeline-step::before{content:"";position:absolute;top:9px;left:-50%;width:100%;height:2px;background:rgba(148,163,184,0.22)}
+.order-timeline-step:first-child::before{display:none}
+.order-timeline-step.done::before{background:rgba(34,197,94,0.55)}
+.order-timeline-dot{width:18px;height:18px;border-radius:50%;border:2px solid rgba(148,163,184,0.4);background:#0f1623;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:#0f1623}
+.order-timeline-step.done .order-timeline-dot{background:#22c55e;border-color:#22c55e}
+.order-timeline-step.current .order-timeline-dot{border-color:var(--accent);background:rgba(59,130,246,0.25);box-shadow:0 0 0 3px rgba(59,130,246,0.18)}
+.order-timeline-step span{font-size:0.62rem;color:var(--muted);text-align:center;line-height:1.2;padding:0 0.15rem;overflow-wrap:anywhere}
+.order-timeline-step.current span{color:var(--text);font-weight:800}
+.order-timeline-cancelled{margin:0.7rem 0 0.4rem;padding:0.6rem 0.8rem;border:1px solid rgba(239,68,68,0.35);border-radius:12px;background:rgba(239,68,68,0.08);color:#fca5a5;font-size:0.8rem;font-weight:700}
+
+/* Attention panel */
+.attention-card{border:1px solid rgba(251,191,36,0.4)!important;background:linear-gradient(180deg,rgba(251,191,36,0.06),rgba(255,255,255,0.02))}
+.attention-item{display:flex;align-items:flex-start;gap:0.55rem;padding:0.5rem 0;border-bottom:1px dashed rgba(148,163,184,0.16);font-size:0.85rem;color:var(--text)}
+.attention-item:last-child{border-bottom:none}
+.attention-item small{display:block;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -261,6 +280,8 @@ header{position:relative;padding:.65rem max(1rem,env(safe-area-inset-right)) .65
     <button type="button" class="admin-nav-btn" data-admin-target="warehouses" data-admin-action="showAdminSection">Sklady</button>
     <button type="button" class="admin-nav-btn" data-admin-target="settings" data-admin-action="showAdminSection">Nastavenia webu</button>
     <button type="button" class="admin-nav-btn" data-admin-target="orders" data-admin-action="showAdminSection">Objednávky</button>
+    <button type="button" class="admin-nav-btn" data-admin-target="emails" data-admin-action="showAdminSection">E-maily</button>
+    <button type="button" class="admin-nav-btn" data-admin-target="customers" data-admin-action="showAdminSection">Zákazníci</button>
     <button type="button" class="admin-nav-btn" data-admin-target="analytics" data-admin-action="showAdminSection">Analytika</button>
     <button type="button" class="admin-nav-btn" data-admin-target="automation" data-admin-action="showAdminSection">Automatizácie</button>
     <button type="button" class="admin-nav-btn" data-admin-target="audit" data-admin-action="showAdminSection">Audit</button>
@@ -1539,7 +1560,59 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
     </div>
   </div>
 
-  <div class="orders-wrap admin-section" data-admin-section="automation">
+  <div class="orders-wrap admin-section" data-admin-section="emails">
+    <div class="orders-head">
+      <div>
+        <strong style="font-family:'Outfit';font-size:1.15rem">Zákaznícke e-maily</strong>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0.2rem 0 0">Automatické e-maily pri zmene stavu objednávky. Uprav texty, zapni/vypni jednotlivé stavy a pošli si test na vlastnú adresu.</p>
+      </div>
+      <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+        <button type="button" class="btn btn-ghost btn-sm" data-admin-action="loadEmailTemplates">Obnoviť</button>
+      </div>
+    </div>
+    <div class="order-card" style="margin-bottom:1.1rem">
+      <div class="order-num">Odosielateľ</div>
+      <div class="order-meta" style="margin:0.4rem 0 0.9rem">E-maily sa posielajú cez Brevo. Adresa odosielateľa musí byť overená v Brevo (Senders &amp; Domains). Odpovede zákazníkov chodia na reply-to adresu.</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Meno odosielateľa</label>
+          <input class="form-input" id="e-sender-name" maxlength="80" placeholder="Computrax">
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-mail odosielateľa (overený v Brevo)</label>
+          <input class="form-input" id="e-sender-email" maxlength="254" placeholder="obchod@computrax.sk">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reply-to (kam chodia odpovede)</label>
+          <input class="form-input" id="e-reply-to" maxlength="254" placeholder="computerax.sk@gmail.com">
+        </div>
+      </div>
+      <div class="order-actions" style="margin-top:0.7rem">
+        <button type="button" class="btn btn-primary btn-sm" data-admin-action="saveEmailSettings">Uložiť odosielateľa</button>
+      </div>
+    </div>
+    <div class="orders-grid" id="email-templates-grid">
+      <div style="color:var(--muted);font-size:0.9rem">Šablóny sa načítajú po prihlásení cez Supabase admin zápis.</div>
+    </div>
+</div>
+
+<div class="orders-wrap admin-section" data-admin-section="customers">
+    <div class="orders-head">
+      <div>
+        <strong style="font-family:'Outfit';font-size:1.15rem">Zákazníci</strong>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0.2rem 0 0">Prehľad zákazníkov podľa objednávok: útrata, počet nákupov, posledná objednávka a interné poznámky.</p>
+      </div>
+      <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+        <input class="form-input" id="customer-search" placeholder="Hľadať meno alebo e-mail..." style="width:220px;min-height:40px;padding:0.5rem 0.8rem;font-size:0.85rem" data-admin-action="renderCustomers">
+        <button type="button" class="btn btn-ghost btn-sm" data-admin-action="loadCustomers">Obnoviť</button>
+      </div>
+    </div>
+    <div class="orders-grid" id="customers-grid">
+      <div style="color:var(--muted);font-size:0.9rem">Zákazníci sa načítajú po prihlásení cez Supabase admin zápis.</div>
+    </div>
+</div>
+
+<div class="orders-wrap admin-section" data-admin-section="automation">
     <div class="orders-head">
       <div>
         <strong style="font-family:'Outfit';font-size:1.15rem">Automatické odporúčania</strong>
@@ -1742,6 +1815,18 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
   </div>
 
   <div class="products-wrap admin-section active-admin-section" data-admin-section="products">
+    <div class="quick-add-bar" style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;border:1px solid rgba(34,197,94,0.28);background:rgba(34,197,94,0.05);border-radius:12px;padding:0.7rem 0.8rem;margin-bottom:1rem">
+      <strong style="font-size:0.85rem;color:var(--text)">⚡ Rýchle pridanie:</strong>
+      <input class="form-input" id="qa-name" placeholder="Názov PC" maxlength="140" style="flex:2;min-width:160px;min-height:40px;padding:0.45rem 0.7rem;font-size:0.85rem" data-admin-enter="quickAddProduct">
+      <input class="form-input" id="qa-price" type="number" min="0" step="1" placeholder="€" style="width:90px;min-height:40px;padding:0.45rem 0.7rem;font-size:0.85rem" data-admin-enter="quickAddProduct">
+      <select class="form-select" id="qa-cat" style="width:auto;min-height:40px;padding:0.45rem 0.6rem;font-size:0.85rem">
+        <option value="gaming">🎮 Herný</option>
+        <option value="office">💼 Kancelársky</option>
+        <option value="retro">🕹️ Retro</option>
+      </select>
+      <button type="button" class="btn btn-success btn-sm" data-admin-action="quickAddProduct">Pridať ako koncept</button>
+      <span style="color:var(--muted);font-size:0.75rem;flex-basis:100%">Uloží sa ako koncept (nezobrazí sa zákazníkom). Detaily a fotku doplníš neskôr cez ✏️ Upraviť.</span>
+    </div>
     <div class="loading-msg" id="loading-msg" role="status" aria-live="polite">Načítavam produkty zo Supabase...</div>
     <div class="pc-grid" id="pc-grid" style="display:none"></div>
     <div class="empty-state" id="empty-state" style="display:none">
@@ -1807,6 +1892,7 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
         <label class="form-label">Stav</label>
         <select class="form-select" id="f-status">
           <option value="active">🟢 Aktívny (skladom)</option>
+          <option value="draft">📝 Koncept (skrytý pred zákazníkmi)</option>
           <option value="sold">🔴 Vypredané</option>
           <option value="reserved">🟡 Rezervované</option>
           <option value="incoming">🔵 Čoskoro</option>
@@ -1969,6 +2055,14 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
         <label class="form-label">Info o doprave</label>
         <input class="form-input" id="f-delivery" maxlength="80" placeholder="napr. Doprava zdarma" value="Doprava 3,90€">
       </div>
+      <div class="form-group form-full" style="border:1px solid rgba(34,197,94,0.3);border-radius:14px;padding:1rem;background:rgba(34,197,94,0.05)">
+        <label class="form-label" style="display:flex;align-items:center;justify-content:space-between;gap:0.8rem;flex-wrap:wrap">
+          <span>🛡️ Computrax Tested – kontrolný zoznam</span>
+          <span id="qc-status-pill" style="font-size:0.75rem;font-weight:800;color:var(--muted)"></span>
+        </label>
+        <div id="qc-checklist" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.45rem;margin-top:0.5rem"></div>
+        <small style="color:var(--muted);display:block;margin-top:0.6rem">Keď sú odškrtnuté všetky položky, produkt automaticky dostane verejný odznak „Computrax Tested“ na stránke.</small>
+      </div>
       <div class="form-group form-full">
         <label class="form-label">Fotka produktu</label>
         <div class="img-upload-wrap" id="img-upload-wrap">
@@ -2118,6 +2212,8 @@ const ADMIN_SECTION_LABELS = {
     warehouses: 'Sklady: umiestnenie zásob, priorita odpočítania a príprava externého prepojenia.',
     settings: 'Nastavenia webu: texty, kontakty, právne/firemné údaje, služby, platby a skladové režimy.',
     orders: 'Objednávky: spracovanie, stavy, exporty, baliace listy a zákaznícke správy.',
+    emails: 'E-maily: automatické správy zákazníkom pri zmene stavu objednávky, šablóny a testovanie.',
+    customers: 'Zákazníci: história nákupov, celková útrata, interné poznámky a firemné dopyty.',
     analytics: 'Analytika: tržby, sklad, top produkty, slabé miesta a rýchle rozhodnutia.',
     automation: 'Automatizácie: kontrola pred spustením, automatická oprava filtrov, zálohy a hromadná údržba.',
     audit: 'Audit: Supabase diagnostika, pohyby skladu a admin udalosti schované na jednom mieste.'
@@ -2140,6 +2236,8 @@ function showAdminSection(section = 'products') {
         renderInsights();
     }
     if (currentAdminSection === 'orders') loadOrders();
+    if (currentAdminSection === 'emails') loadEmailTemplates();
+    if (currentAdminSection === 'customers') loadCustomers();
     if (currentAdminSection === 'warehouses') loadWarehouses();
     if (currentAdminSection === 'analytics') {
         renderAnalytics();
@@ -3868,6 +3966,9 @@ async function sb(method, path, body) {
         path.startsWith('stock_movements') ||
         path.startsWith('admin_events') ||
         path.startsWith('warehouses') ||
+        path.startsWith('email_') ||
+        path.startsWith('customer') ||
+        path.startsWith('product_views') ||
         path.startsWith('product_inventory');
     if (needsAdminAuth && !(await ensureSupabaseWriteAuth(false))) {
         throw new Error('Najprv pripoj Supabase admin zápis');
@@ -3930,6 +4031,29 @@ function handleLocal(method, path, body) {
     return [];
 }
 
+let productViewsMap = new Map();
+
+async function loadProductViews() {
+    if (useLocalStorage || !hasSupabaseWriteAuth()) return;
+    try {
+        const rows = await sb('GET', 'product_views?select=product_id,views');
+        productViewsMap = new Map();
+        (Array.isArray(rows) ? rows : []).forEach(row => {
+            const id = Number(row.product_id);
+            productViewsMap.set(id, (productViewsMap.get(id) || 0) + Number(row.views || 0));
+        });
+        renderList();
+    } catch(e) {
+        // Non-critical: views are informational only
+    }
+}
+
+function productViewsChip(productId) {
+    const views = productViewsMap.get(Number(productId)) || 0;
+    if (!views) return '';
+    return `<span class="spec-chip" style="border-color:rgba(96,165,250,0.3);color:#93c5fd">👁 ${views} videní</span>`;
+}
+
 async function loadProducts() {
     try {
         document.getElementById('loading-msg').style.display = 'block';
@@ -3949,7 +4073,10 @@ async function loadProducts() {
         }
         updateStats();
         renderList();
-        if (!useLocalStorage && hasSupabaseWriteAuth()) await loadWarehouses(true);
+        if (!useLocalStorage && hasSupabaseWriteAuth()) {
+            await loadWarehouses(true);
+            loadProductViews();
+        }
     } catch(e) {
         const fallbackProducts = getBundledProducts();
         if (!isPublicHostedAdmin() && fallbackProducts.length > 0) {
@@ -4027,6 +4154,17 @@ function renderDashboard() {
             return `${warehouse.code}: ${units} ks${warehouse.active ? '' : ' vyp.'}`;
         }).join(' · ')
         : 'Sklady sa načítajú po Supabase admin prihlásení.';
+    const attentionItems = attentionTodayItems();
+    const attentionCard = `<div class="order-card attention-card" style="grid-column:1/-1">
+        <div class="order-num" style="color:#fde68a">⚡ Čo dnes potrebuje pozornosť?</div>
+        ${attentionItems.length
+            ? attentionItems.map(item => `<div class="attention-item"><span>${item.icon}</span><div>${escapeHTML(item.text)}${item.detail ? `<small>${escapeHTML(item.detail)}</small>` : ''}</div></div>`).join('')
+            : '<div class="order-meta" style="margin-top:0.5rem">✅ Nič nehorí. Objednávky, platby aj dopyty sú pod kontrolou.</div>'}
+        ${attentionItems.length ? `<div class="order-actions" style="margin-top:0.9rem">
+            <button type="button" class="btn btn-primary btn-sm" data-admin-action="showAdminSection" data-admin-target="orders">Objednávky a dopyty</button>
+            <button type="button" class="btn btn-ghost btn-sm" data-admin-action="showAdminSection" data-admin-target="products">Produkty</button>
+        </div>` : ''}
+    </div>`;
     const priorityItems = [
         ...snap.missingImages.slice(0, 4).map(product => ({ level: 'warn', text: `Doplniť fotku: ${product.name}` })),
         ...snap.lowStock.slice(0, 4).map(product => ({ level: 'warn', text: `Nízky sklad: ${product.name} (${Number(product.stock || 0)} ks)` })),
@@ -4035,6 +4173,7 @@ function renderDashboard() {
         ...(blockers.items || []).filter(item => item.level === 'blocker').slice(0, 4).map(item => ({ level: 'bad', text: `${item.group}: ${item.label}` }))
     ].slice(0, 8);
     const cards = [
+        attentionCard,
         analyticsCard('Nové objednávky', allOrders.filter(o => o.status === 'new').length, `${pending} objednávok čaká na platbu`, pending ? 'warn' : 'ok'),
         analyticsCard('Aktívne produkty', active, `${snap.activeProducts.reduce((s, p) => s + Number(p.stock || 0), 0)} ks skladom`, active ? 'ok' : 'bad'),
         analyticsCard('Nízky sklad', lowStock, lowStock ? 'Doplň alebo skontroluj posledné kusy.' : 'Sklad vyzerá dobre.', lowStock ? 'warn' : 'ok'),
@@ -4099,6 +4238,70 @@ function analyticsSnapshot() {
         .sort((a, b) => b.revenue - a.revenue || b.qty - a.qty)
         .slice(0, 5);
     return { validOrders, paidOrders, pendingPayments, revenue, paidRevenue, activeProducts, lowStock, missingImages, soldOut, topProducts };
+}
+
+function attentionTodayItems() {
+    const items = [];
+    const now = Date.now();
+    const hoursOld = value => value ? (now - new Date(value).getTime()) / 3600000 : 0;
+    const activeOrders = allOrders.filter(order => order.status !== 'cancelled');
+
+    activeOrders
+        .filter(order => (order.payment_status || 'pending') === 'pending' && hoursOld(order.created_at) > 24)
+        .slice(0, 3)
+        .forEach(order => items.push({
+            icon: '💳',
+            text: `Nezaplatená objednávka ${order.order_number || '#' + order.id} (${Number(order.total || 0)}€)`,
+            detail: `Čaká na platbu už ${Math.floor(hoursOld(order.created_at))} hodín – zváž pripomienku alebo uvoľnenie rezervácie.`
+        }));
+
+    activeOrders
+        .filter(order => ['confirmed', 'packed'].includes(order.status) && hoursOld(order.created_at) > 48)
+        .slice(0, 3)
+        .forEach(order => items.push({
+            icon: '📦',
+            text: `Objednávka ${order.order_number || '#' + order.id} mala byť už odoslaná`,
+            detail: `Stav „${orderStatusLabel(order.status)}“ dlhšie ako 48 hodín od vytvorenia.`
+        }));
+
+    const failedPayments = activeOrders.filter(order => order.payment_status === 'failed');
+    if (failedPayments.length) {
+        items.push({
+            icon: '⚠️',
+            text: `${failedPayments.length}× zlyhaná platba`,
+            detail: 'Skontroluj objednávky so zlyhanou platbou a dohodni náhradný spôsob úhrady.'
+        });
+    }
+
+    (Array.isArray(allInquiries) ? allInquiries : [])
+        .filter(inquiry => (inquiry.status || 'new') === 'new')
+        .slice(0, 3)
+        .forEach(inquiry => items.push({
+            icon: inquiry.kind === 'b2b' ? '🏢' : '✉️',
+            text: `${inquiry.kind === 'b2b' ? 'Firemný / školský dopyt' : 'Správa od zákazníka'}: ${inquiry.customer_name || ''}`,
+            detail: `Bez odpovede od ${inquiry.created_at ? new Date(inquiry.created_at).toLocaleString('sk-SK') : 'neznámeho času'}.`
+        }));
+
+    allProducts
+        .filter(p => p.status === 'active' && Number(p.stock || 0) > 0 && (productViewsMap.get(Number(p.id)) || 0) >= 20)
+        .sort((a, b) => (productViewsMap.get(Number(b.id)) || 0) - (productViewsMap.get(Number(a.id)) || 0))
+        .slice(0, 2)
+        .forEach(p => items.push({
+            icon: '👁',
+            text: `${p.name}: ${productViewsMap.get(Number(p.id))} videní, stále skladom`,
+            detail: 'Produkt láka pozornosť, ale nepredáva sa – zváž lepšiu fotku, popis alebo cenu.'
+        }));
+
+    const lastUnits = allProducts.filter(p => p.status === 'active' && Number(p.stock || 0) === 1);
+    if (lastUnits.length) {
+        items.push({
+            icon: '🔥',
+            text: `${lastUnits.length}× posledný kus skladom`,
+            detail: lastUnits.slice(0, 3).map(p => p.name).join(' · ')
+        });
+    }
+
+    return items.slice(0, 8);
 }
 
 function analyticsCard(title, value, detail, level = 'ok') {
@@ -4689,6 +4892,21 @@ function orderStatusLabel(status) {
     }[status] || status || 'Nová';
 }
 
+function orderTimelineHtml(order = {}) {
+    if (order.status === 'cancelled') {
+        return '<div class="order-timeline-cancelled">✕ Objednávka zrušená</div>';
+    }
+    const steps = ['new', 'confirmed', 'packed', 'sent', 'done'];
+    const currentIndex = Math.max(0, steps.indexOf(order.status || 'new'));
+    return `<div class="order-timeline" aria-label="Priebeh objednávky">${steps.map((step, index) => {
+        const state = index < currentIndex ? 'done' : index === currentIndex ? 'current' : '';
+        return `<div class="order-timeline-step ${state}">
+            <div class="order-timeline-dot">${index < currentIndex ? '✓' : ''}</div>
+            <span>${escapeHTML(orderStatusLabel(step))}</span>
+        </div>`;
+    }).join('')}</div>`;
+}
+
 function paymentMethodLabel(method) {
     return {
         cod: 'Dobierka / pri prevzatí',
@@ -5261,6 +5479,7 @@ function renderOrders() {
                 </div>
                 <div class="order-total">${escapeHTML(order.total || 0)}€</div>
             </div>
+            ${orderTimelineHtml(order)}
             <div style="font-size:0.9rem;font-weight:700">${escapeHTML(order.customer_name || '')}</div>
             <div class="order-meta">${escapeHTML(order.customer_email || '')}${order.customer_phone ? ' · ' + escapeHTML(order.customer_phone) : ''}</div>
             <div class="order-items">${itemText}</div>
@@ -5270,6 +5489,10 @@ function renderOrders() {
             <div class="order-meta">🧾 Faktúra: ${escapeHTML(invoiceStatusLabel(order.invoice_status))}${order.invoice_reference ? ' · ' + escapeHTML(order.invoice_reference) : ''}${invoiceUrl ? ` · <a href="${escapeHTML(invoiceUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">iDoklad</a>` : unsafeInvoiceUrl ? ' · ⚠️ neplatný link dokladu' : ''}</div>
             <div class="order-meta">📦 Sklad sync: ${escapeHTML(warehouseStatusLabel(order.warehouse_sync_status))}${order.warehouse_reference ? ' · ' + escapeHTML(order.warehouse_reference) : ''}</div>
             <div class="order-meta" style="margin-top:0.5rem">${order.terms_accepted ? '✅ Podmienky/GDPR potvrdené' : '⚠️ Chýba potvrdenie podmienok'}</div>
+            <div style="display:flex;gap:0.5rem;margin-top:0.6rem;align-items:center">
+                <input class="form-input" id="order-tracking-${Number(order.id)}" value="${escapeHTML(order.tracking_number || '')}" placeholder="Sledovacie číslo zásielky" maxlength="80" style="flex:1;min-height:38px;padding:0.45rem 0.7rem;font-size:0.82rem">
+                <button type="button" class="btn btn-ghost btn-sm" data-admin-action="saveOrderTracking" data-id="${Number(order.id)}">📦 Uložiť číslo</button>
+            </div>
             <div class="order-control-grid">
                 <select class="form-select" data-admin-action="updateOrderPaymentStatus" data-id="${Number(order.id)}">
                     ${['pending','paid','failed','refunded'].map(s => `<option value="${s}" ${order.payment_status === s ? 'selected' : ''}>${paymentStatusLabel(s)}</option>`).join('')}
@@ -5487,6 +5710,22 @@ async function updateOrderStatus(id, status) {
     }
 }
 
+async function saveOrderTracking(id) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) return;
+    if (useLocalStorage) { showToast('⚠️ Sledovacie čísla sú dostupné v Supabase režime', true); return; }
+    if (!(await ensureSupabaseWriteAuth(false))) { showToast('⚠️ Najprv pripoj Supabase admin zápis', true); return; }
+    const tracking = String(document.getElementById(`order-tracking-${Number(id)}`)?.value || '').trim().slice(0, 80);
+    try {
+        await sb('PATCH', `orders?id=eq.${Number(id)}`, { tracking_number: tracking || null, updated_at: new Date().toISOString() });
+        allOrders = allOrders.map(o => Number(o.id) === Number(id) ? { ...o, tracking_number: tracking || null } : o);
+        showToast(tracking ? '✅ Sledovacie číslo uložené. Ulož ho pred prepnutím na „Odoslaná“, aby prišlo zákazníkovi v e-maile.' : '✅ Sledovacie číslo odstránené');
+        logAdminEvent('order_tracking_update', 'order', id, `Objednávka ${order.order_number || id}: sledovacie číslo ${tracking || '—'}`);
+    } catch(e) {
+        showToast('❌ ' + (e.message || 'Uloženie zlyhalo'), true);
+    }
+}
+
 async function notifyCustomerOrderStatus(id, status) {
     if (useLocalStorage || status === 'new') {
         return { sent: false, skipped: true, message: '' };
@@ -5518,8 +5757,8 @@ async function notifyCustomerOrderStatus(id, status) {
         }
         return {
             sent: Boolean(data.email_sent),
-            skipped: false,
-            message: data.already_sent ? 'e-mail pre tento stav už bol odoslaný' : ''
+            skipped: Boolean(data.skipped),
+            message: cleanImportedText(data.message || (data.already_sent ? 'e-mail pre tento stav už bol odoslaný' : ''), 180)
         };
     } catch(error) {
         return {
@@ -5855,8 +6094,8 @@ function renderList() {
     grid.style.display = 'grid';
     grid.innerHTML = list.map(p => {
         const sold = p.stock === 0 || p.status === 'sold';
-        const pillClass = { active: 'pill-active', sold: 'pill-sold', reserved: 'pill-reserved', incoming: 'pill-incoming' }[p.status] || 'pill-active';
-        const pillLabel = { active: '🟢 Aktívny', sold: '🔴 Vypredané', reserved: '🟡 Rezervované', incoming: '🔵 Čoskoro' }[p.status] || p.status;
+        const pillClass = { active: 'pill-active', draft: 'pill-incoming', sold: 'pill-sold', reserved: 'pill-reserved', incoming: 'pill-incoming' }[p.status] || 'pill-active';
+        const pillLabel = { active: '🟢 Aktívny', draft: '📝 Koncept', sold: '🔴 Vypredané', reserved: '🟡 Rezervované', incoming: '🔵 Čoskoro' }[p.status] || p.status;
         const rawImg = String(p.image_url || '').trim();
         const img = safeImageUrl(rawImg);
         const imageIssue = !rawImg ? '⚠️ Bez fotky' : !img ? '⚠️ Zlá URL fotky' : '';
@@ -5869,8 +6108,10 @@ function renderList() {
                 <span class="status-pill ${pillClass}">${escapeHTML(pillLabel)}</span>
             </div>
             <div class="pc-admin-name">${escapeHTML(p.name)}</div>
-            <div class="pc-admin-price">${escapeHTML(p.price)}€</div>
+            <div class="pc-admin-price">${escapeHTML(p.price)}€ <button type="button" class="sq-btn" data-admin-action="editProductPrice" data-id="${Number(p.id)}" title="Upraviť cenu" style="font-size:0.72rem;padding:2px 7px;vertical-align:middle">✏️</button></div>
             <div class="pc-admin-specs">
+                ${p.tested_at ? '<span class="spec-chip" style="border-color:rgba(34,197,94,0.45);color:#4ade80">🛡️ Computrax Tested</span>' : `<span class="spec-chip" style="border-color:rgba(148,163,184,0.3);color:var(--muted)">QC: ${QC_ITEMS.filter(item => (p.test_checklist || {})[item.key]).length}/${QC_ITEMS.length}</span>`}
+                ${productViewsChip(p.id)}
                 <span class="spec-chip">Stav: ${escapeHTML(p.pc_condition || 'Repasované - veľmi dobrý stav')}</span>
                 ${p.cpu ? `<span class="spec-chip">CPU: ${escapeHTML(p.cpu)}</span>` : ''}
                 ${p.cpu_class ? `<span class="spec-chip">CPU filter: ${escapeHTML(p.cpu_class)}${p.cpu_gen ? ' / ' + escapeHTML(p.cpu_gen) : ''}</span>` : ''}
@@ -5880,7 +6121,8 @@ function renderList() {
                 ${warehouseStockBadges(p.id)}
                 ${p.storage_gb ? `<span class="spec-chip">${escapeHTML(p.storage_gb)}GB ${escapeHTML(p.storage_type || '')}</span>` : ''}
                 ${p.sku || p.warehouse_sku ? `<span class="spec-chip">SKU: ${escapeHTML(p.sku || p.warehouse_sku)}</span>` : ''}
-                <span class="spec-chip" style="border-color:${quality.score >= 85 ? 'rgba(34,197,94,0.35)' : quality.score >= 65 ? 'rgba(251,191,36,0.35)' : 'rgba(239,68,68,0.35)'};color:${quality.score >= 85 ? '#bbf7d0' : quality.score >= 65 ? '#fde68a' : '#fca5a5'}">Pripravenosť: ${quality.score}%</span>
+                <span class="spec-chip" title="${quality.missingLabels.length ? 'Chýba: ' + escapeHTML(quality.missingLabels.join(', ')) : 'Produktová karta je kompletná'}" style="border-color:${quality.score >= 85 ? 'rgba(34,197,94,0.35)' : quality.score >= 65 ? 'rgba(251,191,36,0.35)' : 'rgba(239,68,68,0.35)'};color:${quality.score >= 85 ? '#bbf7d0' : quality.score >= 65 ? '#fde68a' : '#fca5a5'}">Pripravenosť: ${quality.score}%</span>
+                ${quality.missingLabels.length ? `<span class="spec-chip" style="border-color:rgba(251,191,36,0.25);color:#fde68a">Doplniť: ${escapeHTML(quality.missingLabels.slice(0, 3).join(', '))}${quality.missingLabels.length > 3 ? ` +${quality.missingLabels.length - 3}` : ''}</span>` : ''}
                 ${imageIssue ? `<span class="spec-chip" style="border-color:rgba(251,191,36,0.35);color:#fde68a">${escapeHTML(imageIssue)}</span>` : ''}
             </div>
             <div class="stock-control">
@@ -5888,6 +6130,7 @@ function renderList() {
                 <button type="button" class="sq-btn" data-admin-action="quickStock" data-id="${Number(p.id)}" data-delta="-1">−</button>
                 <span class="stock-num ${p.stock === 0 ? 'stock-zero' : ''}">${escapeHTML(p.stock ?? 0)}</span>
                 <button type="button" class="sq-btn" data-admin-action="quickStock" data-id="${Number(p.id)}" data-delta="1">+</button>
+                <button type="button" class="sq-btn" data-admin-action="setProductStock" data-id="${Number(p.id)}" title="Nastaviť presný počet kusov" style="font-size:0.72rem;padding:2px 7px">✎</button>
                 <button type="button" class="btn btn-sm ${p.status === 'sold' ? 'btn-success' : 'btn-danger'}" style="margin-left:auto" data-admin-action="toggleStatus" data-id="${Number(p.id)}">${p.status === 'sold' ? '▶ Aktivovať' : '⏸ Vypredať'}</button>
             </div>
             <div class="card-actions">
@@ -5903,21 +6146,23 @@ function renderList() {
 
 function productQualityScore(product) {
     const checks = [
-        Boolean(String(product.name || '').trim()),
-        Number(product.price || 0) > 0,
-        Number(product.stock || 0) >= 0,
-        Boolean(safeImageUrl(product.image_url || product.imageUrl || '')),
-        Boolean(String(product.sku || product.warehouse_sku || '').trim()),
-        Boolean(String(product.cpu || '').trim()),
-        Boolean(String(product.gpu || '').trim()),
-        Boolean(String(product.ram || '').trim()),
-        Boolean(String(product.ssd || '').trim()),
-        Boolean(String(product.pc_condition || '').trim()),
-        Boolean(String(product.pc_condition_note || '').trim()),
-        !productHasMissingFilters(product)
+        [Boolean(String(product.name || '').trim()), 'názov produktu'],
+        [Number(product.price || 0) > 0, 'cena'],
+        [Number(product.stock || 0) >= 0, 'sklad'],
+        [Boolean(safeImageUrl(product.image_url || product.imageUrl || '')), 'fotka produktu'],
+        [Boolean(String(product.sku || product.warehouse_sku || '').trim()), 'SKU'],
+        [Boolean(String(product.cpu || '').trim()), 'CPU'],
+        [Boolean(String(product.gpu || '').trim()), 'GPU'],
+        [Boolean(String(product.ram || '').trim()), 'RAM'],
+        [Boolean(String(product.ssd || '').trim()), 'úložisko'],
+        [Boolean(String(product.pc_condition || '').trim()), 'stav PC'],
+        [Boolean(String(product.pc_condition_note || '').trim()), 'poznámka ku stavu'],
+        [!productHasMissingFilters(product), 'filtre pre e-shop']
     ];
-    const score = Math.round((checks.filter(Boolean).length / checks.length) * 100);
-    return { score, missing: checks.length - checks.filter(Boolean).length };
+    const passed = checks.filter(check => check[0]).length;
+    const missingLabels = checks.filter(check => !check[0]).map(check => check[1]);
+    const score = Math.round((passed / checks.length) * 100);
+    return { score, missing: missingLabels.length, missingLabels };
 }
 
 function productHasMissingFilters(product) {
@@ -6377,6 +6622,86 @@ async function quickStock(id, delta) {
     } catch(e) { showToast('❌ ' + e.message, true); }
 }
 
+// Inline price edit from the product card
+async function editProductPrice(id) {
+    const p = allProducts.find(x => Number(x.id) === Number(id));
+    if (!p) return;
+    const input = prompt(`Nová cena pre „${p.name}" (€):`, String(p.price ?? ''));
+    if (input === null) return;
+    const price = parseInt(String(input).replace(/[^\d]/g, ''), 10);
+    if (!Number.isFinite(price) || price < 0 || price > 100000) { showToast('⚠️ Zadaj cenu 0 – 100 000 €', true); return; }
+    if (price === Number(p.price)) return;
+    try {
+        if (useLocalStorage) {
+            allProducts = allProducts.map(item => Number(item.id) === Number(id) ? { ...item, price } : item);
+            saveLocal();
+        } else {
+            if (!(await ensureSupabaseWriteAuth(true))) return;
+            await sb('PATCH', `products?id=eq.${Number(id)}`, { price });
+        }
+        await logAdminEvent('price_update', 'product', id, `${p.name}: cena ${Number(p.price || 0)}€ → ${price}€`, { old_price: Number(p.price || 0), new_price: price });
+        await loadProducts();
+        markProductsUpdated();
+        loadAdminEvents();
+        showToast(`💶 Cena upravená: ${price}€`);
+    } catch(e) { showToast('❌ ' + e.message, true); }
+}
+
+// Set exact stock count (routes through the safe warehouse-aware quickStock)
+async function setProductStock(id) {
+    const p = allProducts.find(x => Number(x.id) === Number(id));
+    if (!p) return;
+    const input = prompt(`Presný počet kusov pre „${p.name}":`, String(p.stock ?? 0));
+    if (input === null) return;
+    const target = parseInt(String(input).replace(/[^\d]/g, ''), 10);
+    if (!Number.isFinite(target) || target < 0 || target > 999) { showToast('⚠️ Zadaj počet 0 – 999', true); return; }
+    const delta = target - Number(p.stock || 0);
+    if (delta === 0) return;
+    await quickStock(id, delta);
+}
+
+async function quickAddProduct() {
+    const nameEl = document.getElementById('qa-name');
+    const priceEl = document.getElementById('qa-price');
+    const catEl = document.getElementById('qa-cat');
+    const name = String(nameEl?.value || '').trim().slice(0, 140);
+    const price = parseInt(String(priceEl?.value || '').replace(/[^\d]/g, ''), 10);
+    const cat = ['gaming', 'office', 'retro'].includes(catEl?.value) ? catEl.value : 'office';
+    if (name.length < 3) { showToast('⚠️ Zadaj názov (min. 3 znaky)', true); nameEl?.focus(); return; }
+    if (!Number.isFinite(price) || price < 0 || price > 100000) { showToast('⚠️ Zadaj platnú cenu', true); priceEl?.focus(); return; }
+    if (allProducts.some(product => String(product.name || '').trim().toLowerCase() === name.toLowerCase())) {
+        showToast('⚠️ Produkt s týmto názvom už existuje', true); return;
+    }
+    if (!useLocalStorage && !(await ensureSupabaseWriteAuth(true))) return;
+    const draft = {
+        name, price, stock: 0, status: 'draft', cat,
+        pc_condition: defaultPcCondition(),
+        pc_condition_note: defaultPcConditionNote(),
+        tag: cat === 'gaming' ? 'HERNÉ PC' : cat === 'retro' ? 'RETRO PC' : 'KANCELÁRSKE PC',
+        tag_color: '#60a5fa',
+        os: 'Windows 11 Pro',
+        delivery: 'Doprava 3,90€'
+    };
+    draft.sku = generatedProductSku({ ...draft, id: editingId || Date.now() });
+    draft.warehouse_sku = draft.sku;
+    try {
+        if (useLocalStorage) {
+            allProducts.push({ ...draft, id: Date.now() });
+            saveLocal();
+        } else {
+            await sb('POST', 'products', draft);
+        }
+        await logAdminEvent('product_quick_add', 'product', name, `Rýchle pridanie konceptu: ${name} (${price}€, ${cat})`);
+        if (nameEl) nameEl.value = '';
+        if (priceEl) priceEl.value = '';
+        await loadProducts();
+        markProductsUpdated();
+        loadAdminEvents();
+        showToast(`✅ Koncept „${name}" pridaný. Doplň detaily cez ✏️ Upraviť a potom aktivuj.`);
+        nameEl?.focus();
+    } catch(e) { showToast('❌ ' + e.message, true); }
+}
+
 async function toggleStatus(id) {
     const p = allProducts.find(x => x.id === id);
     if (!p) return;
@@ -6426,6 +6751,62 @@ async function duplicateProduct(id) {
 }
 
 // ---- ADD/EDIT ----
+// ============================================================
+//  COMPUTRAX TESTED – QC CHECKLIST
+// ============================================================
+const QC_ITEMS = [
+    { key: 'os', label: 'Windows nainštalovaný a aktivovaný' },
+    { key: 'ssd', label: 'Zdravie disku skontrolované' },
+    { key: 'ram', label: 'RAM test dokončený' },
+    { key: 'temps', label: 'Teploty CPU a GPU v poriadku' },
+    { key: 'stress', label: 'Záťažový test stabilný' },
+    { key: 'ports', label: 'USB a ostatné porty otestované' },
+    { key: 'net', label: 'Wi-Fi / LAN / Bluetooth otestované' },
+    { key: 'audio', label: 'Audio otestované' },
+    { key: 'clean', label: 'Vyčistený zvonku aj zvnútra' },
+    { key: 'drivers', label: 'Ovládače aktualizované' },
+    { key: 'photos', label: 'Produktové fotky hotové' },
+    { key: 'pack', label: 'Balenie pripravené' }
+];
+
+function renderQcChecklist(checklist = {}) {
+    const wrap = document.getElementById('qc-checklist');
+    if (!wrap) return;
+    const state = checklist && typeof checklist === 'object' ? checklist : {};
+    wrap.innerHTML = QC_ITEMS.map(item => `
+        <label style="display:flex;align-items:center;gap:0.5rem;border:1px solid var(--border);border-radius:10px;padding:0.5rem 0.65rem;font-size:0.8rem;color:var(--text);cursor:pointer;background:rgba(255,255,255,0.03)">
+            <input type="checkbox" id="qc-item-${item.key}" ${state[item.key] ? 'checked' : ''} style="accent-color:#22c55e;width:17px;height:17px" data-admin-action="updateQcStatusPill">
+            ${escapeHTML(item.label)}
+        </label>`).join('');
+    updateQcStatusPill();
+}
+
+function readQcChecklist() {
+    const state = {};
+    QC_ITEMS.forEach(item => {
+        state[item.key] = Boolean(document.getElementById(`qc-item-${item.key}`)?.checked);
+    });
+    return state;
+}
+
+function qcAllChecked(state = readQcChecklist()) {
+    return QC_ITEMS.every(item => state[item.key]);
+}
+
+function updateQcStatusPill() {
+    const pill = document.getElementById('qc-status-pill');
+    if (!pill) return;
+    const state = readQcChecklist();
+    const done = QC_ITEMS.filter(item => state[item.key]).length;
+    if (done === QC_ITEMS.length) {
+        pill.textContent = '🛡️ Computrax Tested';
+        pill.style.color = '#4ade80';
+    } else {
+        pill.textContent = `${done}/${QC_ITEMS.length} hotovo`;
+        pill.style.color = 'var(--muted)';
+    }
+}
+
 async function openModal() {
     editingId = null;
     document.getElementById('modal-title').textContent = '+ Pridať nový PC';
@@ -6469,6 +6850,7 @@ async function openEdit(id) {
     document.getElementById('f-storagetype').value = p.storage_type || getStorageType(p.ssd || '');
     document.getElementById('f-os').value = p.os || 'Windows 11 Pro';
     document.getElementById('f-delivery').value = p.delivery || 'Doprava 3,90€';
+    renderQcChecklist(p.test_checklist || {});
     // Image
     pendingImageFile = null;
     document.getElementById('f-image-file').value = '';
@@ -6506,6 +6888,7 @@ function clearForm() {
     document.getElementById('f-storagetype').value = '';
     document.getElementById('f-os').value = 'Windows 11 Pro';
     document.getElementById('f-delivery').value = 'Doprava 3,90€';
+    renderQcChecklist({});
     clearImageInput();
     renderProductInventoryFields(null, 1);
 }
@@ -6596,6 +6979,10 @@ async function saveProduct() {
         delivery: cleanProductFormText('f-delivery', 80),
         image_url: imageUrl,
     };
+    const qcState = readQcChecklist();
+    data.test_checklist = qcState;
+    const previousTestedAt = editingId ? (allProducts.find(product => Number(product.id) === Number(editingId))?.tested_at || null) : null;
+    data.tested_at = qcAllChecked(qcState) ? (previousTestedAt || new Date().toISOString()) : null;
     const mainWarehouse = allWarehouses.find(warehouse => warehouse.code === 'MAIN') || allWarehouses[0];
     const mainAllocation = mainWarehouse ? allocations.find(allocation => Number(allocation.warehouse_id) === Number(mainWarehouse.id)) : null;
     if (mainAllocation) {
@@ -7136,8 +7523,247 @@ document.addEventListener('error', event => {
     }
 }, true);
 
+// ============================================================
+//  CUSTOMER E-MAIL TEMPLATES
+// ============================================================
+const EMAIL_TEMPLATE_ORDER = ['confirmed', 'packed', 'sent', 'done', 'cancelled'];
+const EMAIL_TEMPLATE_VARS = '{{customer_name}} · {{order_number}} · {{order_total}} · {{items}} · {{support_email}} · {{status_label}} · {{tracking_number}} · {{tracking_line}}';
+let emailTemplatesCache = [];
+
+async function loadEmailTemplates() {
+    const grid = document.getElementById('email-templates-grid');
+    if (!grid) return;
+    if (useLocalStorage) {
+        grid.innerHTML = '<div style="color:var(--muted);font-size:0.9rem">Zákaznícke e-maily sú dostupné v Supabase režime.</div>';
+        return;
+    }
+    if (!(await ensureSupabaseWriteAuth(false))) {
+        grid.innerHTML = '<div class="order-card" style="grid-column:1/-1"><div class="order-num">Prihlás sa cez Supabase admin zápis</div><div class="order-meta">Šablóny zákazníckych e-mailov sú viditeľné len pre admina.</div></div>';
+        return;
+    }
+    try {
+        const [templates, settings] = await Promise.all([
+            sb('GET', 'email_templates?select=key,label,subject,body,enabled,updated_at'),
+            sb('GET', 'email_settings?select=sender_name,sender_email,reply_to&id=eq.true')
+        ]);
+        emailTemplatesCache = Array.isArray(templates) ? templates : [];
+        const s = (Array.isArray(settings) && settings[0]) || {};
+        const senderName = document.getElementById('e-sender-name');
+        const senderEmail = document.getElementById('e-sender-email');
+        const replyTo = document.getElementById('e-reply-to');
+        if (senderName) senderName.value = s.sender_name || 'Computrax';
+        if (senderEmail) senderEmail.value = s.sender_email || '';
+        if (replyTo) replyTo.value = s.reply_to || '';
+        renderEmailTemplates();
+    } catch(e) {
+        grid.innerHTML = `<div class="order-card" style="grid-column:1/-1"><div class="order-num">Šablóny sa nepodarilo načítať</div><div class="order-meta">${escapeHTML(e.message || String(e))}</div><div class="order-meta" style="margin-top:0.5rem">Ak tabuľky chýbajú, spusti najnovší SQL setup (email_templates, email_settings).</div></div>`;
+    }
+}
+
+function renderEmailTemplates() {
+    const grid = document.getElementById('email-templates-grid');
+    if (!grid) return;
+    if (!emailTemplatesCache.length) {
+        grid.innerHTML = '<div style="color:var(--muted);font-size:0.9rem">Zatiaľ tu nie sú žiadne šablóny.</div>';
+        return;
+    }
+    const sorted = [...emailTemplatesCache].sort((a, b) => EMAIL_TEMPLATE_ORDER.indexOf(a.key) - EMAIL_TEMPLATE_ORDER.indexOf(b.key));
+    grid.innerHTML = sorted.map(t => `
+        <div class="order-card" style="grid-column:1/-1">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:0.8rem;flex-wrap:wrap">
+                <div class="order-num">${escapeHTML(t.label || orderStatusLabel(t.key))} <span class="order-meta" style="display:inline">(stav: ${escapeHTML(orderStatusLabel(t.key))})</span></div>
+                <label style="display:flex;align-items:center;gap:0.5rem;color:var(--text);font-size:0.85rem;font-weight:700;cursor:pointer">
+                    <input type="checkbox" id="et-enabled-${escapeHTML(t.key)}" ${t.enabled ? 'checked' : ''} style="accent-color:#22c55e;width:18px;height:18px">
+                    Automaticky posielať
+                </label>
+            </div>
+            <div class="form-group" style="margin-top:0.8rem">
+                <label class="form-label">Predmet</label>
+                <input class="form-input" id="et-subject-${escapeHTML(t.key)}" maxlength="160" value="${escapeHTML(t.subject || '')}">
+            </div>
+            <div class="form-group" style="margin-top:0.6rem">
+                <label class="form-label">Text e-mailu</label>
+                <textarea class="form-input" id="et-body-${escapeHTML(t.key)}" rows="7" maxlength="4000">${escapeHTML(t.body || '')}</textarea>
+                <small style="color:var(--muted)">Premenné: ${escapeHTML(EMAIL_TEMPLATE_VARS)}</small>
+            </div>
+            <div class="order-actions" style="margin-top:0.8rem">
+                <button type="button" class="btn btn-primary btn-sm" data-admin-action="saveEmailTemplate" data-key="${escapeHTML(t.key)}">💾 Uložiť šablónu</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-admin-action="sendTestEmailTemplate" data-key="${escapeHTML(t.key)}">✉️ Poslať test</button>
+            </div>
+        </div>`).join('');
+}
+
+async function saveEmailSettings() {
+    if (!(await ensureSupabaseWriteAuth(false))) { showToast('⚠️ Najprv pripoj Supabase admin zápis', true); return; }
+    const senderName = String(document.getElementById('e-sender-name')?.value || '').trim().slice(0, 80);
+    const senderEmail = String(document.getElementById('e-sender-email')?.value || '').trim().toLowerCase().slice(0, 254);
+    const replyTo = String(document.getElementById('e-reply-to')?.value || '').trim().toLowerCase().slice(0, 254);
+    if (senderName.length < 2) { showToast('⚠️ Doplň meno odosielateľa', true); return; }
+    if (senderEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(senderEmail)) { showToast('⚠️ Neplatný e-mail odosielateľa', true); return; }
+    if (replyTo && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(replyTo)) { showToast('⚠️ Neplatná reply-to adresa', true); return; }
+    try {
+        await sb('PATCH', 'email_settings?id=eq.true', { sender_name: senderName, sender_email: senderEmail, reply_to: replyTo, updated_at: new Date().toISOString() });
+        showToast('✅ Odosielateľ uložený');
+        logAdminEvent('email_settings_update', 'email_settings', 'true', `Odosielateľ e-mailov: ${senderName} <${senderEmail}>`);
+    } catch(e) {
+        showToast('❌ ' + (e.message || 'Uloženie zlyhalo'), true);
+    }
+}
+
+async function saveEmailTemplate(key) {
+    if (!EMAIL_TEMPLATE_ORDER.includes(key)) return;
+    if (!(await ensureSupabaseWriteAuth(false))) { showToast('⚠️ Najprv pripoj Supabase admin zápis', true); return; }
+    const subject = String(document.getElementById(`et-subject-${key}`)?.value || '').trim().slice(0, 160);
+    const bodyText = String(document.getElementById(`et-body-${key}`)?.value || '').trim().slice(0, 4000);
+    const enabled = Boolean(document.getElementById(`et-enabled-${key}`)?.checked);
+    if (subject.length < 3) { showToast('⚠️ Predmet je príliš krátky', true); return; }
+    if (bodyText.length < 5) { showToast('⚠️ Text e-mailu je príliš krátky', true); return; }
+    try {
+        await sb('PATCH', `email_templates?key=eq.${encodeURIComponent(key)}`, { subject, body: bodyText, enabled, updated_at: new Date().toISOString(), updated_by: currentAuthUserId() });
+        emailTemplatesCache = emailTemplatesCache.map(t => t.key === key ? { ...t, subject, body: bodyText, enabled } : t);
+        showToast(`✅ Šablóna „${orderStatusLabel(key)}“ uložená`);
+        logAdminEvent('email_template_update', 'email_template', key, `Šablóna ${orderStatusLabel(key)} upravená (${enabled ? 'zapnutá' : 'vypnutá'})`);
+    } catch(e) {
+        showToast('❌ ' + (e.message || 'Uloženie zlyhalo'), true);
+    }
+}
+
+async function sendTestEmailTemplate(key) {
+    if (!EMAIL_TEMPLATE_ORDER.includes(key)) return;
+    if (!(await ensureSupabaseWriteAuth(false))) { showToast('⚠️ Najprv pripoj Supabase admin zápis', true); return; }
+    const suggested = authSession?.user?.email || '';
+    const testEmail = String(prompt('Na akú adresu poslať testovací e-mail?', suggested) || '').trim().toLowerCase();
+    if (!testEmail) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(testEmail)) { showToast('⚠️ Neplatná testovacia adresa', true); return; }
+    showToast('⏳ Posielam testovací e-mail...');
+    try {
+        const res = await fetchWithTimeout(ORDER_STATUS_NOTIFICATION_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'apikey': SB_KEY,
+                'Authorization': `Bearer ${authSession.access_token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: key, test_email: testEmail })
+        });
+        const data = parseResponseJson(await res.text(), {}) || {};
+        if (!res.ok || !data.email_sent) {
+            showToast(`❌ Test neodišiel: ${cleanImportedText(data.message || 'neznáma chyba', 160)}`, true);
+            return;
+        }
+        showToast(`✅ Test odoslaný na ${testEmail}`);
+    } catch(e) {
+        showToast('❌ ' + (e.message || 'E-mailová služba nie je dostupná'), true);
+    }
+}
+
+// ============================================================
+//  CUSTOMER CRM
+// ============================================================
+let customersCache = [];
+let customerNotesCache = new Map();
+
+async function loadCustomers() {
+    const grid = document.getElementById('customers-grid');
+    if (!grid) return;
+    if (useLocalStorage) {
+        grid.innerHTML = '<div style="color:var(--muted);font-size:0.9rem">Zákazníci sú dostupní v Supabase režime.</div>';
+        return;
+    }
+    if (!(await ensureSupabaseWriteAuth(false))) {
+        grid.innerHTML = '<div class="order-card" style="grid-column:1/-1"><div class="order-num">Prihlás sa cez Supabase admin zápis</div><div class="order-meta">Zoznam zákazníkov je viditeľný len pre admina.</div></div>';
+        return;
+    }
+    try {
+        const [customers, notes] = await Promise.all([
+            sb('GET', 'customer_summary?select=*&order=last_order_at.desc&limit=100'),
+            sb('GET', 'customer_notes?select=customer_email,note')
+        ]);
+        customersCache = Array.isArray(customers) ? customers : [];
+        customerNotesCache = new Map((Array.isArray(notes) ? notes : []).map(n => [String(n.customer_email || '').toLowerCase(), String(n.note || '')]));
+        renderCustomers();
+    } catch(e) {
+        grid.innerHTML = `<div class="order-card" style="grid-column:1/-1"><div class="order-num">Zákazníkov sa nepodarilo načítať</div><div class="order-meta">${escapeHTML(e.message || String(e))}</div></div>`;
+    }
+}
+
+function customerNoteFieldId(email) {
+    return 'cn-' + String(email || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+}
+
+function renderCustomers() {
+    const grid = document.getElementById('customers-grid');
+    if (!grid) return;
+    const search = String(document.getElementById('customer-search')?.value || '').toLowerCase().trim();
+    const list = customersCache.filter(c =>
+        !search ||
+        String(c.customer_email || '').toLowerCase().includes(search) ||
+        String(c.customer_name || '').toLowerCase().includes(search));
+    if (!list.length) {
+        grid.innerHTML = '<div style="color:var(--muted);font-size:0.9rem">Žiadni zákazníci nevyhovujú hľadaniu.</div>';
+        return;
+    }
+    grid.innerHTML = list.map(c => {
+        const email = String(c.customer_email || '').toLowerCase();
+        const note = customerNotesCache.get(email) || '';
+        const last = c.last_order_at ? new Date(c.last_order_at).toLocaleDateString('sk-SK') : '—';
+        const spent = adminMoney(c.total_spent || 0);
+        return `
+        <div class="order-card">
+            <div class="order-top">
+                <div>
+                    <div class="order-num">${escapeHTML(c.customer_name || email)}</div>
+                    <div class="order-meta">${escapeHTML(email)}${c.customer_phone ? ' · ' + escapeHTML(c.customer_phone) : ''}</div>
+                </div>
+                <div class="order-total">${escapeHTML(spent)}</div>
+            </div>
+            <div class="order-meta">🛒 ${Number(c.order_count || 0)} objednávok · posledná ${escapeHTML(last)}${Number(c.cancelled_count || 0) ? ` · ${Number(c.cancelled_count)}× zrušená` : ''}</div>
+            <div class="form-group" style="margin-top:0.7rem">
+                <label class="form-label">Interná poznámka</label>
+                <textarea class="form-input" id="${customerNoteFieldId(email)}" rows="2" maxlength="2000" placeholder="napr. preferuje osobný odber, firemný zákazník...">${escapeHTML(note)}</textarea>
+            </div>
+            <div class="order-actions" style="margin-top:0.6rem">
+                <button type="button" class="btn btn-primary btn-sm" data-admin-action="saveCustomerNote" data-email="${escapeHTML(email)}">💾 Uložiť poznámku</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-admin-action="showCustomerOrders" data-email="${escapeHTML(email)}">Objednávky</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+async function saveCustomerNote(email) {
+    const clean = String(email || '').toLowerCase().trim();
+    if (!clean) return;
+    if (!(await ensureSupabaseWriteAuth(false))) { showToast('⚠️ Najprv pripoj Supabase admin zápis', true); return; }
+    const note = String(document.getElementById(customerNoteFieldId(clean))?.value || '').slice(0, 2000);
+    try {
+        const payload = { note, updated_at: new Date().toISOString(), updated_by: currentAuthUserId() };
+        const updated = await sb('PATCH', `customer_notes?customer_email=eq.${encodeURIComponent(clean)}`, payload);
+        if (!Array.isArray(updated) || !updated.length) {
+            await sb('POST', 'customer_notes', { customer_email: clean, ...payload });
+        }
+        customerNotesCache.set(clean, note);
+        showToast('✅ Poznámka uložená');
+    } catch(e) {
+        showToast('❌ ' + (e.message || 'Uloženie zlyhalo'), true);
+    }
+}
+
+function showCustomerOrders(email) {
+    const filter = document.getElementById('order-search');
+    showAdminSection('orders');
+    if (filter) {
+        filter.value = String(email || '');
+        renderOrders();
+    }
+}
+
 const ADMIN_ACTIONS = {
     login,
+    quickAddProduct,
+    loadEmailTemplates,
+    saveEmailSettings,
+    loadCustomers,
+    renderCustomers,
     openModal,
     showSqlModal,
     showLowStockTab,
@@ -7218,6 +7844,9 @@ const ADMIN_ID_ACTIONS = {
     copyOrderReturnPack,
     copyPaymentReminder,
     advanceOrderStatus,
+    saveOrderTracking,
+    editProductPrice,
+    setProductStock,
     toggleStatus,
     openEdit,
     duplicateProduct,
@@ -7243,6 +7872,7 @@ function handleAdminDelegatedAction(event) {
     if (!actionEl) return;
     const action = actionEl.dataset.adminAction;
     if (event.type === 'input') {
+        if (action === 'renderCustomers') scheduleAdminAction('renderCustomers', renderCustomers, 140);
         if (action === 'renderOrders') scheduleAdminAction('renderOrders', renderOrders, 140);
         if (action === 'renderList') scheduleAdminAction('renderList', renderList, 120);
         if (action === 'autoFillProductFilters') scheduleAdminAction('autoFillProductFilters', () => autoFillProductFilters(false), 120);
@@ -7251,6 +7881,7 @@ function handleAdminDelegatedAction(event) {
         return;
     }
     if (event.type === 'change') {
+        if (action === 'updateQcStatusPill') updateQcStatusPill();
         if (action === 'renderOrders') renderOrders();
         if (action === 'renderList') renderList();
         if (action === 'autoFillProductFilters') autoFillProductFilters(false);
@@ -7299,6 +7930,14 @@ function handleAdminDelegatedAction(event) {
         quickStock(Number(actionEl.dataset.id), Number(actionEl.dataset.delta || 0));
     } else if (action === 'copyProductPublicLink') {
         copyProductPublicLink(actionEl.dataset.name || '');
+    } else if (action === 'saveEmailTemplate') {
+        saveEmailTemplate(actionEl.dataset.key || '');
+    } else if (action === 'sendTestEmailTemplate') {
+        sendTestEmailTemplate(actionEl.dataset.key || '');
+    } else if (action === 'saveCustomerNote') {
+        saveCustomerNote(actionEl.dataset.email || '');
+    } else if (action === 'showCustomerOrders') {
+        showCustomerOrders(actionEl.dataset.email || '');
     } else if (action === 'openDelete') {
         openDelete(Number(actionEl.dataset.id), actionEl.dataset.name || '');
     } else if (ADMIN_ID_ACTIONS[action]) {

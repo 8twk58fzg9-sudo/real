@@ -101,6 +101,16 @@
           "@type": "Question",
           "name": "Dostanem presne ten počítač, ktorý objednám?",
           "acceptedAnswer": { "@type": "Answer", "text": "Objednávka sa viaže na konkrétny skladový kus alebo model s uvedenými parametrami a dostupnosť sa kontroluje pred potvrdením." }
+        },
+        {
+          "@type": "Question",
+          "name": "Je v počítači nainštalovaný Windows?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Operačný systém je uvedený pri každom produkte. Ak je uvedený Windows, počítač príde s nainštalovaným a aktivovaným systémom pripraveným na použitie." }
+        },
+        {
+          "@type": "Question",
+          "name": "Môžem neskôr rozšíriť RAM alebo úložisko?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Pri väčšine stolových počítačov áno, závisí to od konkrétnej dosky a skrinky. Pred kúpou vám radi poradíme možnosti rozšírenia konkrétneho kusu." }
         }
       ]
     }
@@ -211,7 +221,7 @@
         .nav-cta:hover { color: #fff !important; background: var(--action-hover); }
 
         /* CATEGORY GUIDE */
-        .category-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+        .category-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
         .category-card { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 310px; border: 1px solid rgba(148,163,184,0.18); border-radius: 18px; background: linear-gradient(180deg, rgba(20,29,45,0.96), rgba(12,18,31,0.98)); padding: 1.35rem; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
         .category-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--category-accent, var(--accent)); }
         .category-card:hover { transform: translateY(-4px); border-color: var(--category-accent, var(--accent)); box-shadow: 0 20px 45px rgba(0,0,0,0.28); }
@@ -228,6 +238,7 @@
         .category-card.gaming { --category-accent: #60a5fa; }
         .category-card.office { --category-accent: #34d399; }
         .category-card.retro { --category-accent: #f59e0b; }
+        .category-card.business { --category-accent: #a78bfa; }
 
         /* RECOMMENDATION QUIZ */
         .quiz-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; }
@@ -277,7 +288,7 @@
         .hero-monitor { position: relative; overflow: hidden; }
         .hero-monitor::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 34%, rgba(96,165,250,0.11) 50%, transparent 66%); transform: translateX(-130%); animation: heroScan 9s ease-in-out infinite; pointer-events: none; }
 
-        #kategorie, #ako-to-funguje, #bezpecny-nakup, #kontrola-kvality, #poradca, #servisne-sluzby, #skoly-firmy, #platby-faktury, #sledovanie-objednavky, #seo-obsah, #ponuka, #faq, #kontakt, footer {
+        #kategorie, #ako-to-funguje, #bezpecny-nakup, #kontrola-kvality, #poradca, #herny-vykon, #recenzie, #servisne-sluzby, #skoly-firmy, #platby-faktury, #sledovanie-objednavky, #seo-obsah, #ponuka, #faq, #kontakt, footer {
             content-visibility: auto;
             contain-intrinsic-size: auto 760px;
         }
@@ -548,6 +559,8 @@
         .product-detail-perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin-bottom: 1.4rem; }
         .product-detail-perks span { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem; font-size: 0.82rem; color: var(--muted); text-align: center; }
         .product-detail-actions { display: flex; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; }
+        .product-detail-buybar { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; margin-top: 0.9rem; }
+        .product-detail-buybar-price { display: none; font-family: 'Outfit'; font-weight: 900; font-size: 1.35rem; color: var(--accent); white-space: nowrap; }
         .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
         .auth-tab { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); border-radius: 12px; padding: 0.75rem; font-weight: 800; cursor: pointer; }
         .auth-tab.active { background: var(--action); border-color: #60a5fa; color: #fff; }
@@ -840,7 +853,7 @@
 
         /* FOOTER */
         footer { padding: 4rem 8%; border-top: 1px solid var(--border); }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+        .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.1fr; gap: 3rem; margin-bottom: 3rem; }
         .footer-brand .logo { width: fit-content; }
         .footer-brand .logo img { width: 170px; filter: drop-shadow(0 0 18px rgba(59,130,246,0.14)); }
         .footer-brand p { color: var(--muted); font-size: 0.9rem; margin-top: 1rem; max-width: 280px; }
@@ -997,6 +1010,67 @@
             .toast, .cookie-banner, .cart-panel, .cart-overlay, .compare-modal, .compare-bar {
                 transition: none !important;
             }
+        }
+
+        /* ===== 2026 redesign additions ===== */
+        /* Performance label on gaming product cards */
+        .perf-label { display: flex; align-items: center; gap: 0.45rem; border: 1px solid rgba(96,165,250,0.28); border-radius: 10px; background: rgba(59,130,246,0.08); color: #bfdbfe; padding: 0.5rem 0.7rem; font-size: 0.8rem; font-weight: 650; line-height: 1.35; margin-bottom: 0.9rem; }
+        .perf-label .perf-icon { flex: 0 0 auto; }
+
+        /* FPS estimates in product detail */
+        .fps-estimate-block { border: 1px solid rgba(96,165,250,0.24); background: rgba(59,130,246,0.06); border-radius: 14px; padding: 1rem; margin-bottom: 1.2rem; }
+        .fps-estimate-block strong { display: block; color: var(--text); margin-bottom: 0.55rem; }
+        .fps-estimate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.55rem; }
+        .fps-estimate-item { border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: rgba(255,255,255,0.04); padding: 0.6rem 0.7rem; min-width: 0; }
+        .fps-estimate-item span { display: block; color: var(--muted); font-size: 0.72rem; margin-bottom: 0.2rem; }
+        .fps-estimate-item b { display: block; color: var(--text); font-family: 'Outfit'; font-size: 0.92rem; white-space: nowrap; }
+        .fps-disclaimer { color: var(--muted); font-size: 0.76rem; line-height: 1.45; margin: 0.7rem 0 0; }
+
+        /* Gaming performance homepage section */
+        .fps-tier-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+        .fps-tier-card { border: 1px solid rgba(148,163,184,0.18); border-radius: 18px; background: linear-gradient(180deg, rgba(20,29,45,0.96), rgba(12,18,31,0.98)); padding: 1.35rem; position: relative; overflow: hidden; }
+        .fps-tier-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--tier-accent, var(--accent)); }
+        .fps-tier-card.entry { --tier-accent: #94a3b8; }
+        .fps-tier-card.mid { --tier-accent: #60a5fa; }
+        .fps-tier-card.high { --tier-accent: #34d399; }
+        .fps-tier-card h3 { font-family: 'Outfit'; font-size: 1.2rem; margin-bottom: 0.25rem; }
+        .fps-tier-card .fps-tier-gpus { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.9rem; }
+        .fps-tier-rows { display: grid; gap: 0.45rem; }
+        .fps-tier-row { display: flex; justify-content: space-between; gap: 0.8rem; border-bottom: 1px dashed rgba(148,163,184,0.16); padding-bottom: 0.42rem; font-size: 0.86rem; }
+        .fps-tier-row span { color: var(--muted); }
+        .fps-tier-row b { color: var(--text); white-space: nowrap; }
+        .fps-section-note { color: var(--muted); font-size: 0.8rem; line-height: 1.5; max-width: 760px; margin: 1.4rem auto 0; text-align: center; }
+        .fps-section-cta { display: flex; justify-content: center; margin-top: 1.2rem; }
+
+        /* Reviews / social proof placeholder */
+        .reviews-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+        .review-card { border: 1px dashed rgba(148,163,184,0.3); border-radius: 18px; background: rgba(255,255,255,0.025); padding: 1.35rem; display: flex; flex-direction: column; gap: 0.6rem; min-height: 170px; }
+        .review-stars { color: rgba(148,163,184,0.5); letter-spacing: 0.2rem; font-size: 0.95rem; }
+        .review-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.55; margin: 0; }
+        .review-placeholder-tag { width: fit-content; border: 1px solid rgba(148,163,184,0.3); border-radius: 999px; color: var(--muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.3rem 0.65rem; }
+        .reviews-invite { margin-top: 1.2rem; border: 1px solid rgba(34,197,94,0.24); border-radius: 16px; background: rgba(34,197,94,0.06); padding: 1.1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .reviews-invite strong { font-family: 'Outfit'; }
+        .reviews-invite span { color: var(--muted); font-size: 0.86rem; display: block; }
+
+        /* Footer contact column */
+        .footer-contact a { color: var(--muted); text-decoration: none; display: block; margin-bottom: 0.8rem; transition: color 0.2s; }
+        .footer-contact a:hover { color: var(--accent); }
+        .footer-trust-line { display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center; color: var(--muted); font-size: 0.8rem; margin-bottom: 1.1rem; }
+
+        @media (min-width: 901px) and (max-width: 1200px) {
+            .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 900px) {
+            .fps-tier-grid, .reviews-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 720px) {
+            /* Sticky purchase bar inside product detail on mobile */
+            #product-modal .product-detail-buybar { position: sticky; bottom: -1.25rem; margin: 1rem -1.25rem -1.25rem; padding: 0.85rem 1.25rem calc(0.85rem + env(safe-area-inset-bottom)); background: rgba(15,22,35,0.97); backdrop-filter: blur(10px); border-top: 1px solid var(--border); z-index: 5; justify-content: space-between; }
+            #product-modal .product-detail-buybar-price { display: block; }
+            #product-modal .product-detail-buybar .add-cart-btn { flex: 1; }
+        }
+        @media (max-width: 500px) {
+            #product-modal .product-detail-buybar { bottom: -1.4rem; margin-left: -1.4rem; margin-right: -1.4rem; margin-bottom: -1.4rem; padding-left: 1.4rem; padding-right: 1.4rem; }
         }
     </style>
 </head>
@@ -1276,18 +1350,19 @@
     <div class="hero-content">
         <div class="badge"><span class="badge-dot"></span> <span id="hero-badge-text">Testované repasované PC skladom</span></div>
         <div class="site-announcement" id="site-announcement"></div>
-        <h1 id="hero-title">Spoľahlivé počítače pre <span>hry, prácu aj školu.</span></h1>
-        <p id="hero-text">Repasované a použité PC s jasnými parametrami, uvedeným stavom a aktuálnou skladovou dostupnosťou.</p>
+        <h1 id="hero-title">Počítač podľa toho, čo <span>naozaj potrebujete.</span></h1>
+        <p id="hero-text">Herné PC, repasované kancelárske počítače a riešenia pre domácnosti, študentov, firmy aj školy. Otestované, jasne popísané a pripravené na použitie.</p>
         <div class="hero-btns">
-            <a href="#ponuka" class="btn-primary">Prezrieť PC</a>
-            <a href="#poradca" class="btn-ghost">Nájsť vhodný PC</a>
+            <a href="#poradca" class="btn-primary">Nájsť môj PC</a>
+            <a href="#ponuka" class="btn-ghost" data-action="quick-filter" data-filter-type="cat" data-filter-value="gaming">Herné PC</a>
+            <a href="#ponuka" class="btn-ghost" data-action="quick-filter" data-filter-type="cat" data-filter-value="office">Kancelárske PC</a>
         </div>
         <div class="hero-cta-note">Nákup aj bez registrácie · aktuálny sklad · jasná konečná cena</div>
         <div class="trust-row" id="hero-trust-row">
-            <div class="trust-item"><span>✓</span> Kontrola pred predajom</div>
-            <div class="trust-item"><span>✓</span> Jasné parametre</div>
-            <div class="trust-item"><span>✓</span> Uvedený stav kusu</div>
-            <div class="trust-item"><span>✓</span> Aktuálny sklad</div>
+            <div class="trust-item"><span>✓</span> Otestované pred odoslaním</div>
+            <div class="trust-item"><span>✓</span> Záruka v cene</div>
+            <div class="trust-item"><span>✓</span> Bezpečná platba</div>
+            <div class="trust-item"><span>✓</span> Doručenie po celom Slovensku</div>
         </div>
     </div>
     <div class="hero-visual reveal">
@@ -1549,6 +1624,12 @@
             <p>Staršie konfigurácie pre retro hry alebo pôvodný softvér. Ponuka závisí od kusov, ktoré sú práve skladom.</p>
             <a class="category-action" href="#ponuka" data-action="quick-filter" data-filter-type="cat" data-filter-value="retro">Pozrieť retro PC →</a>
         </article>
+        <article class="category-card business">
+            <div class="category-visual" aria-hidden="true"><span class="category-device"></span><span class="category-spec-lines"><span></span><span></span><span></span></span></div>
+            <h3>Pre firmy a školy</h3>
+            <p>Viac počítačov naraz, nákup na faktúru, inštalácia Windows, príslušenstvo a rýchla cenová ponuka na mieru.</p>
+            <a class="category-action" href="#skoly-firmy" data-action="open-info-section" data-info-target="skoly-firmy">Vyžiadať cenovú ponuku →</a>
+        </article>
     </div>
 </section>
 
@@ -1798,6 +1879,87 @@
     </div>
 </section>
 
+<!-- GAMING PERFORMANCE GUIDE -->
+<section id="herny-vykon">
+    <div class="section-header reveal">
+        <div class="section-label">Herný výkon zrozumiteľne</div>
+        <h2 class="section-title">Aký výkon môžete čakať</h2>
+        <p style="color:var(--muted);max-width:720px;margin-top:0.8rem;">Namiesto marketingových sľubov uvádzame orientačné FPS rozsahy podľa triedy grafickej karty. Konkrétny odhad nájdete pri každom hernom PC v detaile produktu.</p>
+    </div>
+    <div class="fps-tier-grid reveal">
+        <article class="fps-tier-card entry">
+            <h3>Základná herná trieda</h3>
+            <div class="fps-tier-gpus">napr. GTX 1650 / 1660, RX 570</div>
+            <div class="fps-tier-rows">
+                <div class="fps-tier-row"><span>CS2</span><b>90–180 FPS</b></div>
+                <div class="fps-tier-row"><span>Fortnite</span><b>60–120 FPS</b></div>
+                <div class="fps-tier-row"><span>GTA V</span><b>45–80 FPS</b></div>
+                <div class="fps-tier-row"><span>Minecraft</span><b>Výborný</b></div>
+                <div class="fps-tier-row"><span>Škola / kancelária</span><b>Výborný</b></div>
+            </div>
+        </article>
+        <article class="fps-tier-card mid">
+            <h3>Stredná herná trieda</h3>
+            <div class="fps-tier-gpus">napr. RTX 3060 / 4060, RX 6600–6700</div>
+            <div class="fps-tier-rows">
+                <div class="fps-tier-row"><span>CS2</span><b>150–320 FPS</b></div>
+                <div class="fps-tier-row"><span>Fortnite</span><b>100–220 FPS</b></div>
+                <div class="fps-tier-row"><span>GTA V</span><b>70–140 FPS</b></div>
+                <div class="fps-tier-row"><span>Minecraft</span><b>Výborný</b></div>
+                <div class="fps-tier-row"><span>Škola / kancelária</span><b>Výborný</b></div>
+            </div>
+        </article>
+        <article class="fps-tier-card high">
+            <h3>Vyššia herná trieda</h3>
+            <div class="fps-tier-gpus">napr. RTX 3080 / 4070+, RX 7800+</div>
+            <div class="fps-tier-rows">
+                <div class="fps-tier-row"><span>CS2</span><b>250–400 FPS</b></div>
+                <div class="fps-tier-row"><span>Fortnite</span><b>180–280 FPS</b></div>
+                <div class="fps-tier-row"><span>GTA V</span><b>120–165 FPS</b></div>
+                <div class="fps-tier-row"><span>Minecraft</span><b>Výborný</b></div>
+                <div class="fps-tier-row"><span>Škola / kancelária</span><b>Výborný</b></div>
+            </div>
+        </article>
+    </div>
+    <p class="fps-section-note">Odhady výkonu sa môžu líšiť podľa nastavení hry, rozlíšenia, ovládačov, aplikácií na pozadí a budúcich aktualizácií hier. Rozsahy platia pre 1080p a stredné až vysoké nastavenia pri vhodnom procesore a dostatku RAM.</p>
+    <div class="fps-section-cta">
+        <a href="#ponuka" class="btn-primary" data-action="quick-filter" data-filter-type="cat" data-filter-value="gaming">Pozrieť herné PC</a>
+    </div>
+</section>
+
+<!-- REVIEWS / SOCIAL PROOF (placeholders until real reviews exist) -->
+<section id="recenzie">
+    <div class="section-header reveal">
+        <div class="section-label">Skúsenosti zákazníkov</div>
+        <h2 class="section-title">Recenzie a hodnotenia</h2>
+        <p style="color:var(--muted);max-width:720px;margin-top:0.8rem;">Zobrazujeme iba skutočné recenzie od overených zákazníkov. Prvé hodnotenia práve zbierame – miesto nižšie patrí im.</p>
+    </div>
+    <div class="reviews-grid reveal">
+        <article class="review-card">
+            <span class="review-placeholder-tag">Pripravené pre recenziu</span>
+            <div class="review-stars" aria-hidden="true">★★★★★</div>
+            <p>Tu pribudne hodnotenie od overeného zákazníka po dokončenej objednávke.</p>
+        </article>
+        <article class="review-card">
+            <span class="review-placeholder-tag">Pripravené pre recenziu</span>
+            <div class="review-stars" aria-hidden="true">★★★★★</div>
+            <p>Pracujeme na prepojení s Google recenziami, aby ste videli hodnotenia priamo zo zdroja.</p>
+        </article>
+        <article class="review-card">
+            <span class="review-placeholder-tag">Pripravené pre recenziu</span>
+            <div class="review-stars" aria-hidden="true">★★★★★</div>
+            <p>Po nákupe vás poprosíme o krátke hodnotenie – pomôže ďalším zákazníkom pri výbere.</p>
+        </article>
+    </div>
+    <div class="reviews-invite reveal">
+        <div>
+            <strong>Nakúpili ste u nás?</strong>
+            <span>Napíšte nám pár viet o vašej skúsenosti – recenzie overujeme voči skutočným objednávkam.</span>
+        </div>
+        <a class="btn-ghost" href="#kontakt" data-action="open-info-section" data-info-target="kontakt">Poslať hodnotenie</a>
+    </div>
+</section>
+
 <!-- SERVICES -->
 <section id="servisne-sluzby" class="info-section-collapsed" data-info-section>
     <div class="section-header reveal">
@@ -2038,6 +2200,18 @@
             <div class="faq-q">Čo kontrolujete pred odoslaním? <span>+</span></div>
             <div class="faq-a">Kontrolujeme CPU, RAM, disk, grafiku, teploty, stabilitu, základnú čistotu, systém a fyzický stav. Pri produkte vidíte aj poznámku ku konkrétnemu kusu.</div>
         </div>
+        <div class="faq-item">
+            <div class="faq-q">Je v počítači nainštalovaný Windows? <span>+</span></div>
+            <div class="faq-a">Operačný systém uvádzame pri každom produkte v parametroch. Ak je uvedený Windows, počítač príde s nainštalovaným a aktivovaným systémom pripraveným na prvé spustenie.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Môžem neskôr rozšíriť RAM alebo úložisko? <span>+</span></div>
+            <div class="faq-a">Pri väčšine stolových PC áno – závisí to od konkrétnej dosky a skrinky. Ak plánujete rozšírenie, napíšte nám názov produktu a poradíme, aké možnosti daný kus má. Rozšírenie vieme často pripraviť už pred odoslaním.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Ako rýchlo príde objednávka? <span>+</span></div>
+            <div class="faq-a">Skladové kusy pripravujeme na odoslanie čo najskôr po potvrdení platby alebo objednávky na dobierku. Očakávaný spôsob doručenia a cenu vidíte v košíku; o odoslaní vás informujeme e-mailom.</div>
+        </div>
     </div>
 </section>
 
@@ -2184,9 +2358,23 @@
             <a href="pravne.html#alternativne-riesenie-sporov">Riešenie sporov</a>
             <a href="pravne.html#cookies">Cookies</a>
         </div>
+        <div class="footer-col footer-contact">
+            <h4>Kontakt</h4>
+            <a href="tel:+421949835923">📞 0949 835 923</a>
+            <a href="mailto:computerax.sk@gmail.com">✉️ computerax.sk@gmail.com</a>
+            <a href="https://wa.me/421949835923" target="_blank" rel="noopener noreferrer">💬 WhatsApp poradenstvo</a>
+            <a href="#skoly-firmy" data-action="open-info-section" data-info-target="skoly-firmy">🏢 Cenová ponuka pre firmy a školy</a>
+        </div>
+    </div>
+    <div class="footer-trust-line" aria-label="Dôvody nákupu">
+        <span>✅ Otestované pred odoslaním</span>
+        <span>🛡️ Záruka v cene</span>
+        <span>🔒 Bezpečná platba</span>
+        <span>🚚 Doručenie po celom Slovensku</span>
+        <span>↩️ 14 dní na vrátenie</span>
     </div>
     <div class="footer-bottom">
-        <p>&copy; 2026 Computrax.sk – Špičková repasovaná technika. Všetky práva vyhradené.</p>
+        <p>&copy; 2026 Computrax.sk – Testované herné a repasované počítače. Všetky práva vyhradené.</p>
     </div>
 </footer>
 
@@ -2231,15 +2419,15 @@ const PRODUCT_AUTO_REFRESH_MS = 60000;
 const SUPABASE_REQUEST_TIMEOUT_MS = 10000;
 const DEFAULT_SITE_SETTINGS = {
     heroBadge: 'Testované repasované PC skladom',
-    heroTitle: 'Spoľahlivé počítače pre <span>hry, prácu aj školu.</span>',
-    heroText: 'Repasované a použité PC s jasnými parametrami, uvedeným stavom a aktuálnou skladovou dostupnosťou.',
+    heroTitle: 'Počítač podľa toho, čo <span>naozaj potrebujete.</span>',
+    heroText: 'Herné PC, repasované kancelárske počítače a riešenia pre domácnosti, študentov, firmy aj školy. Otestované, jasne popísané a pripravené na použitie.',
     promoTitle: 'Počítače pripravené zo skladu',
     promoText: 'jasné parametre a stav každého kusu',
     trustItems: [
-        'Kontrola pred predajom',
-        'Jasné parametre',
-        'Uvedený stav kusu',
-        'Aktuálny sklad'
+        'Otestované pred odoslaním',
+        'Záruka v cene',
+        'Bezpečná platba',
+        'Doručenie po celom Slovensku'
     ],
     publicSiteUrl: 'https://8twk58fzg9-sudo.github.io/real',
     announcementEnabled: false,
@@ -2322,6 +2510,7 @@ function normalizeProduct(p) {
         os: p.os || 'Neuvedené',
         delivery: p.delivery || 'Doprava 3,90€',
         imageUrl: safePublicImageUrl(p.image_url || p.imageUrl || ''),
+        testedAt: p.tested_at || p.testedAt || null,
         sku: p.sku || p.warehouse_sku || p.external_id || '',
         popular: Number(p.popular || 0),
         newest: Number(p.newest || p.id || 0)
@@ -4344,6 +4533,7 @@ function renderProducts() {
         const conditionNote = String(p.pcConditionNote || '').replace(/\s+/g, ' ').trim();
         const shortConditionNote = conditionNote.length > 112 ? conditionNote.slice(0, 109).trim() + '...' : conditionNote;
         const detailBtn = `<button type="button" class="detail-btn" data-action="open-detail" data-name="${safeName}" aria-label="Zobraziť detail produktu ${safeName}">Detail</button>`;
+        const perfLabel = productPerformanceLabel(p);
         const card = document.createElement('div');
         card.className = 'pc-card reveal';
         card.setAttribute('data-product-card', '');
@@ -4384,6 +4574,7 @@ function renderProducts() {
                 <div class="spec-chip"><span>RAM</span><b>${safeAttr(p.ram)}</b></div>
                 <div class="spec-chip"><span>Úložisko</span><b>${safeAttr(p.ssd)}</b></div>
             </div>
+            ${perfLabel ? `<div class="perf-label"><span class="perf-icon" aria-hidden="true">${p.cat === 'gaming' ? '🎯' : p.cat === 'retro' ? '🕹️' : '📚'}</span><span>${safeAttr(perfLabel)}</span></div>` : ''}
             <div class="condition-strip">
                 <span>🔧</span>
                 <span><strong>${safeAttr(p.pcCondition)}</strong>${safeAttr(shortConditionNote || 'Vyčistený, otestovaný a pripravený na používanie.')}</span>
@@ -4394,7 +4585,7 @@ function renderProducts() {
             </ul>
             <div class="card-guarantee">
                 <span class="g-item">🛡️ 12M záruka</span>
-                <span class="g-item">✅ Otestovaný</span>
+                <span class="g-item"${p.testedAt ? ' style="color:#4ade80;border-color:rgba(34,197,94,0.4)"' : ''}>${p.testedAt ? '🛡️ Computrax Tested' : '✅ Otestovaný'}</span>
                 <span class="g-item">🔄 14 dní vrátenie</span>
             </div>
             <div class="service-teaser">
@@ -4576,6 +4767,8 @@ function handleDelegatedActions(event) {
 
     if (action === 'add-cart') {
         addToCart(actionEl.dataset.name || '', Number(actionEl.dataset.price || 0), actionEl);
+    } else if (action === 'subscribe-alert') {
+        subscribeProductAlert(Number(actionEl.dataset.id || 0));
     } else if (action === 'open-detail') {
         openProductDetail(actionEl.dataset.name || '');
     } else if (action === 'run-advisor') {
@@ -5374,6 +5567,53 @@ function clearRecentProducts() {
     renderRecentProducts();
 }
 
+const FPS_DISCLAIMER = 'Orientačné odhady pri 1080p a stredných až vysokých nastaveniach. Skutočný výkon závisí od nastavení hry, rozlíšenia, ovládačov, aplikácií na pozadí a budúcich aktualizácií hier.';
+
+function gpuFpsTier(gpu = '') {
+    const g = String(gpu || '').toLowerCase().replace(/\s+/g, ' ');
+    if (!/rtx|gtx|radeon|rx|arc/.test(g)) return null;
+    if (/rtx ?(50[6-9]0|4070|4080|4090|3080|3090)|rx ?(7[89]00|6900|6950)/.test(g)) {
+        return { key: 'high', label: 'vyššia herná trieda', cs2: '250–400', fortnite: '180–280', gta5: '120–165' };
+    }
+    if (/rtx ?(4060|3060 ?ti|3070|2080)|rx ?(6700|6750|7600)/.test(g)) {
+        return { key: 'mid', label: 'stredná herná trieda', cs2: '200–320', fortnite: '140–220', gta5: '95–140' };
+    }
+    if (/rtx ?(3060|2060|2070)|gtx ?(1080|1070)|rx ?(6600|5700|5600)/.test(g)) {
+        return { key: 'mid-entry', label: 'nižšia stredná trieda', cs2: '150–250', fortnite: '100–165', gta5: '70–110' };
+    }
+    return { key: 'entry', label: 'základná herná trieda', cs2: '90–180', fortnite: '60–120', gta5: '45–80' };
+}
+
+function productFpsEstimates(product) {
+    if (product.cat !== 'gaming') return null;
+    const tier = gpuFpsTier(product.gpu);
+    if (!tier) return null;
+    return {
+        tier,
+        rows: [
+            { game: 'CS2', fps: `${tier.cs2} FPS` },
+            { game: 'Fortnite', fps: `${tier.fortnite} FPS` },
+            { game: 'GTA V', fps: `${tier.gta5} FPS` },
+            { game: 'Minecraft', fps: 'Výborný' },
+            { game: 'Škola / kancelária', fps: 'Výborný' }
+        ]
+    };
+}
+
+function productPerformanceLabel(product) {
+    if (product.cat === 'gaming') {
+        const tier = gpuFpsTier(product.gpu);
+        if (!tier) return 'Herné PC – výkon porovnajte s požiadavkami hier';
+        if (tier.key === 'high') return 'Plynulé 1080p aj 1440p hranie · CS2, Fortnite, GTA V';
+        if (tier.key === 'mid') return 'Skvelé na CS2, Fortnite a GTA V pri 1080p';
+        if (tier.key === 'mid-entry') return 'Dobré 1080p hranie · CS2, Fortnite, GTA V';
+        return 'Na nenáročné hry a e-šport tituly pri 1080p';
+    }
+    if (product.cat === 'office') return 'Ideálne na školu, kanceláriu a bežnú prácu';
+    if (product.cat === 'retro') return 'Pre retro hry a starší softvér';
+    return '';
+}
+
 function productUseCases(product) {
     const uses = [];
     const ram = Number(product.ramFilter || parseInt(product.ram, 10) || 0);
@@ -5403,6 +5643,48 @@ function productFitCards(product) {
     ];
 }
 
+async function subscribeProductAlert(productId) {
+    const input = document.getElementById('alert-email');
+    const email = normalizeEmail(input?.value || '');
+    if (!productId || productId <= 0) return;
+    if (!isValidEmail(email)) {
+        showToast('⚠️ Zadajte platný e-mail');
+        input?.focus();
+        return;
+    }
+    if (!guardRateLimit('product-alert', email, 5, 3600000)) return;
+    const product = activeProducts.find(p => Number(p.id) === productId);
+    try {
+        const res = await fetch(`${SB_URL}/rest/v1/product_alerts`, {
+            method: 'POST',
+            headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ product_id: productId, email, price_at_subscribe: Number(product?.price || 0) || null })
+        });
+        if (res.status === 409) {
+            showToast('✅ Tento produkt už strážite');
+            return;
+        }
+        if (!res.ok) throw new Error('subscribe failed');
+        showToast('🔔 Hotovo! Dáme vám vedieť e-mailom.');
+        if (input) input.value = '';
+    } catch (e) {
+        showToast('⚠️ Nepodarilo sa uložiť. Skúste znova alebo nám napíšte.');
+    }
+}
+
+function trackProductView(product) {
+    const id = Number(product?.id || 0);
+    if (!id || id <= 0 || !SB_URL || !SB_KEY) return;
+    try {
+        fetch(`${SB_URL}/rest/v1/rpc/track_product_view`, {
+            method: 'POST',
+            headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ p_product_id: id }),
+            keepalive: true
+        }).catch(() => {});
+    } catch (e) { /* non-critical */ }
+}
+
 function openProductDetail(name) {
     const p = products[name];
     const wrap = document.getElementById('product-detail-wrap');
@@ -5411,6 +5693,7 @@ function openProductDetail(name) {
         return;
     }
     rememberRecentProduct(name);
+    trackProductView(p);
     const url = new URL(location.href);
     url.searchParams.set('pc', p.name);
     history.replaceState(null, '', `${url.pathname}?${url.searchParams.toString()}${url.hash || '#ponuka'}`);
@@ -5428,6 +5711,7 @@ function openProductDetail(name) {
     const whatsappHref = productInquiryWhatsappHref(p);
     const useCases = productUseCases(p);
     const fitCards = productFitCards(p);
+    const fpsEstimates = productFpsEstimates(p);
     const related = activeProducts
         .filter(product => product.name !== p.name && product.cat === p.cat && product.status !== 'sold' && Number(product.stock || 0) > 0)
         .slice(0, 3);
@@ -5461,6 +5745,13 @@ function openProductDetail(name) {
         <div class="product-fit-grid" aria-label="Rýchle zhrnutie vhodnosti">
             ${fitCards.map(card => `<div class="product-fit-card"><span>${safeAttr(card.label)}</span><b>${safeAttr(card.value)}</b></div>`).join('')}
         </div>
+        ${fpsEstimates ? `<div class="fps-estimate-block" aria-label="Odhad herného výkonu">
+            <strong>🎯 Odhad herného výkonu (${safeAttr(fpsEstimates.tier.label)})</strong>
+            <div class="fps-estimate-grid">
+                ${fpsEstimates.rows.map(row => `<div class="fps-estimate-item"><span>${safeAttr(row.game)}</span><b>${safeAttr(row.fps)}</b></div>`).join('')}
+            </div>
+            <p class="fps-disclaimer">${safeAttr(FPS_DISCLAIMER)}</p>
+        </div>` : ''}
         <div class="product-detail-services">
             <strong>Stav konkrétneho kusu</strong>
             ${safeAttr(p.pcConditionNote)}
@@ -5489,15 +5780,26 @@ function openProductDetail(name) {
                     <b>${safeAttr(product.name)}</b><span>${money(product.price)}</span>
                 </button>`).join('')}</div>
         </div>` : ''}
+        <div class="product-detail-services" style="border-color:rgba(96,165,250,0.3);background:rgba(59,130,246,0.06);">
+            <strong>🔔 ${isSold ? 'Strážiť dostupnosť' : 'Strážiť cenu'}</strong>
+            ${isSold ? 'Dáme vám vedieť e-mailom, keď bude produkt opäť skladom alebo zlacnie.' : 'Dáme vám vedieť e-mailom, keď produkt zlacnie.'}
+            <div style="display:flex;gap:0.5rem;margin-top:0.7rem;flex-wrap:wrap;">
+                <input type="email" id="alert-email" placeholder="vas@email.sk" maxlength="254" autocomplete="email" style="flex:1;min-width:180px;min-height:44px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.055);color:var(--text);padding:0.6rem 0.8rem;">
+                <button type="button" class="detail-btn" data-action="subscribe-alert" data-id="${Number(p.id || 0)}">Strážiť</button>
+            </div>
+        </div>
         <div class="product-detail-perks">
             <span>🛡️ 12 mesiacov záruka</span>
-            <span>✅ Kontrola pred odoslaním</span>
+            <span${p.testedAt ? ' style="color:#4ade80;border-color:rgba(34,197,94,0.4)"' : ''}>${p.testedAt ? '🛡️ Computrax Tested – kompletný test dokončený' : '✅ Kontrola pred odoslaním'}</span>
             <span>📦 Doručenie podľa dostupnosti</span>
         </div>
         <div class="product-detail-actions">
             <button type="button" class="detail-btn" data-action="close-product-detail">Späť na ponuku</button>
             <button type="button" class="detail-btn" data-action="copy-product-link" data-name="${safeAttr(p.name)}">Kopírovať link</button>
             ${inquiryActions}
+        </div>
+        <div class="product-detail-buybar">
+            <div class="product-detail-buybar-price" aria-hidden="true">${money(p.price)}</div>
             ${buyAction}
         </div>
     `;
