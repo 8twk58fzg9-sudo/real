@@ -265,6 +265,7 @@ header{position:relative;padding:.65rem max(1rem,env(safe-area-inset-right)) .65
   <header>
     <div class="h-logo"><img src="computrax-logo.png?v=20260614b" alt="Computrax" width="145" height="72"> <span style="font-size:0.85rem;color:var(--muted);font-family:'Inter';font-weight:400">Admin</span></div>
     <div class="h-right">
+      <input id="global-search" class="search-box" placeholder="🔎 Hľadať kdekoľvek (produkt, objednávka, zákazník)…" style="width:280px;max-width:60vw" data-admin-enter="runGlobalSearch">
       <button type="button" class="btn btn-success" data-admin-action="openModal">+ Pridať PC</button>
       <button type="button" class="btn btn-ghost btn-sm" data-admin-action="migrateProducts" id="migrate-btn">⬆️ Nahrať vzorové produkty</button>
       <button type="button" class="btn btn-primary btn-sm" data-admin-action="useSupabaseMode">☁️ Supabase režim</button>
@@ -1655,6 +1656,7 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
       <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
         <select id="order-filter" class="form-select" style="width:150px;padding:0.45rem 0.7rem;font-size:0.8rem" data-admin-action="renderOrders">
           <option value="all">Všetky</option>
+          <option value="needs_action">⚡ Vyžadujú pozornosť</option>
           <option value="new">Nové</option>
           <option value="confirmed">Potvrdené</option>
           <option value="packed">Zabalené</option>
@@ -1670,7 +1672,13 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
         <button type="button" class="btn btn-ghost btn-sm" data-admin-action="downloadVisibleInvoicesHtml">Faktúry HTML</button>
         <button type="button" class="btn btn-ghost btn-sm" data-admin-action="exportWarehousePickList">Sklad export</button>
         <button type="button" class="btn btn-ghost btn-sm" data-admin-action="exportOrders">Stiahnuť CSV</button>
+        <button type="button" class="btn btn-ghost btn-sm" data-admin-action="exportAccountingCsv">📊 Pre účtovníka</button>
       </div>
+    </div>
+    <div id="bulk-order-bar" style="display:none;align-items:center;gap:0.5rem;flex-wrap:wrap;border:1px solid rgba(59,130,246,0.35);background:rgba(59,130,246,0.08);border-radius:12px;padding:0.6rem 0.8rem;margin-bottom:1rem">
+      <strong id="bulk-order-count" style="font-size:0.85rem;color:var(--text)">0 objednávok</strong>
+      <button type="button" class="btn btn-success btn-sm" data-admin-action="bulkAdvanceOrders">⏭ Posunúť do ďalšieho stavu (+ e-mail)</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-admin-action="bulkClearOrders" style="margin-left:auto">Zrušiť výber</button>
     </div>
     <div class="orders-grid" id="orders-grid">
       <div style="color:var(--muted);font-size:0.9rem">Objednávky sa načítajú po otvorení adminu.</div>
@@ -1810,6 +1818,7 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
     <button type="button" class="ftab" data-admin-action="setTab" data-tab="office">💼 Kancelárske</button>
     <button type="button" class="ftab" data-admin-action="setTab" data-tab="retro">🕹️ Retro</button>
     <button type="button" class="ftab" data-admin-action="setTab" data-tab="lowstock">📦 Nízky sklad</button>
+    <button type="button" class="ftab" data-admin-action="setTab" data-tab="draft">📝 Koncepty</button>
     <button type="button" class="ftab" data-admin-action="setTab" data-tab="sold">🔴 Vypredané</button>
     <input class="search-box" id="admin-search" placeholder="🔍 Hľadať..." data-admin-action="renderList">
   </div>
@@ -1826,6 +1835,14 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
       </select>
       <button type="button" class="btn btn-success btn-sm" data-admin-action="quickAddProduct">Pridať ako koncept</button>
       <span style="color:var(--muted);font-size:0.75rem;flex-basis:100%">Uloží sa ako koncept (nezobrazí sa zákazníkom). Detaily a fotku doplníš neskôr cez ✏️ Upraviť.</span>
+    </div>
+    <div id="bulk-bar" style="display:none;align-items:center;gap:0.5rem;flex-wrap:wrap;border:1px solid rgba(59,130,246,0.35);background:rgba(59,130,246,0.08);border-radius:12px;padding:0.6rem 0.8rem;margin-bottom:1rem">
+      <strong id="bulk-count" style="font-size:0.85rem;color:var(--text)">0 vybraných</strong>
+      <button type="button" class="btn btn-success btn-sm" data-admin-action="bulkActivate">🟢 Aktivovať</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-admin-action="bulkDeactivate">🔴 Vypredané</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-admin-action="bulkPriceChange">💶 Cena ±%</button>
+      <button type="button" class="btn btn-danger btn-sm" data-admin-action="bulkDelete">🗑️ Vymazať</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-admin-action="bulkClear" style="margin-left:auto">Zrušiť výber</button>
     </div>
     <div class="loading-msg" id="loading-msg" role="status" aria-live="polite">Načítavam produkty zo Supabase...</div>
     <div class="pc-grid" id="pc-grid" style="display:none"></div>
@@ -1849,6 +1866,10 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
       <div class="form-group">
         <label class="form-label">Cena (€) *</label>
         <input class="form-input" id="f-price" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="949">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nákupná cena (€) <span style="color:var(--muted);font-weight:400">— len pre teba, marža</span></label>
+        <input class="form-input" id="f-cost" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="napr. 300">
       </div>
       <div class="form-group">
         <label class="form-label">Kusov skladom</label>
@@ -1911,6 +1932,8 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
       <div class="form-group form-full">
         <label class="form-label">Poznámka ku stavu PC</label>
         <textarea class="form-input" id="f-condition-note" rows="3" maxlength="320" placeholder="napr. Vyčistený, bez výrazných škrabancov, skontrolovaný disk a pamäť."></textarea>
+        <button type="button" class="btn btn-ghost btn-sm" data-admin-action="generateProductDescription" style="margin-top:0.5rem">✨ Navrhnúť popis (AI)</button>
+        <small style="color:var(--muted);display:block;margin-top:0.3rem">Vyplň najprv názov a parametre. AI navrhne text — ty ho skontroluješ a upravíš pred uložením.</small>
       </div>
       <div class="form-group">
         <label class="form-label">Tag / Nálepka</label>
@@ -4032,6 +4055,44 @@ function handleLocal(method, path, body) {
 }
 
 let productViewsMap = new Map();
+let productCostMap = new Map();
+
+async function loadProductCosts() {
+    if (useLocalStorage || !hasSupabaseWriteAuth()) return;
+    try {
+        const rows = await sb('GET', 'product_costs?select=product_id,cost');
+        productCostMap = new Map((Array.isArray(rows) ? rows : []).map(r => [Number(r.product_id), Number(r.cost || 0)]));
+        renderList();
+    } catch (e) { /* non-critical */ }
+}
+
+async function saveProductCost(productId, cost) {
+    if (useLocalStorage || !hasSupabaseWriteAuth()) return;
+    const c = Math.max(0, Number(cost || 0));
+    try {
+        if (c > 0) {
+            const updated = await sb('PATCH', `product_costs?product_id=eq.${Number(productId)}`, { cost: c, updated_at: new Date().toISOString() });
+            if (!Array.isArray(updated) || !updated.length) {
+                await sb('POST', 'product_costs', { product_id: Number(productId), cost: c });
+            }
+            productCostMap.set(Number(productId), c);
+        } else if (productCostMap.has(Number(productId))) {
+            await sb('DELETE', `product_costs?product_id=eq.${Number(productId)}`);
+            productCostMap.delete(Number(productId));
+        }
+    } catch (e) { /* non-critical */ }
+}
+
+function productMarginChip(product) {
+    const cost = productCostMap.get(Number(product.id)) || 0;
+    const price = Number(product.price || 0);
+    if (!cost || !price) return '';
+    const margin = price - cost;
+    const pct = Math.round((margin / price) * 100);
+    const color = margin <= 0 ? '#fca5a5' : pct < 15 ? '#fde68a' : '#4ade80';
+    const border = margin <= 0 ? 'rgba(239,68,68,0.35)' : pct < 15 ? 'rgba(251,191,36,0.35)' : 'rgba(34,197,94,0.35)';
+    return `<span class="spec-chip" title="Cena ${price}€ − nákup ${cost}€" style="border-color:${border};color:${color}">Marža ${margin.toFixed(0)}€ (${pct}%)</span>`;
+}
 
 async function loadProductViews() {
     if (useLocalStorage || !hasSupabaseWriteAuth()) return;
@@ -4076,6 +4137,7 @@ async function loadProducts() {
         if (!useLocalStorage && hasSupabaseWriteAuth()) {
             await loadWarehouses(true);
             loadProductViews();
+            loadProductCosts();
         }
     } catch(e) {
         const fallbackProducts = getBundledProducts();
@@ -5419,8 +5481,16 @@ function getFilteredOrders() {
     const filter = document.getElementById('order-filter')?.value || currentOrderFilter || 'all';
     const search = (document.getElementById('order-search')?.value || '').trim().toLowerCase();
     currentOrderFilter = filter;
+    const now = Date.now();
+    const hoursOld = v => v ? (now - new Date(v).getTime()) / 3600000 : 0;
     return allOrders.filter(order => {
-        const statusOk = filter === 'all' || order.status === filter;
+        const needsAction = order.status !== 'cancelled' && order.status !== 'done' && (
+            ((order.payment_status || 'pending') === 'pending' && hoursOld(order.created_at) > 24) ||
+            (order.payment_status === 'failed') ||
+            (['confirmed', 'packed'].includes(order.status) && hoursOld(order.created_at) > 48) ||
+            (order.status === 'new')
+        );
+        const statusOk = filter === 'all' || (filter === 'needs_action' ? needsAction : order.status === filter);
         const haystack = [
             order.order_number,
             order.customer_name,
@@ -5474,6 +5544,7 @@ function renderOrders() {
         <div class="order-card">
             <div class="order-top">
                 <div>
+                    <label style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:var(--muted);cursor:pointer"><input type="checkbox" data-admin-action="toggleBulkOrderSelect" data-id="${Number(order.id)}" ${bulkOrderSelected.has(Number(order.id)) ? 'checked' : ''} style="width:15px;height:15px;accent-color:#60a5fa">výber</label>
                     <div class="order-num">${escapeHTML(order.order_number || ('#' + order.id))}</div>
                     <div class="order-meta">${escapeHTML(date)}</div>
                 </div>
@@ -5489,9 +5560,13 @@ function renderOrders() {
             <div class="order-meta">🧾 Faktúra: ${escapeHTML(invoiceStatusLabel(order.invoice_status))}${order.invoice_reference ? ' · ' + escapeHTML(order.invoice_reference) : ''}${invoiceUrl ? ` · <a href="${escapeHTML(invoiceUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">iDoklad</a>` : unsafeInvoiceUrl ? ' · ⚠️ neplatný link dokladu' : ''}</div>
             <div class="order-meta">📦 Sklad sync: ${escapeHTML(warehouseStatusLabel(order.warehouse_sync_status))}${order.warehouse_reference ? ' · ' + escapeHTML(order.warehouse_reference) : ''}</div>
             <div class="order-meta" style="margin-top:0.5rem">${order.terms_accepted ? '✅ Podmienky/GDPR potvrdené' : '⚠️ Chýba potvrdenie podmienok'}</div>
-            <div style="display:flex;gap:0.5rem;margin-top:0.6rem;align-items:center">
-                <input class="form-input" id="order-tracking-${Number(order.id)}" value="${escapeHTML(order.tracking_number || '')}" placeholder="Sledovacie číslo zásielky" maxlength="80" style="flex:1;min-height:38px;padding:0.45rem 0.7rem;font-size:0.82rem">
-                <button type="button" class="btn btn-ghost btn-sm" data-admin-action="saveOrderTracking" data-id="${Number(order.id)}">📦 Uložiť číslo</button>
+            <div style="display:flex;gap:0.4rem;margin-top:0.6rem;align-items:center;flex-wrap:wrap">
+                <select class="form-select" id="order-carrier-${Number(order.id)}" style="width:auto;min-height:38px;padding:0.4rem 0.5rem;font-size:0.8rem">
+                  ${CARRIER_PRESETS.map(c => `<option value="${c.id}" ${order.tracking_carrier === c.id ? 'selected' : ''}>${escapeHTML(c.label)}</option>`).join('')}
+                </select>
+                <input class="form-input" id="order-tracking-${Number(order.id)}" value="${escapeHTML(order.tracking_number || '')}" placeholder="Sledovacie číslo" maxlength="80" style="flex:1;min-width:120px;min-height:38px;padding:0.45rem 0.7rem;font-size:0.82rem">
+                <button type="button" class="btn btn-ghost btn-sm" data-admin-action="saveOrderTracking" data-id="${Number(order.id)}">📦 Uložiť</button>
+                ${safeExternalUrl(order.tracking_url) ? `<a href="${escapeHTML(safeExternalUrl(order.tracking_url))}" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-size:0.8rem">🔗 Sledovať</a>` : ''}
             </div>
             <div class="order-control-grid">
                 <select class="form-select" data-admin-action="updateOrderPaymentStatus" data-id="${Number(order.id)}">
@@ -5509,7 +5584,9 @@ function renderOrders() {
                     ${['new','confirmed','packed','sent','done','cancelled'].map(s => `<option value="${s}" ${order.status === s ? 'selected' : ''}>${orderStatusLabel(s)}</option>`).join('')}
                 </select>
                 <button type="button" class="btn btn-ghost btn-sm" data-admin-action="copyOrderSummary" data-id="${Number(order.id)}">Kopírovať</button>
-                <button type="button" class="btn btn-ghost btn-sm" data-admin-action="copyOrderPackingList" data-id="${Number(order.id)}">Baliť</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-admin-action="printPackingSlip" data-id="${Number(order.id)}">🖨️ Baliaci list</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-admin-action="copyOrderPackingList" data-id="${Number(order.id)}">Baliť (text)</button>
+                ${nextOrderStatus(order.status) ? `<button type="button" class="btn btn-success btn-sm" data-admin-action="fulfilOrder" data-id="${Number(order.id)}">✅ Vybaviť + list</button>` : ''}
                 <button type="button" class="btn btn-ghost btn-sm" data-admin-action="copyOrderInvoiceDraft" data-id="${Number(order.id)}">Faktúra</button>
                 <button type="button" class="btn btn-ghost btn-sm" data-admin-action="editOrderInvoiceData" data-id="${Number(order.id)}">Doklad údaje</button>
                 <button type="button" class="btn btn-ghost btn-sm" data-admin-action="downloadOrderInvoiceHtml" data-id="${Number(order.id)}">HTML</button>
@@ -5710,20 +5787,107 @@ async function updateOrderStatus(id, status) {
     }
 }
 
+// #11 Carrier presets — tracking-URL templates ({T} = tracking number)
+const CARRIER_PRESETS = [
+    { id: '', label: 'Dopravca…', url: '' },
+    { id: 'packeta', label: 'Packeta / Zásielkovňa', url: 'https://tracking.packeta.com/sk/?id={T}' },
+    { id: 'sps', label: 'SPS', url: 'https://www.sps-sro.sk/sledovanie-zasielky/?fbclid=&cislo={T}' },
+    { id: 'gls', label: 'GLS', url: 'https://gls-group.com/SK/sk/sledovanie-zasielok?match={T}' },
+    { id: 'dpd', label: 'DPD', url: 'https://www.dpd.com/sk/sk/sledovanie/?parcelNumber={T}' },
+    { id: 'posta', label: 'Slovenská pošta', url: 'https://tandt.posta.sk/en/parcel-services/{T}' },
+    { id: 'other', label: 'Iný dopravca', url: '' }
+];
+function carrierTrackingUrl(carrierId, trackingNumber) {
+    const c = CARRIER_PRESETS.find(x => x.id === carrierId);
+    if (!c || !c.url || !trackingNumber) return '';
+    return c.url.replace('{T}', encodeURIComponent(trackingNumber));
+}
+
 async function saveOrderTracking(id) {
     const order = allOrders.find(o => Number(o.id) === Number(id));
     if (!order) return;
     if (useLocalStorage) { showToast('⚠️ Sledovacie čísla sú dostupné v Supabase režime', true); return; }
     if (!(await ensureSupabaseWriteAuth(false))) { showToast('⚠️ Najprv pripoj Supabase admin zápis', true); return; }
     const tracking = String(document.getElementById(`order-tracking-${Number(id)}`)?.value || '').trim().slice(0, 80);
+    const carrier = String(document.getElementById(`order-carrier-${Number(id)}`)?.value || '').slice(0, 30);
+    const trackingUrl = carrierTrackingUrl(carrier, tracking).slice(0, 300);
     try {
-        await sb('PATCH', `orders?id=eq.${Number(id)}`, { tracking_number: tracking || null, updated_at: new Date().toISOString() });
-        allOrders = allOrders.map(o => Number(o.id) === Number(id) ? { ...o, tracking_number: tracking || null } : o);
-        showToast(tracking ? '✅ Sledovacie číslo uložené. Ulož ho pred prepnutím na „Odoslaná“, aby prišlo zákazníkovi v e-maile.' : '✅ Sledovacie číslo odstránené');
-        logAdminEvent('order_tracking_update', 'order', id, `Objednávka ${order.order_number || id}: sledovacie číslo ${tracking || '—'}`);
+        await sb('PATCH', `orders?id=eq.${Number(id)}`, {
+            tracking_number: tracking || null,
+            tracking_carrier: carrier || null,
+            tracking_url: trackingUrl || null,
+            updated_at: new Date().toISOString()
+        });
+        allOrders = allOrders.map(o => Number(o.id) === Number(id) ? { ...o, tracking_number: tracking || null, tracking_carrier: carrier || null, tracking_url: trackingUrl || null } : o);
+        renderOrders();
+        showToast(tracking ? '✅ Sledovanie uložené. Ulož ho pred prepnutím na „Odoslaná“, aby prišlo zákazníkovi v e-maile.' : '✅ Sledovanie odstránené');
+        logAdminEvent('order_tracking_update', 'order', id, `Objednávka ${order.order_number || id}: ${carrier || '—'} ${tracking || '—'}`);
     } catch(e) {
         showToast('❌ ' + (e.message || 'Uloženie zlyhalo'), true);
     }
+}
+
+// #9 One-click fulfil: advance status (which e-mails the customer) + open packing slip
+async function fulfilOrder(id) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) { showToast('⚠️ Objednávka sa nenašla', true); return; }
+    printPackingSlip(id);
+    await advanceOrderStatus(id);
+}
+
+// #10 Printable packing slip in a new window
+function printPackingSlip(id) {
+    const order = allOrders.find(o => Number(o.id) === Number(id));
+    if (!order) { showToast('⚠️ Objednávka sa nenašla', true); return; }
+    const items = Array.isArray(order.items) ? order.items : [];
+    const rows = items.map(it => `<tr><td style="text-align:center;font-size:20px">☐</td><td>${escapeHTML(it.name || 'Produkt')}</td><td style="text-align:center">${Number(it.qty || 1)}</td></tr>`).join('') || '<tr><td></td><td>Bez položiek</td><td></td></tr>';
+    const date = order.created_at ? new Date(order.created_at).toLocaleDateString('sk-SK') : '';
+    const html = `<!doctype html><html lang="sk"><head><meta charset="utf-8"><title>Baliaci list ${escapeHTML(order.order_number || '#' + order.id)}</title>
+<style>body{font-family:Arial,sans-serif;color:#111;margin:32px;line-height:1.5}h1{font-size:24px;margin:0 0 4px}.muted{color:#666;font-size:13px}.box{border:1px solid #ccc;border-radius:8px;padding:14px;margin:16px 0}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border-bottom:1px solid #ddd;padding:9px;text-align:left}th{background:#f3f4f6}@media print{body{margin:14mm}.no-print{display:none}}</style>
+</head><body>
+<h1>Baliaci list</h1>
+<div class="muted">Objednávka ${escapeHTML(order.order_number || '#' + order.id)} · ${escapeHTML(date)}</div>
+<div class="box"><strong>Doručiť:</strong><br>${escapeHTML(order.customer_name || '')}<br>${escapeHTML(order.address || '')}<br>${escapeHTML(order.customer_phone || '')} · ${escapeHTML(order.customer_email || '')}<br><strong>Doprava:</strong> ${escapeHTML(order.delivery || '')}${order.tracking_number ? `<br><strong>Sledovanie:</strong> ${escapeHTML(order.tracking_number)}` : ''}</div>
+<table><thead><tr><th style="width:40px">✓</th><th>Položka</th><th style="width:60px">Ks</th></tr></thead><tbody>${rows}</tbody></table>
+${order.note ? `<div class="box"><strong>Poznámka:</strong><br>${escapeHTML(order.note)}</div>` : ''}
+<p class="muted">Skontroluj obsah pred zabalením. Computrax.</p>
+<p class="no-print"><button onclick="window.print()">🖨️ Tlačiť</button></p>
+</body></html>`;
+    const w = window.open('', '_blank');
+    if (!w) { showToast('⚠️ Povoľ vyskakovacie okná pre tlač', true); return; }
+    w.document.write(html);
+    w.document.close();
+}
+
+// #12 Bulk order status
+const bulkOrderSelected = new Set();
+function toggleBulkOrderSelect(id, checked) {
+    if (checked) bulkOrderSelected.add(Number(id)); else bulkOrderSelected.delete(Number(id));
+    const bar = document.getElementById('bulk-order-bar');
+    const count = document.getElementById('bulk-order-count');
+    if (bar) bar.style.display = bulkOrderSelected.size ? 'flex' : 'none';
+    if (count) count.textContent = `${bulkOrderSelected.size} objednávok`;
+}
+async function bulkAdvanceOrders() {
+    const ids = [...bulkOrderSelected];
+    if (!ids.length) return;
+    if (!(await ensureSupabaseWriteAuth(false))) { showToast('⚠️ Najprv pripoj Supabase admin zápis', true); return; }
+    let done = 0;
+    for (const id of ids) {
+        const order = allOrders.find(o => Number(o.id) === Number(id));
+        const next = order && nextOrderStatus(order.status);
+        if (next) { try { await updateOrderStatus(id, next); done++; } catch (e) { /* continue */ } }
+    }
+    bulkOrderSelected.clear();
+    document.getElementById('bulk-order-bar')?.style && (document.getElementById('bulk-order-bar').style.display = 'none');
+    await loadOrders();
+    showToast(`✅ Posunutých ${done} objednávok (zákazníci dostali e-mail)`);
+}
+function bulkClearOrders() {
+    bulkOrderSelected.clear();
+    document.querySelectorAll('#orders-grid input[data-admin-action="toggleBulkOrderSelect"]').forEach(cb => { cb.checked = false; });
+    const bar = document.getElementById('bulk-order-bar');
+    if (bar) bar.style.display = 'none';
 }
 
 async function notifyCustomerOrderStatus(id, status) {
@@ -5953,6 +6117,50 @@ function exportOrders() {
     copyText(csv, '📋 CSV filtrovaných objednávok skopírované');
 }
 
+function downloadTextFile(filename, text, mime = 'text/csv;charset=utf-8') {
+    const blob = new Blob(['﻿' + text], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+// #5 Accountant export — clean sales sheet with VAT breakdown, downloads as CSV
+function exportAccountingCsv() {
+    const settings = getSiteSettings();
+    const orders = allOrders.filter(o => o.status !== 'cancelled');
+    if (!orders.length) { showToast('⚠️ Nie sú žiadne objednávky na export', true); return; }
+    const vatModeLabel = { vat_included: 'Ceny s DPH 20%', non_payer: 'Neplatiteľ DPH', no_vat_note: 'Bez rozpisu DPH' };
+    const rows = [
+        ['Faktura_cislo', 'Datum', 'Objednavka', 'Zakaznik', 'Email', 'Suma_s_DPH_EUR', 'Zaklad_DPH_EUR', 'DPH_20_EUR', 'Rezim_DPH', 'Sposob_platby', 'Stav_platby', 'Doprava'],
+        ...orders.map(o => {
+            const d = invoiceData(o, settings);
+            return [
+                d.invoiceNo,
+                o.created_at ? new Date(o.created_at).toLocaleDateString('sk-SK') : '',
+                o.order_number || o.id,
+                o.customer_name || '',
+                o.customer_email || '',
+                Number(o.total || 0).toFixed(2),
+                d.vatMode === 'vat_included' ? d.base.toFixed(2) : '',
+                d.vatMode === 'vat_included' ? d.vat.toFixed(2) : '',
+                vatModeLabel[d.vatMode] || d.vatMode,
+                paymentMethodLabel(o.payment_method),
+                paymentStatusLabel(o.payment_status),
+                o.delivery || ''
+            ];
+        })
+    ];
+    const csv = rows.map(row => row.map(csvCell).join(';')).join('\r\n');
+    const stamp = new Date().toISOString().slice(0, 10);
+    downloadTextFile(`computrax-uctovnictvo-${stamp}.csv`, csv);
+    showToast(`📊 Export pre účtovníka stiahnutý (${orders.length} objednávok)`);
+}
+
 function exportWarehousePickList() {
     const orders = getFilteredOrders().filter(o => !['cancelled','done'].includes(o.status || 'new'));
     if (!orders.length) { showToast('⚠️ Nie sú žiadne objednávky pre sklad', true); return; }
@@ -6074,6 +6282,7 @@ function renderList() {
             (currentTab === 'office' && p.cat === 'office') ||
             (currentTab === 'retro' && p.cat === 'retro') ||
             (currentTab === 'lowstock' && Number(p.stock || 0) > 0 && Number(p.stock || 0) <= 2) ||
+            (currentTab === 'draft' && p.status === 'draft') ||
             (currentTab === 'sold' && (p.stock === 0 || p.status === 'sold'));
         const matchSearch = !search || (p.name || '').toLowerCase().includes(search);
         return matchTab && matchSearch;
@@ -6104,6 +6313,7 @@ function renderList() {
         <div class="pc-admin-card ${sold ? 'sold' : ''}">
             ${img ? `<img src="${escapeHTML(img)}" alt="${escapeHTML(p.name || 'Produkt')}" class="pc-card-img" loading="lazy" decoding="async" width="1000" height="750" data-admin-product-image>` : `<div class="pc-card-img-placeholder">🖥️</div>`}
             <div class="card-top">
+                <label style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.72rem;color:var(--muted);cursor:pointer"><input type="checkbox" data-admin-action="toggleBulkSelect" data-id="${Number(p.id)}" ${bulkSelected.has(Number(p.id)) ? 'checked' : ''} style="width:16px;height:16px;accent-color:#60a5fa">výber</label>
                 <span class="cat-badge ${p.cat === 'gaming' ? 'cat-gaming' : p.cat === 'retro' ? 'cat-retro' : 'cat-office'}">${p.cat === 'gaming' ? '🎮 Gaming' : p.cat === 'retro' ? '🕹️ Retro' : '💼 Office'}</span>
                 <span class="status-pill ${pillClass}">${escapeHTML(pillLabel)}</span>
             </div>
@@ -6111,6 +6321,7 @@ function renderList() {
             <div class="pc-admin-price">${escapeHTML(p.price)}€ <button type="button" class="sq-btn" data-admin-action="editProductPrice" data-id="${Number(p.id)}" title="Upraviť cenu" style="font-size:0.72rem;padding:2px 7px;vertical-align:middle">✏️</button></div>
             <div class="pc-admin-specs">
                 ${p.tested_at ? '<span class="spec-chip" style="border-color:rgba(34,197,94,0.45);color:#4ade80">🛡️ Computrax Tested</span>' : `<span class="spec-chip" style="border-color:rgba(148,163,184,0.3);color:var(--muted)">QC: ${QC_ITEMS.filter(item => (p.test_checklist || {})[item.key]).length}/${QC_ITEMS.length}</span>`}
+                ${productMarginChip(p)}
                 ${productViewsChip(p.id)}
                 <span class="spec-chip">Stav: ${escapeHTML(p.pc_condition || 'Repasované - veľmi dobrý stav')}</span>
                 ${p.cpu ? `<span class="spec-chip">CPU: ${escapeHTML(p.cpu)}</span>` : ''}
@@ -6622,6 +6833,221 @@ async function quickStock(id, delta) {
     } catch(e) { showToast('❌ ' + e.message, true); }
 }
 
+// #2 (idea) AI product-description draft — fills fields, admin approves before saving
+const ADMIN_ASSISTANT_ENDPOINT = `${SB_URL}/functions/v1/admin-assistant`;
+async function generateProductDescription() {
+    if (useLocalStorage) { showToast('⚠️ AI návrh je dostupný v Supabase režime', true); return; }
+    if (!(await ensureSupabaseWriteAuth(false))) { showToast('⚠️ Najprv pripoj Supabase admin zápis', true); return; }
+    const name = String(document.getElementById('f-name')?.value || '').trim();
+    if (name.length < 3) { showToast('⚠️ Najprv vyplň názov produktu', true); document.getElementById('f-name')?.focus(); return; }
+    const payload = {
+        name,
+        cat: document.getElementById('f-cat')?.value || '',
+        cpu: document.getElementById('f-cpu')?.value || '',
+        gpu: document.getElementById('f-gpu')?.value || '',
+        ram: document.getElementById('f-ram')?.value || '',
+        ssd: document.getElementById('f-ssd')?.value || '',
+        os: document.getElementById('f-os')?.value || '',
+        condition: document.getElementById('f-condition')?.value || ''
+    };
+    const btn = document.querySelector('[data-admin-action="generateProductDescription"]');
+    const original = btn?.textContent;
+    if (btn) { btn.textContent = '✨ Generujem…'; btn.disabled = true; }
+    try {
+        const res = await fetchWithTimeout(ADMIN_ASSISTANT_ENDPOINT, {
+            method: 'POST',
+            headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${authSession.access_token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }, 25000);
+        const data = parseResponseJson(await res.text(), {}) || {};
+        if (!res.ok || !data.note) {
+            showToast('⚠️ ' + cleanImportedText(data.message || 'AI návrh sa nepodaril', 160), true);
+            return;
+        }
+        const noteField = document.getElementById('f-condition-note');
+        if (noteField) { noteField.value = String(data.note).slice(0, 320); }
+        if (data.seoTitle) {
+            await copyText(String(data.seoTitle), '📋 SEO titulok skopírovaný do schránky');
+        }
+        showToast('✨ Návrh doplnený — skontroluj a uprav pred uložením');
+    } catch (e) {
+        showToast('❌ ' + (e.message || 'AI služba je nedostupná'), true);
+    } finally {
+        if (btn) { btn.textContent = original; btn.disabled = false; }
+    }
+}
+
+// #2 Bulk product actions
+const bulkSelected = new Set();
+function toggleBulkSelect(id, checked) {
+    if (checked) bulkSelected.add(Number(id)); else bulkSelected.delete(Number(id));
+    updateBulkBar();
+}
+function updateBulkBar() {
+    const bar = document.getElementById('bulk-bar');
+    const count = document.getElementById('bulk-count');
+    if (!bar) return;
+    bar.style.display = bulkSelected.size ? 'flex' : 'none';
+    if (count) count.textContent = `${bulkSelected.size} vybraných`;
+}
+function bulkClear() {
+    bulkSelected.clear();
+    document.querySelectorAll('#pc-grid input[data-admin-action="toggleBulkSelect"]').forEach(cb => { cb.checked = false; });
+    updateBulkBar();
+}
+function selectedBulkProducts() {
+    return allProducts.filter(p => bulkSelected.has(Number(p.id)));
+}
+async function bulkSetStatus(status, label) {
+    const items = selectedBulkProducts();
+    if (!items.length) return;
+    if (useLocalStorage) {
+        allProducts = allProducts.map(p => bulkSelected.has(Number(p.id)) ? { ...p, status } : p);
+        saveLocal();
+    } else {
+        if (!(await ensureSupabaseWriteAuth(true))) return;
+        for (const p of items) {
+            try { await sb('PATCH', `products?id=eq.${Number(p.id)}`, { status }); } catch (e) { /* continue */ }
+        }
+    }
+    await logAdminEvent('bulk_status', 'product', 'multiple', `Hromadne ${label}: ${items.length} produktov`);
+    bulkClear();
+    await loadProducts();
+    markProductsUpdated();
+    loadAdminEvents();
+    showToast(`✅ ${label}: ${items.length} produktov`);
+}
+async function bulkActivate() {
+    const items = selectedBulkProducts();
+    const noPhoto = items.filter(p => !safeImageUrl(p.image_url || p.imageUrl || ''));
+    if (noPhoto.length) {
+        showToast(`⚠️ ${noPhoto.length} produktov nemá fotku — tie sa nezverejnia. Doplň fotku a skús znova.`, true);
+    }
+    const ready = items.filter(p => safeImageUrl(p.image_url || p.imageUrl || ''));
+    if (!ready.length) return;
+    if (useLocalStorage) {
+        allProducts = allProducts.map(p => ready.some(r => Number(r.id) === Number(p.id)) ? { ...p, status: 'active' } : p);
+        saveLocal();
+    } else {
+        if (!(await ensureSupabaseWriteAuth(true))) return;
+        for (const p of ready) { try { await sb('PATCH', `products?id=eq.${Number(p.id)}`, { status: 'active' }); } catch (e) { /* continue */ } }
+    }
+    await logAdminEvent('bulk_status', 'product', 'multiple', `Hromadne aktivované: ${ready.length} produktov`);
+    bulkClear();
+    await loadProducts();
+    markProductsUpdated();
+    loadAdminEvents();
+    showToast(`✅ Aktivované: ${ready.length} produktov`);
+}
+function bulkDeactivate() { bulkSetStatus('sold', 'označené vypredané'); }
+async function bulkPriceChange() {
+    const items = selectedBulkProducts();
+    if (!items.length) return;
+    const input = prompt(`Zmeniť cenu o koľko %? (napr. -10 zlacní, 5 zdraží) — ${items.length} produktov:`, '');
+    if (input === null) return;
+    const pct = Number(String(input).replace(',', '.'));
+    if (!Number.isFinite(pct) || pct === 0 || pct < -90 || pct > 200) { showToast('⚠️ Zadaj % v rozsahu -90 až 200', true); return; }
+    if (!useLocalStorage && !(await ensureSupabaseWriteAuth(true))) return;
+    for (const p of items) {
+        const newPrice = Math.max(0, Math.round(Number(p.price || 0) * (1 + pct / 100)));
+        try {
+            if (useLocalStorage) {
+                allProducts = allProducts.map(x => Number(x.id) === Number(p.id) ? { ...x, price: newPrice } : x);
+            } else {
+                await sb('PATCH', `products?id=eq.${Number(p.id)}`, { price: newPrice });
+            }
+        } catch (e) { /* continue */ }
+    }
+    if (useLocalStorage) saveLocal();
+    await logAdminEvent('bulk_price', 'product', 'multiple', `Hromadná zmena ceny ${pct}%: ${items.length} produktov`);
+    bulkClear();
+    await loadProducts();
+    markProductsUpdated();
+    loadAdminEvents();
+    showToast(`💶 Cena zmenená o ${pct}% pri ${items.length} produktoch`);
+}
+async function bulkDelete() {
+    const items = selectedBulkProducts();
+    if (!items.length) return;
+    if (!confirm(`Naozaj vymazať ${items.length} produktov? Táto akcia je nevratná.`)) return;
+    if (!useLocalStorage && !(await ensureSupabaseWriteAuth(true))) return;
+    for (const p of items) {
+        try {
+            if (useLocalStorage) {
+                allProducts = allProducts.filter(x => Number(x.id) !== Number(p.id));
+            } else {
+                await sb('DELETE', `products?id=eq.${Number(p.id)}`);
+            }
+        } catch (e) { /* continue */ }
+    }
+    if (useLocalStorage) saveLocal();
+    await logAdminEvent('bulk_delete', 'product', 'multiple', `Hromadné vymazanie: ${items.length} produktov`);
+    bulkClear();
+    await loadProducts();
+    markProductsUpdated();
+    loadAdminEvents();
+    showToast(`🗑️ Vymazaných ${items.length} produktov`);
+}
+
+// #5 Global search: jump to the best match across products / orders / customers
+function runGlobalSearch() {
+    const q = String(document.getElementById('global-search')?.value || '').trim().toLowerCase();
+    if (!q) return;
+    const product = allProducts.find(p => String(p.name || '').toLowerCase().includes(q));
+    if (product) {
+        showAdminSection('products');
+        const searchBox = document.getElementById('admin-search');
+        if (searchBox) { searchBox.value = q; }
+        const btn = [...document.querySelectorAll('.ftab')].find(el => el.dataset.tab === 'all');
+        setTab('all', btn);
+        showToast(`🖥️ Produkt: ${product.name}`);
+        return;
+    }
+    const order = allOrders.find(o =>
+        String(o.order_number || '').toLowerCase().includes(q) ||
+        String(o.customer_name || '').toLowerCase().includes(q) ||
+        String(o.customer_email || '').toLowerCase().includes(q));
+    if (order) {
+        showAdminSection('orders');
+        const os = document.getElementById('order-search');
+        if (os) { os.value = q; renderOrders(); }
+        showToast(`📦 Objednávka: ${order.order_number || '#' + order.id}`);
+        return;
+    }
+    const customer = (customersCache || []).find(c =>
+        String(c.customer_name || '').toLowerCase().includes(q) ||
+        String(c.customer_email || '').toLowerCase().includes(q));
+    if (customer) {
+        showAdminSection('customers');
+        setTimeout(() => { const cs = document.getElementById('customer-search'); if (cs) { cs.value = q; renderCustomers(); } }, 300);
+        showToast(`👤 Zákazník: ${customer.customer_name || customer.customer_email}`);
+        return;
+    }
+    showToast('🔎 Nič sa nenašlo pre: ' + q, true);
+}
+
+// #6 Undo: remember the inverse of the last quick change for ~30s
+let lastUndoable = null;
+let lastUndoTimer = null;
+function registerUndo(label, revertFn) {
+    lastUndoable = { label, revertFn };
+    clearTimeout(lastUndoTimer);
+    lastUndoTimer = setTimeout(() => { lastUndoable = null; }, 30000);
+    showToast(`${label} · stlač Z pre späť`);
+}
+async function undoLastAction() {
+    if (!lastUndoable) return;
+    const action = lastUndoable;
+    lastUndoable = null;
+    clearTimeout(lastUndoTimer);
+    try {
+        await action.revertFn();
+        showToast('↩️ Vrátené späť');
+    } catch (e) {
+        showToast('❌ Späť sa nepodarilo: ' + (e.message || ''), true);
+    }
+}
+
 // Inline price edit from the product card
 async function editProductPrice(id) {
     const p = allProducts.find(x => Number(x.id) === Number(id));
@@ -6631,6 +7057,7 @@ async function editProductPrice(id) {
     const price = parseInt(String(input).replace(/[^\d]/g, ''), 10);
     if (!Number.isFinite(price) || price < 0 || price > 100000) { showToast('⚠️ Zadaj cenu 0 – 100 000 €', true); return; }
     if (price === Number(p.price)) return;
+    const oldPrice = Number(p.price || 0);
     try {
         if (useLocalStorage) {
             allProducts = allProducts.map(item => Number(item.id) === Number(id) ? { ...item, price } : item);
@@ -6639,11 +7066,20 @@ async function editProductPrice(id) {
             if (!(await ensureSupabaseWriteAuth(true))) return;
             await sb('PATCH', `products?id=eq.${Number(id)}`, { price });
         }
-        await logAdminEvent('price_update', 'product', id, `${p.name}: cena ${Number(p.price || 0)}€ → ${price}€`, { old_price: Number(p.price || 0), new_price: price });
+        await logAdminEvent('price_update', 'product', id, `${p.name}: cena ${oldPrice}€ → ${price}€`, { old_price: oldPrice, new_price: price });
         await loadProducts();
         markProductsUpdated();
         loadAdminEvents();
-        showToast(`💶 Cena upravená: ${price}€`);
+        registerUndo(`💶 Cena upravená: ${price}€`, async () => {
+            if (useLocalStorage) {
+                allProducts = allProducts.map(item => Number(item.id) === Number(id) ? { ...item, price: oldPrice } : item);
+                saveLocal();
+            } else {
+                await sb('PATCH', `products?id=eq.${Number(id)}`, { price: oldPrice });
+            }
+            await loadProducts();
+            markProductsUpdated();
+        });
     } catch(e) { showToast('❌ ' + e.message, true); }
 }
 
@@ -6706,6 +7142,12 @@ async function toggleStatus(id) {
     const p = allProducts.find(x => x.id === id);
     if (!p) return;
     const ns = p.status === 'sold' ? 'active' : 'sold';
+    const oldStatus = p.status;
+    if (ns === 'active' && !safeImageUrl(p.image_url || p.imageUrl || '')) {
+        showToast('⚠️ Nedá sa zverejniť bez fotky. Otvor ✏️ Upraviť a doplň fotku.', true);
+        renderList();
+        return;
+    }
     try {
         if (useLocalStorage) {
             allProducts = allProducts.map(item => Number(item.id) === Number(id) ? { ...item, status: ns } : item);
@@ -6713,11 +7155,20 @@ async function toggleStatus(id) {
         } else {
             await sb('PATCH', `products?id=eq.${id}`, { status: ns });
         }
-        await logAdminEvent('product_status_update', 'product', id, `${p.name}: status ${p.status} → ${ns}`, { old_status: p.status, new_status: ns });
+        await logAdminEvent('product_status_update', 'product', id, `${p.name}: status ${oldStatus} → ${ns}`, { old_status: oldStatus, new_status: ns });
         await loadProducts();
         markProductsUpdated();
         loadAdminEvents();
-        showToast(ns === 'sold' ? '🔴 Označené ako vypredané' : '🟢 Aktivované');
+        registerUndo(ns === 'sold' ? '🔴 Označené ako vypredané' : '🟢 Aktivované', async () => {
+            if (useLocalStorage) {
+                allProducts = allProducts.map(item => Number(item.id) === Number(id) ? { ...item, status: oldStatus } : item);
+                saveLocal();
+            } else {
+                await sb('PATCH', `products?id=eq.${id}`, { status: oldStatus });
+            }
+            await loadProducts();
+            markProductsUpdated();
+        });
     } catch(e) { showToast('❌ ' + e.message, true); }
 }
 
@@ -6826,6 +7277,7 @@ async function openEdit(id) {
     document.getElementById('modal-title').textContent = '✏️ Upraviť: ' + p.name;
     document.getElementById('f-name').value = p.name || '';
     document.getElementById('f-price').value = p.price || '';
+    document.getElementById('f-cost').value = productCostMap.get(Number(p.id)) || '';
     document.getElementById('f-stock').value = p.stock ?? 1;
     document.getElementById('f-sku').value = p.sku || '';
     document.getElementById('f-warehouse-sku').value = p.warehouse_sku || '';
@@ -6872,7 +7324,7 @@ function closeModal() {
 }
 
 function clearForm() {
-    ['f-name','f-price','f-tag','f-cpu','f-gpu','f-ram','f-ssd','f-image-url','f-sku','f-warehouse-sku','f-warehouse-location','f-external-id'].forEach(id => document.getElementById(id).value = '');
+    ['f-name','f-price','f-cost','f-tag','f-cpu','f-gpu','f-ram','f-ssd','f-image-url','f-sku','f-warehouse-sku','f-warehouse-location','f-external-id'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('f-stock').value = 1;
     document.getElementById('f-cat').value = 'gaming';
     document.getElementById('f-status').value = 'active';
@@ -6989,6 +7441,19 @@ async function saveProduct() {
         data.warehouse_sku = mainAllocation.warehouse_sku || data.warehouse_sku;
         data.warehouse_location = mainAllocation.location || data.warehouse_location;
     }
+    // #3 Photo/spec gate: a product can't go live to customers half-empty
+    if (data.status === 'active') {
+        const missing = [];
+        if (!imageUrl) missing.push('fotku');
+        if (!String(data.cpu || '').trim()) missing.push('CPU');
+        if (!(Number(data.price) > 0)) missing.push('cenu');
+        if (missing.length) {
+            showToast(`⚠️ Pred zverejnením doplň: ${missing.join(', ')}. Alebo zmeň stav na 📝 Koncept a doplň neskôr.`, true);
+            saveBtn.textContent = originalSaveText;
+            saveBtn.disabled = false;
+            return;
+        }
+    }
     if (!data.sku) data.sku = generatedProductSku({ ...data, id: editingId || Date.now() });
     if (!data.warehouse_sku) data.warehouse_sku = data.sku;
     try {
@@ -7013,6 +7478,8 @@ async function saveProduct() {
             await saveProductInventoryAllocations(savedProductId, allocations);
             showToast('✅ Nový PC pridaný');
         }
+        const costValue = parseInt(String(document.getElementById('f-cost')?.value || '').replace(/[^\d]/g, ''), 10) || 0;
+        if (!useLocalStorage && savedProductId) await saveProductCost(savedProductId, costValue);
         await logAdminEvent(wasEditing ? 'product_update' : 'product_create', 'product', auditId, `${wasEditing ? 'Upravený' : 'Pridaný'} produkt: ${name}`, {
             name,
             price,
@@ -7760,6 +8227,16 @@ function showCustomerOrders(email) {
 const ADMIN_ACTIONS = {
     login,
     quickAddProduct,
+    runGlobalSearch,
+    bulkActivate,
+    bulkDeactivate,
+    bulkPriceChange,
+    bulkDelete,
+    bulkClear,
+    bulkAdvanceOrders,
+    bulkClearOrders,
+    exportAccountingCsv,
+    generateProductDescription,
     loadEmailTemplates,
     saveEmailSettings,
     loadCustomers,
@@ -7845,6 +8322,8 @@ const ADMIN_ID_ACTIONS = {
     copyPaymentReminder,
     advanceOrderStatus,
     saveOrderTracking,
+    fulfilOrder,
+    printPackingSlip,
     editProductPrice,
     setProductStock,
     toggleStatus,
@@ -7882,6 +8361,8 @@ function handleAdminDelegatedAction(event) {
     }
     if (event.type === 'change') {
         if (action === 'updateQcStatusPill') updateQcStatusPill();
+        if (action === 'toggleBulkSelect') toggleBulkSelect(Number(actionEl.dataset.id), actionEl.checked);
+        if (action === 'toggleBulkOrderSelect') toggleBulkOrderSelect(Number(actionEl.dataset.id), actionEl.checked);
         if (action === 'renderOrders') renderOrders();
         if (action === 'renderList') renderList();
         if (action === 'autoFillProductFilters') autoFillProductFilters(false);
@@ -7984,6 +8465,40 @@ document.addEventListener('keydown', event => {
     if (!action || !ADMIN_ACTIONS[action]) return;
     event.preventDefault();
     ADMIN_ACTIONS[action]();
+});
+
+// #7 Keyboard shortcuts (ignored while typing in a field or a modal is open)
+document.addEventListener('keydown', event => {
+    const tag = (event.target?.tagName || '').toLowerCase();
+    const typing = ['input', 'textarea', 'select'].includes(tag) || event.target?.isContentEditable;
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+    const modalOpen = document.querySelector('.modal-bg.open, .del-modal.open');
+    if (typing || modalOpen) return;
+    if (document.getElementById('admin')?.style.display === 'none') return;
+    if (event.key === 'n' || event.key === 'N') {
+        event.preventDefault();
+        showAdminSection('products');
+        openModal();
+    } else if (event.key === '/') {
+        event.preventDefault();
+        showAdminSection('products');
+        document.getElementById('admin-search')?.focus();
+    } else if (event.key === 'z' && lastUndoable) {
+        event.preventDefault();
+        undoLastAction();
+    }
+});
+
+// #4 Paste an image directly into the open product editor (Ctrl/Cmd+V)
+document.addEventListener('paste', event => {
+    if (!document.getElementById('product-modal')?.classList.contains('open')) return;
+    const item = [...(event.clipboardData?.items || [])].find(i => i.type && i.type.startsWith('image/'));
+    if (!item) return;
+    const file = item.getAsFile();
+    if (!file) return;
+    event.preventDefault();
+    handleImageSelect({ files: [file], value: '' });
+    showToast('📋 Fotka vložená zo schránky');
 });
 </script>
 </body>
