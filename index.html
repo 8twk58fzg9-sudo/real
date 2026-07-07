@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="sk" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-title" content="Computrax">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="theme-color" content="#0b0f1a">
+    <meta name="theme-color" content="#f4f6fb">
     <meta name="robots" content="index,follow,max-image-preview:large">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://aryjaqexfgalxaiseqtp.supabase.co https://*.supabase.co; media-src 'self'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
@@ -1072,6 +1072,129 @@
         @media (max-width: 500px) {
             #product-modal .product-detail-buybar { bottom: -1.4rem; margin-left: -1.4rem; margin-right: -1.4rem; margin-bottom: -1.4rem; padding-left: 1.4rem; padding-right: 1.4rem; }
         }
+
+        /* ===== Refurbed-style two-path hero ===== */
+        .hero-paths { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.9rem; align-items: stretch; margin: 1.6rem 0 1.4rem; max-width: 640px; }
+        .hero-path { display: flex; flex-direction: column; gap: 0.35rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: 18px; background: var(--card-bg); text-decoration: none; color: var(--text); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+        .hero-path:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 16px 34px rgba(37,99,235,0.16); }
+        .hero-path-icon { font-size: 1.7rem; line-height: 1; }
+        .hero-path strong { font-family: 'Outfit', sans-serif; font-size: 1.18rem; }
+        .hero-path-sub { color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
+        .hero-path-cta { margin-top: auto; color: var(--accent); font-weight: 800; font-size: 0.9rem; padding-top: 0.4rem; }
+        .hero-path-or { align-self: center; color: var(--muted); font-weight: 800; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.09em; }
+        .hero-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; }
+        @media (max-width: 720px) {
+            .hero-paths { grid-template-columns: 1fr; max-width: 100%; }
+            .hero-path-or { padding: 0.15rem 0; }
+            .hero-cols { grid-template-columns: 1fr; }
+        }
+
+        /* ===== LIGHT THEME (Refurbed style). Toggle: remove data-theme="light" on <html> to revert. ===== */
+        :root[data-theme="light"] {
+            --bg: #f4f6fb;
+            --card-bg: #ffffff;
+            --accent: #2563eb;
+            --accent-glow: rgba(37,99,235,0.22);
+            --action: #2563eb;
+            --action-hover: #1d4ed8;
+            --text: #0f172a;
+            --muted: #56606f;
+            --glass: #ffffff;
+            --border: rgba(15,23,42,0.11);
+        }
+        :root[data-theme="light"] body { background: #f4f6fb; }
+        :root[data-theme="light"] nav { background: rgba(255,255,255,0.92); border-bottom: 1px solid rgba(15,23,42,0.08); }
+        :root[data-theme="light"] .logo { color: var(--text); }
+        :root[data-theme="light"] .nav-menu-btn { background: #eef2f8; color: var(--text); }
+        :root[data-theme="light"] .nav-search input,
+        :root[data-theme="light"] .quiz-field input, :root[data-theme="light"] .quiz-field select, :root[data-theme="light"] .quiz-field textarea,
+        :root[data-theme="light"] .b2b-inquiry-form input, :root[data-theme="light"] .b2b-inquiry-form select, :root[data-theme="light"] .b2b-inquiry-form textarea,
+        :root[data-theme="light"] .auth-field input, :root[data-theme="light"] .auth-field select, :root[data-theme="light"] .auth-field textarea,
+        :root[data-theme="light"] .filter-select { background: #fff; border: 1px solid rgba(15,23,42,0.14); color: var(--text); }
+        :root[data-theme="light"] .filter-btn, :root[data-theme="light"] .filter-reset { background: #fff; border: 1px solid rgba(15,23,42,0.12); color: var(--text); }
+        :root[data-theme="light"] .filter-btn.active { background: var(--action); color: #fff; border-color: var(--action); }
+        :root[data-theme="light"] .filter-panel { background: #fff; border: 1px solid rgba(15,23,42,0.08); box-shadow: 0 10px 30px rgba(15,23,42,0.05); }
+        /* Cards & surfaces → solid light */
+        :root[data-theme="light"] .pc-card,
+        :root[data-theme="light"] .category-card,
+        :root[data-theme="light"] .hero-showcase,
+        :root[data-theme="light"] .hero-monitor,
+        :root[data-theme="light"] .compare-content,
+        :root[data-theme="light"] .cart-panel,
+        :root[data-theme="light"] .shop-entry,
+        :root[data-theme="light"] .info-hub { background: #ffffff; border-color: rgba(15,23,42,0.1); }
+        :root[data-theme="light"] .pc-card { box-shadow: 0 12px 30px rgba(15,23,42,0.07); }
+        :root[data-theme="light"] .pc-card:hover { box-shadow: 0 20px 44px rgba(15,23,42,0.12); border-color: var(--accent); }
+        :root[data-theme="light"] .hero-showcase::before,
+        :root[data-theme="light"] .hero-monitor::after { display: none; }
+        :root[data-theme="light"] .hero-spec, :root[data-theme="light"] .spec-chip, :root[data-theme="light"] .hero-stock-card { background: #f4f6fb; border-color: rgba(15,23,42,0.08); }
+        :root[data-theme="light"] .buy-confidence-item, :root[data-theme="light"] .product-fit-card, :root[data-theme="light"] .fps-estimate-item, :root[data-theme="light"] .fps-tier-card { background: #f8fafc; border-color: rgba(15,23,42,0.08); }
+        :root[data-theme="light"] .service-teaser { background: #f4f6fb; border-color: rgba(15,23,42,0.08); }
+        :root[data-theme="light"] footer { background: #0b1220; }
+        :root[data-theme="light"] footer, :root[data-theme="light"] footer p, :root[data-theme="light"] footer a, :root[data-theme="light"] .footer-trust-line, :root[data-theme="light"] .footer-contact a { color: #cbd5e1; }
+        :root[data-theme="light"] footer h4 { color: #fff; }
+        /* Cart panel & modals readable */
+        :root[data-theme="light"] .cart-header, :root[data-theme="light"] .cart-footer, :root[data-theme="light"] .cart-item { background: #fff; border-color: rgba(15,23,42,0.1); }
+        /* Fix low-contrast light-on-tint texts for white background */
+        :root[data-theme="light"] .hero-stock-pill,
+        :root[data-theme="light"] .site-announcement,
+        :root[data-theme="light"] .condition-strip strong,
+        :root[data-theme="light"] .test-check,
+        :root[data-theme="light"] .checkout-assurance b { color: #15803d; }
+        :root[data-theme="light"] .hero-cta-note { color: var(--muted); }
+        :root[data-theme="light"] .perf-label { color: #1d4ed8; background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.2); }
+        :root[data-theme="light"] .account-btn.logged-in { color: #166534; }
+        :root[data-theme="light"] .review-card { background: #fff; }
+        :root[data-theme="light"] .cookie-banner { background: #fff; border-color: rgba(15,23,42,0.12); }
+        :root[data-theme="light"] .cookie-banner p { color: var(--text); }
+        :root[data-theme="light"] .toast { background: #0b1220; color: #fff; }
+        :root[data-theme="light"] .usecase-item, :root[data-theme="light"] .recent-item, :root[data-theme="light"] .b2b-panel, :root[data-theme="light"] .pc-image { background: #f4f6fb; border-color: rgba(15,23,42,0.08); }
+        :root[data-theme="light"] .filter-select option, :root[data-theme="light"] .wizard-input option, :root[data-theme="light"] .form-group select option, :root[data-theme="light"] select option { background: #fff; color: #0f172a; }
+        :root[data-theme="light"] .advisor-match { background: #f4f8ff; border-color: rgba(37,99,235,0.18); }
+        :root[data-theme="light"] .quiz-need, :root[data-theme="light"] .checkout-assurance, :root[data-theme="light"] .product-detail-services { background: #f8fafc; }
+        :root[data-theme="light"] .info-hub-link:hover, :root[data-theme="light"] .info-hub-link:focus-visible { background: #eef3ff; border-color: var(--accent); }
+        :root[data-theme="light"] .info-hub-link { background: #f8fafc; }
+
+        /* ===== Design upgrade: condition grade, icon specs, tested seal, FPS bars ===== */
+        .card-badge-row { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; margin: 0.2rem 0 0.75rem; }
+        .card-badge-row .product-category-badge { margin: 0; }
+        .cond-pill { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.34rem 0.7rem; border-radius: 999px; font-size: 0.72rem; font-weight: 800; color: var(--cd); background: color-mix(in srgb, var(--cd) 13%, transparent); border: 1px solid color-mix(in srgb, var(--cd) 32%, transparent); white-space: nowrap; }
+        .cond-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cd); flex: 0 0 auto; }
+        .spec-chip .spec-ico { display: block; font-size: 0.95rem; line-height: 1; margin-bottom: 0.28rem; }
+        .tested-seal { font-size: 0.72rem; font-weight: 850; display: inline-flex; align-items: center; gap: 0.32rem; border-radius: 999px; padding: 0.28rem 0.6rem; color: #15803d; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.4); }
+        .fps-bar-row { display: grid; grid-template-columns: 92px 1fr auto; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+        .fps-bar-row > span:first-child { color: var(--text); font-size: 0.82rem; font-weight: 700; }
+        .fps-bar-track { height: 8px; border-radius: 999px; background: rgba(148,163,184,0.22); overflow: hidden; }
+        .fps-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #60a5fa, #22c55e); }
+        .fps-bar-row b { color: var(--text); font-size: 0.8rem; font-family: 'Outfit'; white-space: nowrap; }
+        :root[data-theme="light"] .fps-bar-track { background: rgba(15,23,42,0.1); }
+
+        /* ===== How-it-works trust band ===== */
+        .howto-band { padding: 1.5rem 8% 0.5rem; }
+        .howto-inner { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 0.8rem; max-width: 1100px; margin: 0 auto; border: 1px solid var(--border); border-radius: 18px; background: var(--card-bg); padding: 1.25rem 1.4rem; }
+        .howto-step { display: flex; align-items: center; gap: 0.8rem; min-width: 0; }
+        .howto-num { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff; font-family: 'Outfit'; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+        .howto-step strong { display: block; font-family: 'Outfit'; font-size: 0.98rem; }
+        .howto-step span { display: block; color: var(--muted); font-size: 0.82rem; line-height: 1.4; }
+        .howto-arrow { color: var(--accent); font-size: 1.3rem; font-weight: 900; }
+        @media (max-width: 820px) {
+            .howto-inner { grid-template-columns: 1fr; gap: 1rem; }
+            .howto-arrow { display: none; }
+        }
+
+        /* ===== Trust signals at decision points (research-backed) ===== */
+        .detail-trust-row { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0.8rem 0 0.2rem; border-top: 1px solid var(--border); margin-top: 0.5rem; }
+        .detail-trust-row span { font-size: 0.8rem; font-weight: 700; color: var(--muted); }
+        .secure-pay-row { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; align-items: center; justify-content: center; margin-top: 1rem; padding: 0.8rem 1rem; border: 1px solid rgba(37,99,235,0.22); border-radius: 12px; background: rgba(37,99,235,0.05); }
+        .secure-pay-row span { font-size: 0.8rem; font-weight: 750; color: var(--accent); }
+        :root[data-theme="light"] .secure-pay-row span { color: #1d4ed8; }
+
+        /* ===== Savings badge (Ušetríte) ===== */
+        .save-badge { display: inline-flex; align-items: center; padding: 0.28rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 850; color: #fff; background: #dc2626; white-space: nowrap; }
+        .pc-price-old { font-family: 'Inter'; font-size: 0.95rem; font-weight: 700; color: var(--muted); text-decoration: line-through; margin-left: 0.5rem; }
+        .detail-save-line { display: flex; align-items: center; gap: 0.6rem; justify-content: flex-end; margin-top: 0.35rem; }
+        .detail-old-price { font-size: 1.05rem; font-weight: 700; color: var(--muted); text-decoration: line-through; }
+        @media (max-width: 900px) { .detail-save-line { justify-content: flex-start; } }
     </style>
 </head>
 <body>
@@ -1204,6 +1327,11 @@
         <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem;">Skontrolujte svoju objednávku</p>
         <div id="order-summary-items"></div>
         <div id="delivery-summary" style="margin: 1rem 0; padding: 1rem; background: var(--glass); border-radius: 12px; font-size: 0.9rem; color: var(--muted);"></div>
+        <div class="secure-pay-row" aria-label="Bezpečná platba">
+            <span>🔒 Zabezpečené spojenie (SSL)</span>
+            <span>💳 Bezpečná platba</span>
+            <span>🛡️ Ochrana údajov (GDPR)</span>
+        </div>
         <div class="checkout-assurance">
             <div><b>Kontrola pred odoslaním:</b> objednávku pred expedíciou ešte manuálne skontrolujeme.</div>
             <div><b>Sklad:</b> pri odoslaní objednávky sa kus rezervuje, aby ho nekúpil niekto ďalší.</div>
@@ -1350,19 +1478,27 @@
     <div class="hero-content">
         <div class="badge"><span class="badge-dot"></span> <span id="hero-badge-text">Testované repasované PC skladom</span></div>
         <div class="site-announcement" id="site-announcement"></div>
-        <h1 id="hero-title">Počítač podľa toho, čo <span>naozaj potrebujete.</span></h1>
-        <p id="hero-text">Herné PC, repasované kancelárske počítače a riešenia pre domácnosti, študentov, firmy aj školy. Otestované, jasne popísané a pripravené na použitie.</p>
-        <div class="hero-btns">
-            <a href="#poradca" class="btn-primary">Nájsť môj PC</a>
-            <a href="#ponuka" class="btn-ghost" data-action="quick-filter" data-filter-type="cat" data-filter-value="gaming">Herné PC</a>
-            <a href="#ponuka" class="btn-ghost" data-action="quick-filter" data-filter-type="cat" data-filter-value="office">Kancelárske PC</a>
+        <h1 id="hero-title">Nájdi si počítač <span>za pár klikov.</span></h1>
+        <p id="hero-text">Herné a repasované PC — otestované, so zárukou a jasnou cenou.</p>
+        <div class="hero-paths" role="group" aria-label="Vyber si cestu">
+            <a class="hero-path" href="#ponuka">
+                <span class="hero-path-icon" aria-hidden="true">🖥️</span>
+                <strong>Kúpiť hotový PC</strong>
+                <span class="hero-path-sub">Vyber si zo skladu — pripravené na odoslanie.</span>
+                <span class="hero-path-cta">Prezrieť ponuku →</span>
+            </a>
+            <span class="hero-path-or" aria-hidden="true">alebo</span>
+            <a class="hero-path" href="#poradca">
+                <span class="hero-path-icon" aria-hidden="true">🛠️</span>
+                <strong>PC na mieru</strong>
+                <span class="hero-path-sub">Povedz nám, na čo ho chceš — poradíme a poskladáme.</span>
+                <span class="hero-path-cta">Poradiť sa →</span>
+            </a>
         </div>
-        <div class="hero-cta-note">Nákup aj bez registrácie · aktuálny sklad · jasná konečná cena</div>
-        <div class="trust-row" id="hero-trust-row">
+        <div class="trust-row hero-cols" id="hero-trust-row">
             <div class="trust-item"><span>✓</span> Otestované pred odoslaním</div>
-            <div class="trust-item"><span>✓</span> Záruka v cene</div>
-            <div class="trust-item"><span>✓</span> Bezpečná platba</div>
-            <div class="trust-item"><span>✓</span> Doručenie po celom Slovensku</div>
+            <div class="trust-item"><span>✓</span> 12 mesiacov záruka</div>
+            <div class="trust-item"><span>✓</span> Doprava po celom Slovensku</div>
         </div>
     </div>
     <div class="hero-visual reveal">
@@ -1417,6 +1553,26 @@
         </a>
     </div>
 </div>
+
+<!-- HOW IT WORKS (trust band) -->
+<section class="howto-band" aria-label="Ako u nás nakúpite">
+    <div class="howto-inner">
+        <div class="howto-step">
+            <span class="howto-num">1</span>
+            <div><strong>Vyberte si PC</strong><span>Podľa použitia a rozpočtu — alebo použite poradcu.</span></div>
+        </div>
+        <span class="howto-arrow" aria-hidden="true">→</span>
+        <div class="howto-step">
+            <span class="howto-num">2</span>
+            <div><strong>Otestujeme a pripravíme</strong><span>Každý počítač skontrolujeme a nachystáme na použitie.</span></div>
+        </div>
+        <span class="howto-arrow" aria-hidden="true">→</span>
+        <div class="howto-step">
+            <span class="howto-num">3</span>
+            <div><strong>Doručíme so zárukou</strong><span>Odošleme po celom Slovensku, so zárukou 12 mesiacov.</span></div>
+        </div>
+    </div>
+</section>
 
 <!-- PRODUCTS -->
 <section id="ponuka">
@@ -2419,15 +2575,14 @@ const PRODUCT_AUTO_REFRESH_MS = 60000;
 const SUPABASE_REQUEST_TIMEOUT_MS = 10000;
 const DEFAULT_SITE_SETTINGS = {
     heroBadge: 'Testované repasované PC skladom',
-    heroTitle: 'Počítač podľa toho, čo <span>naozaj potrebujete.</span>',
-    heroText: 'Herné PC, repasované kancelárske počítače a riešenia pre domácnosti, študentov, firmy aj školy. Otestované, jasne popísané a pripravené na použitie.',
+    heroTitle: 'Nájdi si počítač <span>za pár klikov.</span>',
+    heroText: 'Herné a repasované PC — otestované, so zárukou a jasnou cenou.',
     promoTitle: 'Počítače pripravené zo skladu',
     promoText: 'jasné parametre a stav každého kusu',
     trustItems: [
         'Otestované pred odoslaním',
-        'Záruka v cene',
-        'Bezpečná platba',
-        'Doručenie po celom Slovensku'
+        '12 mesiacov záruka',
+        'Doprava po celom Slovensku'
     ],
     publicSiteUrl: 'https://8twk58fzg9-sudo.github.io/real',
     announcementEnabled: false,
@@ -2513,7 +2668,8 @@ function normalizeProduct(p) {
         testedAt: p.tested_at || p.testedAt || null,
         sku: p.sku || p.warehouse_sku || p.external_id || '',
         popular: Number(p.popular || 0),
-        newest: Number(p.newest || p.id || 0)
+        newest: Number(p.newest || p.id || 0),
+        compareAt: Math.max(0, Number(p.compare_at_price || p.compareAt || 0))
     };
 }
 
@@ -4534,6 +4690,8 @@ function renderProducts() {
         const shortConditionNote = conditionNote.length > 112 ? conditionNote.slice(0, 109).trim() + '...' : conditionNote;
         const detailBtn = `<button type="button" class="detail-btn" data-action="open-detail" data-name="${safeName}" aria-label="Zobraziť detail produktu ${safeName}">Detail</button>`;
         const perfLabel = productPerformanceLabel(p);
+        const condMeta = conditionGradeMeta(p);
+        const cardSavings = p.compareAt > p.price ? Math.round(p.compareAt - p.price) : 0;
         const card = document.createElement('div');
         card.className = 'pc-card reveal';
         card.setAttribute('data-product-card', '');
@@ -4566,13 +4724,17 @@ function renderProducts() {
             </div>
             <div class="stock-badge ${stockClass}"><span class="stock-dot"></span> ${stockLabel}</div>
             ${productImageMarkup(p)}
-            <span class="product-category-badge">${safeAttr(categoryLabel(p.cat))}</span>
+            <div class="card-badge-row">
+                <span class="product-category-badge">${safeAttr(categoryLabel(p.cat))}</span>
+                <span class="cond-pill" style="--cd:${safeCssColor(condMeta.dot)}"><span class="cond-dot"></span>${safeAttr(condMeta.label)}</span>
+                ${cardSavings ? `<span class="save-badge">Ušetríte ${cardSavings}€</span>` : ''}
+            </div>
             <h3 class="pc-name">${safeName}</h3>
             <div class="spec-chip-grid" aria-label="Hlavné parametre">
-                <div class="spec-chip"><span>CPU</span><b>${safeAttr(p.cpu)}</b></div>
-                <div class="spec-chip"><span>GPU</span><b>${safeAttr(p.gpu)}</b></div>
-                <div class="spec-chip"><span>RAM</span><b>${safeAttr(p.ram)}</b></div>
-                <div class="spec-chip"><span>Úložisko</span><b>${safeAttr(p.ssd)}</b></div>
+                <div class="spec-chip" title="Procesor"><span class="spec-ico" aria-hidden="true">${SPEC_ICONS.cpu}</span><b>${safeAttr(p.cpu)}</b></div>
+                <div class="spec-chip" title="Grafická karta"><span class="spec-ico" aria-hidden="true">${SPEC_ICONS.gpu}</span><b>${safeAttr(p.gpu)}</b></div>
+                <div class="spec-chip" title="Operačná pamäť"><span class="spec-ico" aria-hidden="true">${SPEC_ICONS.ram}</span><b>${safeAttr(p.ram)}</b></div>
+                <div class="spec-chip" title="Úložisko"><span class="spec-ico" aria-hidden="true">${SPEC_ICONS.ssd}</span><b>${safeAttr(p.ssd)}</b></div>
             </div>
             ${perfLabel ? `<div class="perf-label"><span class="perf-icon" aria-hidden="true">${p.cat === 'gaming' ? '🎯' : p.cat === 'retro' ? '🕹️' : '📚'}</span><span>${safeAttr(perfLabel)}</span></div>` : ''}
             <div class="condition-strip">
@@ -4585,7 +4747,7 @@ function renderProducts() {
             </ul>
             <div class="card-guarantee">
                 <span class="g-item">🛡️ 12M záruka</span>
-                <span class="g-item"${p.testedAt ? ' style="color:#4ade80;border-color:rgba(34,197,94,0.4)"' : ''}>${p.testedAt ? '🛡️ Computrax Tested' : '✅ Otestovaný'}</span>
+                ${p.testedAt ? '<span class="tested-seal">🛡️ Computrax Tested</span>' : '<span class="g-item">✅ Otestovaný</span>'}
                 <span class="g-item">🔄 14 dní vrátenie</span>
             </div>
             <div class="service-teaser">
@@ -4593,7 +4755,7 @@ function renderProducts() {
                 <span>${safeAttr(serviceText)}</span>
             </div>
             <div class="pc-footer">
-                <div class="pc-price">${p.price}€<span class="pc-price-note">${safeAttr(productPriceTaxNote())}</span></div>
+                <div class="pc-price">${p.price}€${cardSavings ? `<span class="pc-price-old">${Math.round(p.compareAt)}€</span>` : ''}<span class="pc-price-note">${safeAttr(productPriceTaxNote())}</span></div>
                 ${detailBtn}
                 ${cartBtn}
             </div>
@@ -5614,6 +5776,25 @@ function productPerformanceLabel(product) {
     return '';
 }
 
+function conditionGradeMeta(product) {
+    const key = product.pcConditionKey || productConditionKey(product.pcCondition || '');
+    const map = {
+        'excellent': { label: 'Ako nový', dot: '#16a34a' },
+        'very-good': { label: 'Veľmi dobrý', dot: '#2563eb' },
+        'good': { label: 'Dobrý stav', dot: '#0d9488' },
+        'cosmetic': { label: 'Kozmetické stopy', dot: '#d97706' }
+    };
+    return map[key] || { label: 'Repasovaný', dot: '#64748b' };
+}
+
+const SPEC_ICONS = { cpu: '🧠', gpu: '🎮', ram: '⚡', ssd: '💾' };
+
+function fpsBarPercent(fps) {
+    const m = String(fps || '').match(/\d+/);
+    if (!m) return 100;
+    return Math.max(10, Math.min(100, Math.round(Number(m[0]) / 300 * 100)));
+}
+
 function productUseCases(product) {
     const uses = [];
     const ram = Number(product.ramFilter || parseInt(product.ram, 10) || 0);
@@ -5730,6 +5911,7 @@ function openProductDetail(name) {
             </div>
             <div>
                 <div class="product-detail-price">${money(p.price)}</div>
+                ${p.compareAt > p.price ? `<div class="detail-save-line"><span class="detail-old-price">${money(p.compareAt)}</span><span class="save-badge">Ušetríte ${Math.round(p.compareAt - p.price)}€</span></div>` : ''}
                 <div class="product-detail-stock">${safeAttr(stockLabel)}</div>
             </div>
         </div>
@@ -5747,8 +5929,8 @@ function openProductDetail(name) {
         </div>
         ${fpsEstimates ? `<div class="fps-estimate-block" aria-label="Odhad herného výkonu">
             <strong>🎯 Odhad herného výkonu (${safeAttr(fpsEstimates.tier.label)})</strong>
-            <div class="fps-estimate-grid">
-                ${fpsEstimates.rows.map(row => `<div class="fps-estimate-item"><span>${safeAttr(row.game)}</span><b>${safeAttr(row.fps)}</b></div>`).join('')}
+            <div class="fps-bars">
+                ${fpsEstimates.rows.map(row => `<div class="fps-bar-row"><span>${safeAttr(row.game)}</span><div class="fps-bar-track"><div class="fps-bar-fill" style="width:${fpsBarPercent(row.fps)}%"></div></div><b>${safeAttr(row.fps)}</b></div>`).join('')}
             </div>
             <p class="fps-disclaimer">${safeAttr(FPS_DISCLAIMER)}</p>
         </div>` : ''}
@@ -5797,6 +5979,12 @@ function openProductDetail(name) {
             <button type="button" class="detail-btn" data-action="close-product-detail">Späť na ponuku</button>
             <button type="button" class="detail-btn" data-action="copy-product-link" data-name="${safeAttr(p.name)}">Kopírovať link</button>
             ${inquiryActions}
+        </div>
+        <div class="detail-trust-row" aria-label="Záruky nákupu">
+            <span>🛡️ 12 mesiacov záruka</span>
+            <span>🔄 14 dní na vrátenie</span>
+            <span>🔒 Bezpečná platba</span>
+            <span>🚚 Doprava po SK</span>
         </div>
         <div class="product-detail-buybar">
             <div class="product-detail-buybar-price" aria-hidden="true">${money(p.price)}</div>

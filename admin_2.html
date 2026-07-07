@@ -1872,6 +1872,10 @@ USING (bucket_id = 'product-images' AND public.is_admin());</pre>
         <input class="form-input" id="f-cost" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="napr. 300">
       </div>
       <div class="form-group">
+        <label class="form-label">Pôvodná cena (€) <span style="color:var(--muted);font-weight:400">— pre odznak „Ušetríte", nepovinné</span></label>
+        <input class="form-input" id="f-compare" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="napr. cena nového = 899">
+      </div>
+      <div class="form-group">
         <label class="form-label">Kusov skladom</label>
         <input class="form-input" id="f-stock" type="number" min="0" max="999" step="1" inputmode="numeric" placeholder="1" value="1">
         <small id="f-stock-help" style="color:var(--muted)">V Supabase režime sa počet automaticky spočíta zo skladov nižšie.</small>
@@ -7278,6 +7282,7 @@ async function openEdit(id) {
     document.getElementById('f-name').value = p.name || '';
     document.getElementById('f-price').value = p.price || '';
     document.getElementById('f-cost').value = productCostMap.get(Number(p.id)) || '';
+    document.getElementById('f-compare').value = p.compare_at_price || '';
     document.getElementById('f-stock').value = p.stock ?? 1;
     document.getElementById('f-sku').value = p.sku || '';
     document.getElementById('f-warehouse-sku').value = p.warehouse_sku || '';
@@ -7324,7 +7329,7 @@ function closeModal() {
 }
 
 function clearForm() {
-    ['f-name','f-price','f-cost','f-tag','f-cpu','f-gpu','f-ram','f-ssd','f-image-url','f-sku','f-warehouse-sku','f-warehouse-location','f-external-id'].forEach(id => document.getElementById(id).value = '');
+    ['f-name','f-price','f-cost','f-compare','f-tag','f-cpu','f-gpu','f-ram','f-ssd','f-image-url','f-sku','f-warehouse-sku','f-warehouse-location','f-external-id'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('f-stock').value = 1;
     document.getElementById('f-cat').value = 'gaming';
     document.getElementById('f-status').value = 'active';
@@ -7430,6 +7435,7 @@ async function saveProduct() {
         os: cleanProductFormText('f-os', 80),
         delivery: cleanProductFormText('f-delivery', 80),
         image_url: imageUrl,
+        compare_at_price: (parseInt(String(document.getElementById('f-compare')?.value || '').replace(/[^\d]/g, ''), 10) || 0) || null,
     };
     const qcState = readQcChecklist();
     data.test_checklist = qcState;
